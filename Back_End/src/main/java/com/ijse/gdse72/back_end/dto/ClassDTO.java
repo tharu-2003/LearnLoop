@@ -1,13 +1,17 @@
 package com.ijse.gdse72.back_end.dto;
 
-import com.ijse.gdse72.back_end.entity.*;
-import jakarta.persistence.*;
+import com.ijse.gdse72.back_end.entity.Priority;
+import com.ijse.gdse72.back_end.entity.Status;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClassDTO {
-
     private Long classId;
     private String name;
     private String description;
@@ -15,9 +19,6 @@ public class ClassDTO {
     private LocalDateTime createdAt;
     private Priority priority;
     private Status status;
-    private List<User> users;
-    private List<Assignment> assignments;
-    private List<Discussion> discussions;
-    private List<Chat> chats;
-
+    private String imageUrl;
+    private Integer studentCount;
 }

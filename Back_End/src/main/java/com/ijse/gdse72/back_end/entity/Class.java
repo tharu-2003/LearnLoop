@@ -44,6 +44,11 @@ public class Class {
     private String imageUrl;
 
     // Relationships
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
+
     @ManyToMany
     @JoinTable(
             name = "user_class",

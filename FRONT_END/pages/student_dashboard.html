@@ -1203,11 +1203,11 @@
         const token = sessionStorage.getItem("token");
         const currentUser = JSON.parse(localStorage.getItem("current User"));
 
-        console.log("ready hode " + currentUser.username);
+        console.log("Loging User Id " + currentUser.userId);
             
         $('.student-name').text(currentUser.username || "Student");
         $('.student-email').text(currentUser.email || "Email");
-        $('.student-phone').text( "+94 0" + currentUser.phoneNumber || "Phone");
+        $('.student-phone').text( "+94 " + currentUser.phoneNumber || "Phone");
         
 
         // Get modal elements using jQuery

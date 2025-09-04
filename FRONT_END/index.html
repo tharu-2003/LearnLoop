@@ -509,6 +509,7 @@ $("#login-btn").click(function(e){
       // Store user data securely (using variables instead of localStorage)
       window.currentUser = {
        
+        userId: userData.userId,
         email: userData.email || email,
         username: userData.username || '',
         role: userData.role,

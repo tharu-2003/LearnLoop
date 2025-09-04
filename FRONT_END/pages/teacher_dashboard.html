@@ -1466,37 +1466,10 @@
         const token = sessionStorage.getItem("token");
         const currentUser = JSON.parse(localStorage.getItem("current User"));
 
-        console.log("ready hode " + currentUser.username);
+
+        console.log("Loging User Id " + currentUser.userId);
             
         $('.teacher-name').text(currentUser.username || "Teacher");
-    
-        // // Get user data from localStorage
-        // const currentUserString = localStorage.getItem("currentUser");
-        // let currentUser = null;
-
-        
-        // if (currentUserString) {
-        //     console.log("awada")
-
-        //     try {
-        //         currentUser = JSON.parse(currentUserString);
-                
-        //         // Set the teacher name from localStorage data
-        //         if (currentUser.username) {
-        //             console.log("ko nama ..");
-
-                    
-        //             // $('#teacherName').val(currentUser.username);
-        //         }
-                
-        //         if (currentUser.email) {
-        //             $('#teacherEmail').val(currentUser.email);
-        //         }
-                
-        //     } catch (e) {
-        //         console.error("Error parsing user data:", e);
-        //     }
-        // }
         
 
         // showToast("Welcome to the Dashboard", 'success');

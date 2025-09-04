@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Cards</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .status-indicator-nav {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: #2eb67d;
+            border: 2px solid #3f0e40;
+            border-radius: 50%;
+        }
+
+        .container {
+            margin-left: 35px;
+            padding: 20px;
+            width: calc(100% - 68px);
+            box-sizing: border-box;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+            min-width: 280px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 50px;
+            background-color: #1a1a1a;
+            border: 2px solid #404040;
+            border-radius: 25px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3ea6ff;
+            box-shadow: 0 0 0 3px rgba(62, 166, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #666666;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            color: #666666;
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .search-input:focus + .search-icon {
+            color: #3ea6ff;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #666666;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .clear-search:hover {
+            color: #ffffff;
+            background-color: #333333;
+        }
+
+        .search-results {
+            margin-bottom: 16px;
+            color: #aaaaaa;
+            font-size: 14px;
+            display: none;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 16px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666666;
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .no-results-text {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .no-results-subtitle {
+            font-size: 14px;
+            color: #555555;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .class-card {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .class-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: #3ea6ff;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-image.placeholder {
+            font-size: 48px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .class-dp {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+            background: #3ea6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            color: white;
+            overflow: hidden;
+        }
+
+        .class-dp img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-public {
+            background-color: rgba(46, 213, 115, 0.9);
+            color: white;
+        }
+
+        .status-private {
+            background-color: rgba(255, 107, 107, 0.9);
+            color: white;
+        }
+
+        .card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .class-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            /* -webkit-line-clamp: 2;    */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .teacher-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: #aaaaaa;
+            font-size: 13px;
+        }
+
+        .teacher-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3ea6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+            overflow: hidden;
+        }
+
+        .teacher-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .teacher-name {
+            font-weight: 500;
+            color: #cccccc;
+        }
+
+        .class-description {
+            color: #999999;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            /* -webkit-line-clamp: 3; */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .card-footer {
+            margin-top: auto;
+        }
+
+        .student-count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #aaaaaa;
+            margin-bottom: 16px;
+        }
+
+        .student-count i {
+            font-size: 16px;
+            color: #3ea6ff;
+        }
+
+        .join-btn {
+            background-color: #3ea6ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .join-btn:hover {
+            background-color: #2691ff;
+            transform: translateY(-1px);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            border: 1px solid #404040;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #aaaaaa;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #1a1a1a;
+            border: 2px solid #404040;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3ea6ff;
+        }
+
+        .form-input::placeholder {
+            color: #666666;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel {
+            background-color: #404040;
+            color: #ffffff;
+        }
+
+        .btn-cancel:hover {
+            background-color: #505050;
+        }
+
+        .btn-enter {
+            background-color: #3ea6ff;
+            color: #ffffff;
+        }
+
+        .btn-enter:hover {
+            background-color: #2691ff;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 16px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .header-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .search-container {
+                width: 100%;
+                max-width: none;
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .search-container {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Left Navigation Bar -->
+    
+
+    <div class="container">
+        <div class="header-section">
+            <h1 class="section-title">Featured Classes</h1>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="searchInput"
+                        placeholder="Search classes, teachers, or topics..."
+                        autocomplete="off"
+                    >
+                    <span class="search-icon">🔍</span>
+                    <button class="clear-search" id="clearSearch" onclick="clearSearch()">&times;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results Info -->
+        <div class="search-results" id="searchResults"></div>
+
+        <div class="cards-grid" id="cardsGrid">
+            <!-- Class Card 1 -->
+            <div class="class-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=200&fit=crop" alt="JavaScript Course" onerror="this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='📚';">
+                    <div class="class-dp">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Course" onerror="this.parentElement.innerHTML='JS';">
+                    </div>
+                    <span class="status-badge status-public">Public</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="class-name">Advanced JavaScript Development</h3>
+                    <div class="teacher-info">
+                        <div class="teacher-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Teacher" onerror="this.parentElement.innerHTML='MJ';">
+                        </div>
+                        <span class="teacher-name">by Michael Johnson</span>
+                    </div>
+                    <div class="class-description">
+                        Master modern JavaScript concepts including ES6+, async programming, DOM manipulation, and advanced frameworks. Perfect for developers looking to enhance their skills.
+                    </div>
+                    <div class="card-footer">
+                        <div class="student-count">
+                            <i class="fas fa-users"></i>
+                            <span>1,234 students</span>
+                        </div>
+                        <button class="join-btn">
+                            <i class="fas fa-plus"></i>
+                            Join Class
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Card 2 -->
+            <div class="class-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=400&h=200&fit=crop" alt="UI/UX Design" onerror="this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='🎨';">
+                    <div class="class-dp">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b977?w=100&h=100&fit=crop&crop=face" alt="Course" onerror="this.parentElement.innerHTML='UI';">
+                    </div>
+                    <span class="status-badge status-private">Private</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="class-name">UI/UX Design Fundamentals</h3>
+                    <div class="teacher-info">
+                        <div class="teacher-avatar">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b977?w=100&h=100&fit=crop&crop=face" alt="Teacher" onerror="this.parentElement.innerHTML='SA';">
+                        </div>
+                        <span class="teacher-name">by Sarah Anderson</span>
+                    </div>
+                    <div class="class-description">
+                        Learn the principles of user interface and user experience design. From wireframing to prototyping, create beautiful and functional digital experiences.
+                    </div>
+                    <div class="card-footer">
+                        <div class="student-count">
+                            <i class="fas fa-users"></i>
+                            <span>856 students</span>
+                        </div>
+                        <button class="join-btn">
+                            <i class="fas fa-lock"></i>
+                            Join Class
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Card 3 -->
+            <div class="class-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1526379879527-8559ecfcaec0?w=400&h=200&fit=crop" alt="Python Course" onerror="this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='🐍';">
+                    <div class="class-dp">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Course" onerror="this.parentElement.innerHTML='PY';">
+                    </div>
+                    <span class="status-badge status-public">Public</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="class-name">Python for Data Science</h3>
+                    <div class="teacher-info">
+                        <div class="teacher-avatar">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Teacher" onerror="this.parentElement.innerHTML='DR';">
+                        </div>
+                        <span class="teacher-name">by Dr. Robert Chen</span>
+                    </div>
+                    <div class="class-description">
+                        Dive into data analysis and machine learning with Python. Learn pandas, NumPy, matplotlib, and scikit-learn to become a data science professional.
+                    </div>
+                    <div class="card-footer">
+                        <div class="student-count">
+                            <i class="fas fa-users"></i>
+                            <span>2,167 students</span>
+                        </div>
+                        <button class="join-btn">
+                            <i class="fas fa-plus"></i>
+                            Join Class
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Card 4 -->
+            <div class="class-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=200&fit=crop" alt="Cloud Computing" onerror="this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='☁️';">
+                    <div class="class-dp">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Course" onerror="this.parentElement.innerHTML='AW';">
+                    </div>
+                    <span class="status-badge status-private">Private</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="class-name">Cloud Computing with AWS</h3>
+                    <div class="teacher-info">
+                        <div class="teacher-avatar">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face" alt="Teacher" onerror="this.parentElement.innerHTML='EM';">
+                        </div>
+                        <span class="teacher-name">by Emily Martinez</span>
+                    </div>
+                    <div class="class-description">
+                        Master Amazon Web Services from basics to advanced. Learn EC2, S3, Lambda, and more to build scalable cloud applications and infrastructure.
+                    </div>
+                    <div class="card-footer">
+                        <div class="student-count">
+                            <i class="fas fa-users"></i>
+                            <span>943 students</span>
+                        </div>
+                        <button class="join-btn">
+                            <i class="fas fa-lock"></i>
+                            Join Class
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Card 5 -->
+            <div class="class-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=200&fit=crop" alt="Mobile Development" onerror="this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='📱';">
+                    <div class="class-dp">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face" alt="Course" onerror="this.parentElement.innerHTML='FL';">
+                    </div>
+                    <span class="status-badge status-public">Public</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="class-name">Mobile App with Flutter</h3>
+                    <div class="teacher-info">
+                        <div class="teacher-avatar">
+                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face" alt="Teacher" onerror="this.parentElement.innerHTML='DK';">
+                        </div>
+                        <span class="teacher-name">by David Kim</span>
+                    </div>
+                    <div class="class-description">
+                        Build cross-platform mobile applications using Flutter and Dart. Learn to create beautiful, native-performance apps for both iOS and Android.
+                    </div>
+                    <div class="card-footer">
+                        <div class="student-count">
+                            <i class="fas fa-users"></i>
+                            <span>1,523 students</span>
+                        </div>
+                        <button class="join-btn">
+                            <i class="fas fa-plus"></i>
+                            Join Class
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Class Card 6 -->
+            <div class="class-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=200&fit=crop" alt="Cybersecurity" onerror="this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='🔒';">
+                    <div class="class-dp">
+                        <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&crop=face" alt="Course" onerror="this.parentElement.innerHTML='CS';">
+                    </div>
+                    <span class="status-badge status-private">Private</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="class-name">Cybersecurity Essentials</h3>
+                    <div class="teacher-info">
+                        <div class="teacher-avatar">
+                            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop&crop=face" alt="Teacher" onerror="this.parentElement.innerHTML='LS';">
+                        </div>
+                        <span class="teacher-name">by Lisa Thompson</span>
+                    </div>
+                    <div class="class-description">
+                        Comprehensive cybersecurity training covering network security, ethical hacking, risk assessment, and incident response. Protect digital assets effectively.
+                    </div>
+                    <div class="card-footer">
+                        <div class="student-count">
+                            <i class="fas fa-users"></i>
+                            <span>678 students</span>
+                        </div>
+                        <button class="join-btn">
+                            <i class="fas fa-lock"></i>
+                            Join Class
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div class="no-results" id="noResults">
+            <div class="no-results-icon">🔍</div>
+            <div class="no-results-text">No classes found</div>
+            <div class="no-results-subtitle">Try adjusting your search terms</div>
+        </div>
+    </div>
+
+    <!-- Passcode Modal -->
+    <div class="modal-overlay" id="passcodeModal">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <div class="modal-icon">🔐</div>
+                <div>
+                    <h3 class="modal-title">Private Class Access</h3>
+                </div>
+            </div>
+            <p class="modal-subtitle">This is a private class. Please enter the passcode to join.</p>
+            <div class="form-group">
+                <label class="form-label" for="passcode">Class Passcode</label>
+                <input 
+                    type="password" 
+                    id="passcode" 
+                    class="form-input" 
+                    placeholder="Enter passcode..."
+                    maxlength="20"
+                >
+                <div class="error-message" id="errorMessage">Incorrect passcode. Please try again.</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn btn-enter" onclick="verifyPasscode()">Enter</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPrivateClass = null;
+        let allCards = [];
+
+        // Class passcodes (in real app, these would be stored securely on server)
+        const clasPasscodes = {
+            'UI/UX Design Fundamentals': 'design123',
+            'Cloud Computing with AWS': 'cloud456',
+            'Cybersecurity Essentials': 'secure789'
+        };
+
+        // Initialize navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store all cards for search functionality
+            allCards = Array.from(document.querySelectorAll('.class-card'));
+            
+            // Search input event listener
+            const searchInput = document.getElementById('searchInput');
+            const clearButton = document.getElementById('clearSearch');
+            
+            searchInput.addEventListener('input', handleSearch);
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Escape') {
+                    clearSearch();
+                }
+            });
+
+            // Navigation menu functionality
+            initializeNavigation();
+        });
+
+        function initializeNavigation() {
+            const navItems = document.querySelectorAll('.nav-menu-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Get the navigation text
+                    const navText = this.querySelector('.nav-menu-text').textContent;
+                    console.log(`Navigated to: ${navText}`);
+                });
+            });
+        }
+
+        function handleSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearButton = document.getElementById('clearSearch');
+            const searchResults = document.getElementById('searchResults');
+            const noResults = document.getElementById('noResults');
+            const cardsGrid = document.getElementById('cardsGrid');
+            
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            // Show/hide clear button
+            if (searchTerm.length > 0) {
+                clearButton.style.display = 'block';
+            } else {
+                clearButton.style.display = 'none';
+            }
+            
+            if (searchTerm === '') {
+                // Show all cards
+                showAllCards();
+                searchResults.style.display = 'none';
+                noResults.style.display = 'none';
+                return;
+            }
+            
+            // Filter cards based on search term (search in class name, teacher name, and description)
+            const filteredCards = allCards.filter(card => {
+                const className = card.querySelector('.class-name').textContent.toLowerCase();
+                const teacherName = card.querySelector('.teacher-name').textContent.toLowerCase();
+                const description = card.querySelector('.class-description').textContent.toLowerCase();
+                
+                return className.includes(searchTerm) || 
+                       teacherName.includes(searchTerm) || 
+                       description.includes(searchTerm);
+            });
+            
+            // Clear grid and show filtered results
+            cardsGrid.innerHTML = '';
+            
+            if (filteredCards.length === 0) {
+                // No results found
+                searchResults.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                // Show filtered results
+                filteredCards.forEach(card => {
+                    cardsGrid.appendChild(card.cloneNode(true));
+                });
+                
+                // Re-attach event listeners to cloned cards
+                attachCardEventListeners();
+                
+                // Show search results info
+                searchResults.textContent = `Found ${filteredCards.length} class${filteredCards.length !== 1 ? 'es' : ''} for "${searchInput.value}"`;
+                searchResults.style.display = 'block';
+                noResults.style.display = 'none';
+            }
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearButton = document.getElementById('clearSearch');
+            
+            searchInput.value = '';
+            clearButton.style.display = 'none';
+            searchInput.focus();
+            
+            showAllCards();
+        }
+
+        function showAllCards() {
+            const cardsGrid = document.getElementById('cardsGrid');
+            const searchResults = document.getElementById('searchResults');
+            const noResults = document.getElementById('noResults');
+            
+            // Clear grid and show all cards
+            cardsGrid.innerHTML = '';
+            allCards.forEach(card => {
+                cardsGrid.appendChild(card.cloneNode(true));
+            });
+            
+            // Re-attach event listeners
+            attachCardEventListeners();
+            
+            searchResults.style.display = 'none';
+            noResults.style.display = 'none';
+        }
+
+        function attachCardEventListeners() {
+            // Add click functionality to cards
+            document.querySelectorAll('.class-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking the join button
+                    if (e.target.classList.contains('join-btn') || e.target.closest('.join-btn')) {
+                        return;
+                    }
+                    
+                    // Add a subtle animation to show interaction
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-4px)';
+                    }, 100);
+                });
+            });
+
+            // Handle join button clicks
+            document.querySelectorAll('.join-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const card = this.closest('.class-card');
+                    const className = card.querySelector('.class-name').textContent;
+                    const isPrivate = card.querySelector('.status-private');
+                    
+                    if (isPrivate) {
+                        // Show passcode modal for private classes
+                        currentPrivateClass = className;
+                        showModal();
+                    } else {
+                        // Direct join for public classes
+                        joinClass(className, this);
+                    }
+                });
+            });
+        }
+
+        // Initialize event listeners on page load
+        attachCardEventListeners();
+
+        function showModal() {
+            const modal = document.getElementById('passcodeModal');
+            const passcodeInput = document.getElementById('passcode');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Reset modal state
+            passcodeInput.value = '';
+            errorMessage.style.display = 'none';
+            passcodeInput.style.borderColor = '#404040';
+            
+            modal.classList.add('active');
+            
+            // Focus on input after animation
+            setTimeout(() => {
+                passcodeInput.focus();
+            }, 300);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('passcodeModal');
+            modal.classList.remove('active');
+            currentPrivateClass = null;
+        }
+
+        function verifyPasscode() {
+            const passcodeInput = document.getElementById('passcode');
+            const errorMessage = document.getElementById('errorMessage');
+            const enteredPasscode = passcodeInput.value.trim();
+            
+            if (!enteredPasscode) {
+                showError('Please enter a passcode');
+                return;
+            }
+
+            const correctPasscode = clasPasscodes[currentPrivateClass];
+            
+            if (enteredPasscode === correctPasscode) {
+                // Correct passcode
+                closeModal();
+                
+                // Find the join button for this class and trigger join
+                const cards = document.querySelectorAll('.class-card');
+                cards.forEach(card => {
+                    const cardClassName = card.querySelector('.class-name').textContent;
+                    if (cardClassName === currentPrivateClass) {
+                        const joinBtn = card.querySelector('.join-btn');
+                        joinClass(currentPrivateClass, joinBtn);
+                    }
+                });
+            } else {
+                // Incorrect passcode
+                showError('Incorrect passcode. Please try again.');
+            }
+        }
+
+        function showError(message) {
+            const passcodeInput = document.getElementById('passcode');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            passcodeInput.style.borderColor = '#ff6b6b';
+            
+            // Shake animation
+            passcodeInput.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => {
+                passcodeInput.style.animation = '';
+            }, 500);
+        }
+
+        function joinClass(className, buttonElement) {
+            // Change button text temporarily
+            const originalText = buttonElement.innerHTML;
+            buttonElement.innerHTML = '<i class="fas fa-check"></i> Joined!';
+            buttonElement.style.backgroundColor = '#00b894';
+            
+            setTimeout(() => {
+                buttonElement.innerHTML = originalText;
+                buttonElement.style.backgroundColor = '#3ea6ff';
+            }, 2000);
+            
+            console.log(`Joined class: ${className}`);
+        }
+
+        // Handle Enter key in passcode input
+        document.getElementById('passcode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyPasscode();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('passcodeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

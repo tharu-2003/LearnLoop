@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IJSE - Internet Technologies B72</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <!-- SweetAlert2 CSS (optional, for styling) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1d29;
+            color: #ffffff;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Left Navigation Bar */
+        .left-nav {
+            width: 68px;
+            background: #0a357f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 0;
+            border-right: 1px solid #522653;
+        }
+
+        .fa-chevron-left{
+            margin-bottom: 30%;
+            scale: 120%;
+            cursor: pointer;
+        }
+
+        .workspace-icon {
+            width: 36px;
+            height: 36px;
+            background: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #3f0e40;
+            margin-bottom: 8px;
+            /* cursor: pointer; */
+        }
+
+        /* New Navigation Menu */
+        .left-nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .nav-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            flex-direction: column;
+        }
+
+        .nav-menu-item.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .nav-menu-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-menu-text {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-button {
+            width: 36px;
+            height: 36px;
+            background: #522653;
+            border-radius: 8px;
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .nav-button.active {
+            background: #1164a3;
+        }
+
+        .nav-button:hover {
+            background: #6b3475;
+        }
+
+        .nav-button.active:hover {
+            background: #1164a3;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            background: #e01e5a;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #3f0e40;
+        }
+
+        .add-workspace {
+            width: 36px;
+            height: 36px;
+            border: 2px dashed #72767d;
+            border-radius: 8px;
+            background: none;
+            color: #72767d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .add-workspace:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .user-avatar-nav {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #2eb67d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: auto;
+            margin-bottom: 8px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .status-indicator-nav {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: #2eb67d;
+            border: 2px solid #3f0e40;
+            border-radius: 50%;
+        }
+
+        /* Main Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #1e0e40;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #522653;
+        }
+
+        /* Workspace Header */
+        .workspace-header {
+            /* background: #1c2966; */
+            padding: 20px 16px 16px 16px;
+            border-bottom: 1px solid #522653;
+        }
+
+        .workspace-title {
+            font-size: 18px;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .workspace-title::after {
+            content: "\f013";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            font-size: 12px;
+            opacity: 0.7;
+            margin-left: 4px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            margin: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 8px 36px 8px 12px;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        /* Upgrade Button */
+        .upgrade-button {
+            background: linear-gradient(135deg, #4c2c54, #5a2c64);
+            border: 1px solid #6b3475;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 6px;
+            width: 100%;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .upgrade-button::before {
+            content: "\f0e7";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 8px;
+        }
+
+        /* Navigation Items */
+        .nav-items {
+            padding: 0 16px;
+            margin-bottom: 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 1px;
+            transition: transform 0.5s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.196);
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+        .nav-item-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item-icon {
+            width: 20px;
+            text-align: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .nav-badge {
+            background: #e01e5a;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Sections */
+        .section {
+            padding: 0 16px;
+            margin-bottom: 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .section-header .arrow i {
+            margin-right: 6px;
+            font-size: 10px;
+            transition: transform 0.2s;
+        }
+
+        .section-header.collapsed .arrow i {
+            transform: rotate(-90deg);
+        }
+
+        .section-list {
+            list-style: none;
+        }
+
+        .section-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 8px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-bottom: 1px;
+        }
+
+        .section-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .section-item.active {
+            background: #84bde830;
+            color: #ffffff;
+        }
+
+        .channel-name, .user-name {
+            display: flex;
+            align-items: center;
+        }
+
+        .channel-prefix {
+            margin-right: 6px;
+            opacity: 0.7;
+            font-weight: bold;
+        }
+
+        .user-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            margin-right: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .notification-badge {
+            background: #668ee55a;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Unread mentions popup */
+        .unread-mentions {
+            position: fixed;
+            bottom: 20px;
+            left: 280px;
+            background: #4a154b;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            border: 1px solid #6b3475;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .unread-mentions::before {
+            content: "\f063";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 6px;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #1a1d29;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            border-bottom: 1px solid #313544;
+            background: #1a1d29;
+        }
+
+        .chat-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            margin-right: 8px;
+            background: #4a154b;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            font-weight: 900;
+            margin-right: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border: 2px solid #1a1d29;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        /* Chat Content */
+        .chat-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .welcome-avatar {
+            width: 128px;
+            height: 128px;
+            border-radius: 12px;
+            background: #4a154b;
+            margin-bottom: 24px;
+        }
+
+        .welcome-name {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .welcome-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .welcome-status-dot {
+            width: 8px;
+            height: 8px;
+            border: 2px solid #1a1d29;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin-left: 8px;
+        }
+
+        .welcome-message {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .welcome-message .mention {
+            color: #1d9bd1;
+            font-weight: 500;
+        }
+
+        /* Assignment Content - Enhanced styles */
+        .assignment-content {
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .assignment-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .add-assignment-btn {
+            background: #2eb67d;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .add-assignment-btn:hover {
+            background: #2aa56c;
+            transform: translateY(-1px);
+        }
+
+        .assignments-list {
+            padding: 0 20px;
+        }
+
+        .assignment-card {
+            background: #2a2d33;
+            border: 1px solid #404449;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .assignment-card:hover {
+            background: #313640;
+            border-color: #1164a3;
+            transform: translateY(-2px);
+        }
+
+        .assignment-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .assignment-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .assignment-card-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .assignment-card-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .assignment-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .assignment-status {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .assignment-status.active {
+            background: rgba(46, 182, 125, 0.2);
+            color: #2eb67d;
+        }
+
+        .assignment-status.due {
+            background: rgba(224, 30, 90, 0.2);
+            color: #e01e5a;
+        }
+
+        .assignment-status.completed {
+            background: rgba(29, 155, 209, 0.2);
+            color: #1d9bd1;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .assignment-action-btn {
+            background: none;
+            border: 1px solid #404449;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .assignment-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-color: #1164a3;
+        }
+
+        .assignment-action-btn.submit {
+            background: #1164a3;
+            border-color: #1164a3;
+            color: white;
+        }
+
+        .assignment-action-btn.submit:hover {
+            background: #0f5591;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background: #2a2d33;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #404449;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .close {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .close:hover {
+            color: #ffffff;
+        }
+
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            background: #1a1d29;
+            border: 1px solid #404449;
+            border-radius: 6px;
+            padding: 12px;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            border-color: #1164a3;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-file {
+            width: 100%;
+            background: #1a1d29;
+            border: 2px dashed #404449;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .form-file:hover {
+            border-color: #1164a3;
+            background: #222529;
+        }
+
+        .file-upload-icon {
+            font-size: 24px;
+            color: #1164a3;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4px;
+        }
+
+        .file-upload-hint {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #404449;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: #404449;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .btn-secondary:hover {
+            background: #4a4e54;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background: #1164a3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0f5591;
+        }
+
+        .btn-success {
+            background: #2eb67d;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #2aa56c;
+        }
+
+        .selected-files {
+            margin-top: 12px;
+            padding: 12px;
+            background: #1a1d29;
+            border-radius: 6px;
+            border: 1px solid #404449;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #404449;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-icon {
+            color: #1164a3;
+        }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: #e01e5a;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .remove-file:hover {
+            color: #ff4066;
+        }
+
+        /* MESSAGE INPUT - Bottom message composer */
+        .message-input-area {
+            border-top: 1px solid #313237;
+            padding: 20px;
+            background: #1a1d29;
+        }
+
+        .message-composer {
+            background: #222529;
+            border: 1px solid #404449;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .message-composer:focus-within {
+            border-color: #1164a3;
+            box-shadow: 0 0 0 1px #1164a3;
+        }
+
+        /* Message toolbar */
+        .message-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding: 8px 12px;
+            border-bottom: 1px solid #404449;
+            background: #2a2d33;
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 20px;
+            background: #404449;
+            margin: 0 4px;
+        }
+
+        .toolbar-btn {
+            background: none;
+            border: none;
+            color: #8d8d8d;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            position: relative;
+        }
+
+        .toolbar-btn i {
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .toolbar-btn:hover {
+            color: #ffffff;
+            background: #404449;
+        }
+
+        .toolbar-btn:active {
+            background: #4a4e54;
+            transform: scale(0.95);
+        }
+
+        .toolbar-btn.active {
+            color: #ffffff;
+            background: #1164a3;
+        }
+
+        .toolbar-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background: #1164a3;
+        }
+
+        /* Message input field with enhanced placeholder */
+        .message-input-container {
+            padding: 16px;
+        }
+
+        .message-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
+            line-height: 1.4;
+            font-family: inherit;
+            min-height: 20px;
+        }
+
+        .message-input::placeholder {
+            color: #8d8d8d;
+        }
+
+        .message-input.empty::before {
+            content: attr(data-placeholder);
+            color: #8d8d8d;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .message-input.empty:focus::before {
+            display: none;
+        }
+
+        /* Enhanced chat content for different contexts */
+        .context-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(29, 155, 209, 0.2);
+            color: #1d9bd1;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .context-indicator.direct {
+            background: rgba(46, 182, 125, 0.2);
+            color: #2eb67d;
+        }
+
+        .context-indicator.group {
+            background: rgba(17, 100, 163, 0.2);
+            color: #1164a3;
+        }
+
+        /* Bottom message controls */
+        .message-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #2a2d33;
+            border-top: 1px solid #404449;
+        }
+
+        .message-tools {
+            display: flex;
+            gap: 4px;
+        }
+
+        .tool-btn {
+            background: none;
+            border: none;
+            color: #8d8d8d;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+        }
+
+        .tool-btn i {
+            font-size: 14px;
+        }
+
+        .tool-btn:hover {
+            color: #ffffff;
+            background: #404449;
+        }
+
+        .tool-btn:active {
+            background: #4a4e54;
+            transform: scale(0.95);
+        }
+
+        .tool-btn.recording {
+            color: #e01e5a;
+            background: rgba(224, 30, 90, 0.1);
+        }
+
+        .tool-btn.recording:hover {
+            background: rgba(224, 30, 90, 0.2);
+        }
+
+        .send-btn {
+            background: #2eb67d;
+            border: none;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 32px;
+        }
+
+        .send-btn:hover {
+            background: #2aa56c;
+        }
+
+        .send-btn:active {
+            background: #268a5c;
+            transform: scale(0.95);
+        }
+
+        .send-btn:disabled {
+            background: #404449;
+            color: #8d8d8d;
+            cursor: not-allowed;
+        }
+
+        /* Scrollbar Styles */
+        .section::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .section::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .section::-webkit-scrollbar-thumb {
+            background: #522653;
+            border-radius: 2px;
+        }
+
+        .assignment-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .assignment-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .assignment-content::-webkit-scrollbar-thumb {
+            background: #522653;
+            border-radius: 3px;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Navigation Bar -->
+        <div class="left-nav">
+
+            <!-- <i class="fa-solid fa-chevron-left"></i> -->
+            <div class="workspace-icon">IJ</div>
+            
+            <!-- New Navigation Menu -->
+            <div class="left-nav-menu">
+                <button class="nav-menu-item " aria-label="Home">
+                    <span class="nav-menu-icon"><i class="fas fa-home"></i></span>
+                    <span class="nav-menu-text">Dashboard</span>
+                </button>
+                
+                <button class="nav-menu-item" aria-label="Classes">
+                    <span class="nav-menu-icon"><i class="fas fa-users"></i></span>
+                    <span class="nav-menu-text">Classes</span>
+                </button>
+                
+                <button class="nav-menu-item" aria-label="Document">
+                    <span class="nav-menu-icon"><i class="fas fa-file-alt"></i></span>
+                    <span class="nav-menu-text">Document</span>
+                </button>
+
+                <button class="nav-menu-item" aria-label="LogOut">
+                    <span class="nav-menu-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+                    <span class="nav-menu-text">LogOut</span>
+                </button>
+            </div>
+            
+            <div class="user-avatar-nav">
+                T
+                <div class="status-indicator-nav"></div>
+            </div>
+        </div>
+
+        <!-- Main Sidebar -->
+        <div class="sidebar">
+            <!-- Workspace Header -->
+            <div class="workspace-header">
+                <div class="workspace-title">IJSE - Internet Technolgi</div>
+            </div>
+
+            <!-- Search bar -->
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search IJSE - Internet Technologies B72" id="searchInput">
+                <div class="search-icon"><i class="fas fa-search"></i></div>
+            </div>
+            
+            <!-- Navigation Items -->
+            <div class="nav-items">
+
+                <div class="nav-item active" data-section="discussions">
+                    <div class="nav-item-content">
+                        <span class="nav-item-icon"><i class="fa-solid fa-comments"></i></span>
+                        Discussions
+                    </div>
+                </div>
+                
+                <div class="nav-item" data-section="assignment">
+                    <div class="nav-item-content">
+                        <span class="nav-item-icon"><i class="fa-solid fa-notes-medical"></i></span>
+                        Assignment
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct Messages Section -->
+            <div class="section" id="membersSection">
+                <div class="section-header" id="membersHeader">
+                    <span class="arrow"><i class="fas fa-chevron-down"></i></span>
+                    Members
+                </div>
+                <ul class="section-list" id="membersList">
+                    
+                    <li class="section-item">
+                        <div class="user-name">
+                            <div class="user-avatar" style="background: #2eb67d;">A</div>
+                            Ashen Indeewara
+                        </div>
+                        <span class="notification-badge">1</span>
+                    </li>
+                    
+                    <li class="section-item">
+                        <div class="user-name">
+                            <div class="user-avatar" style="background: #36c5f0;">C</div>
+                            Charuka Hansaja
+                        </div>
+                        <span class="notification-badge">1</span>
+                    </li>
+                    <li class="section-item">
+                        <div class="user-name">
+                            <div class="user-avatar" style="background: #b6502e;">D</div>
+                            dilini kaushalya
+                        </div>
+                        <span class="notification-badge">1</span>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-info">
+                    <div class="chat-avatar"></div>
+                    <div class="chat-title">IJSE Group</div>
+                    <div class="status-dot"></div>
+                </div>
+            </div>
+
+            <!-- Chat Content (Default - Discussions) -->
+            <div class="chat-content" id="discussionsContent">
+                <div class="welcome-avatar"></div>
+                <div class="welcome-name">IJSE Group</div>
+                <div class="welcome-status">
+                    <div class="welcome-status-dot"></div>
+                </div>
+                <div class="context-indicator group">Group Discussion</div>
+                <div class="welcome-message">
+                    This is the beginning of the <span class="mention">#general</span> channel for IJSE Internet Technologies B72.
+                </div>
+            </div>
+
+            <!-- Assignment Content -->
+            <div class="assignment-content" id="assignmentContent">
+                <div class="assignment-header">
+                    <div class="assignment-title">Assignments</div>
+                    <button class="add-assignment-btn" id="addAssignmentBtn">
+                        <i class="fas fa-plus"></i>
+                        Create Assignment
+                    </button>
+                </div>
+                
+                <div class="assignments-list" id="assignmentsList">
+                    <!-- Sample Assignment Cards -->
+                    <div class="assignment-card">
+                        <div class="assignment-card-header">
+                            <div>
+                                <div class="assignment-card-title">HTML & CSS Fundamentals</div>
+                                <div class="assignment-card-meta">
+                                    <span><i class="fas fa-calendar"></i> Due: Dec 15, 2024</span>
+                                    <span><i class="fas fa-users"></i> 25 students</span>
+                                    <span><i class="fas fa-clock"></i> 2 weeks</span>
+                                </div>
+                            </div>
+                            <div class="assignment-status active">Active</div>
+                        </div>
+                        <div class="assignment-card-description">
+                            Create a responsive website using HTML5 and CSS3. The website should include navigation, hero section, and contact form.
+                        </div>
+                        <div class="assignment-card-footer">
+                            <div class="assignment-actions">
+                                <button class="assignment-action-btn">View Details</button>
+                                <button class="assignment-action-btn submit" onclick="openSubmissionModal('HTML & CSS Fundamentals')">Submit Assignment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card">
+                        <div class="assignment-card-header">
+                            <div>
+                                <div class="assignment-card-title">JavaScript DOM Manipulation</div>
+                                <div class="assignment-card-meta">
+                                    <span><i class="fas fa-calendar"></i> Due: Dec 22, 2024</span>
+                                    <span><i class="fas fa-users"></i> 25 students</span>
+                                    <span><i class="fas fa-clock"></i> 1 week</span>
+                                </div>
+                            </div>
+                            <div class="assignment-status due">Due Soon</div>
+                        </div>
+                        <div class="assignment-card-description">
+                            Build an interactive web application that demonstrates DOM manipulation, event handling, and form validation using vanilla JavaScript.
+                        </div>
+                        <div class="assignment-card-footer">
+                            <div class="assignment-actions">
+                                <button class="assignment-action-btn">View Details</button>
+                                <button class="assignment-action-btn submit" onclick="openSubmissionModal('JavaScript DOM Manipulation')">Submit Assignment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assignment-card">
+                        <div class="assignment-card-header">
+                            <div>
+                                <div class="assignment-card-title">Bootstrap Framework Project</div>
+                                <div class="assignment-card-meta">
+                                    <span><i class="fas fa-calendar"></i> Submitted: Dec 1, 2024</span>
+                                    <span><i class="fas fa-users"></i> 25 students</span>
+                                    <span><i class="fas fa-check"></i> Completed</span>
+                                </div>
+                            </div>
+                            <div class="assignment-status completed">Completed</div>
+                        </div>
+                        <div class="assignment-card-description">
+                            Create a professional portfolio website using Bootstrap framework with responsive design and modern components.
+                        </div>
+                        <div class="assignment-card-footer">
+                            <div class="assignment-actions">
+                                <button class="assignment-action-btn">View Submission</button>
+                                <button class="assignment-action-btn">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MESSAGE INPUT AREA - Message composer -->
+            <div class="message-input-area">
+                <div class="message-composer">
+                    <!-- Message formatting toolbar -->
+                    <div class="message-toolbar">
+                        <button class="toolbar-btn" data-format="bold" title="Bold"><i class="fas fa-bold"></i></button>
+                        <button class="toolbar-btn" data-format="italic" title="Italic"><i class="fas fa-italic"></i></button>
+                        <button class="toolbar-btn" data-format="strikethrough" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+                        <button class="toolbar-btn" data-format="underline" title="Underline"><i class="fas fa-underline"></i></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" data-format="list" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                        <button class="toolbar-btn" data-format="numbered" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                    </div>
+                    
+                    <!-- Message input field -->
+                    <div class="message-input-container">
+                        <div class="message-input" contenteditable="true" data-placeholder="Message D Navidu" id="messageInput"></div>
+                    </div>
+                    
+                    
+                    <!-- Message controls and send button -->
+                    <div class="message-controls">
+                        <div class="message-tools">
+                            <button class="tool-btn" data-tool="text" title="Text formatting"><i class="fas fa-font"></i></button>
+                            <button class="tool-btn" data-tool="emoji" title="Add emoji"><i class="far fa-smile"></i></button>
+                            <button class="tool-btn" data-tool="mention" title="Mention someone"><i class="fas fa-at"></i></button>
+                            <button class="tool-btn" data-tool="file" title="Attach file"><i class="fas fa-paperclip"></i></button>
+                        </div>
+                        <button class="send-btn" id="sendBtn" title="Send message"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Assignment Modal -->
+    <div id="createAssignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create New Assignment</h2>
+                <span class="close" id="closeCreateModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="createAssignmentForm">
+                    <div class="form-group">
+                        <label class="form-label" for="assignmentTitle">Assignment Title</label>
+                        <input type="text" class="form-input" id="assignmentTitle" placeholder="Enter assignment title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="assignmentDescription">Description</label>
+                        <textarea class="form-textarea" id="assignmentDescription" placeholder="Describe the assignment requirements..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="assignmentDueDate">Due Date</label>
+                        <input type="datetime-local" class="form-input" id="assignmentDueDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="assignmentPoints">Points</label>
+                        <input type="number" class="form-input" id="assignmentPoints" placeholder="100" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Attach Files (Optional)</label>
+                        <div class="form-file" id="assignmentFileUpload">
+                            <div class="file-upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="file-upload-text">Click to upload files or drag and drop</div>
+                            <div class="file-upload-hint">PDF, DOC, DOCX, TXT (Max 10MB each)</div>
+                            <input type="file" multiple accept=".pdf,.doc,.docx,.txt" style="display: none;" id="assignmentFiles">
+                        </div>
+                        <div id="assignmentSelectedFiles" class="selected-files" style="display: none;"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelCreateAssignment">Cancel</button>
+                <button type="submit" class="btn btn-primary" form="createAssignmentForm">Create Assignment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Assignment Modal -->
+    <div id="submitAssignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="submitModalTitle">Submit Assignment</h2>
+                <span class="close" id="closeSubmitModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="submitAssignmentForm">
+                    <div class="form-group">
+                        <label class="form-label" for="submissionText">Comments (Optional)</label>
+                        <textarea class="form-textarea" id="submissionText" placeholder="Add any comments about your submission..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Upload Your Work</label>
+                        <div class="form-file" id="submissionFileUpload">
+                            <div class="file-upload-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                            <div class="file-upload-text">Click to upload your assignment files</div>
+                            <div class="file-upload-hint">All file types accepted (Max 50MB each)</div>
+                            <input type="file" multiple id="submissionFiles" style="display: none;">
+                        </div>
+                        <div id="submissionSelectedFiles" class="selected-files" style="display: none;"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelSubmitAssignment">Cancel</button>
+                <button type="submit" class="btn btn-success" form="submitAssignmentForm">Submit Assignment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Get DOM elements
+            const sidebarItems = document.querySelectorAll('.section-item');
+            const navMenuItems = document.querySelectorAll('.nav-menu-item');
+            const navItems = document.querySelectorAll('.nav-item');
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const searchInput = document.getElementById('searchInput');
+            const membersHeader = document.getElementById('membersHeader');
+            const membersList = document.getElementById('membersList');
+            const chatTitle = document.querySelector('.chat-title');
+            const welcomeName = document.querySelector('.welcome-name');
+            const toolbarBtns = document.querySelectorAll('.toolbar-btn');
+            const toolBtns = document.querySelectorAll('.tool-btn');
+            const discussionsContent = document.getElementById('discussionsContent');
+            const assignmentContent = document.getElementById('assignmentContent');
+
+            // Assignment modal elements
+            const createAssignmentModal = document.getElementById('createAssignmentModal');
+            const submitAssignmentModal = document.getElementById('submitAssignmentModal');
+            const addAssignmentBtn = document.getElementById('addAssignmentBtn');
+            const closeCreateModal = document.getElementById('closeCreateModal');
+            const closeSubmitModal = document.getElementById('closeSubmitModal');
+            const createAssignmentForm = document.getElementById('createAssignmentForm');
+            const submitAssignmentForm = document.getElementById('submitAssignmentForm');
+
+            // Track active formatting states
+            let activeFormats = new Set();
+            let selectedAssignmentFiles = [];
+            let selectedSubmissionFiles = [];
+
+            // Handle nav item clicks (Discussions vs Assignment)
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all nav items
+                    navItems.forEach(i => i.classList.remove('active'));
+                    // Remove active class from all member items
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    const section = this.getAttribute('data-section');
+                    
+                    if (section === 'discussions') {
+                        // Show discussions content, hide assignment content
+                        discussionsContent.style.display = 'flex';
+                        assignmentContent.style.display = 'none';
+                        chatTitle.textContent = 'IJSE Group';
+                        
+                        // Update message input for group discussion
+                        updateMessageInput('group', 'Message #general');
+                        updateContextIndicator('group');
+                        showMessageInput();
+                        
+                        // Update welcome message for discussions
+                        welcomeName.textContent = 'IJSE Group';
+                        document.querySelector('.welcome-message').innerHTML = `
+                            This is the beginning of the <span class="mention">#general</span> channel for IJSE Internet Technologies B72.
+                        `;
+                        
+                    } else if (section === 'assignment') {
+                        // Show assignment content, hide discussions content
+                        discussionsContent.style.display = 'none';
+                        assignmentContent.style.display = 'flex';
+                        chatTitle.textContent = 'Assignments';
+                        
+                        // Hide message input for assignments view
+                        hideMessageInput();
+                    }
+                });
+            });
+
+            // Assignment Modal Functions
+            function openCreateAssignmentModal() {
+                createAssignmentModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeCreateAssignmentModal() {
+                createAssignmentModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                createAssignmentForm.reset();
+                selectedAssignmentFiles = [];
+                updateSelectedFiles('assignment');
+            }
+
+            window.openSubmissionModal = function(assignmentTitle) {
+                document.getElementById('submitModalTitle').textContent = `Submit: ${assignmentTitle}`;
+                submitAssignmentModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            window.logout = function(){
+                Swal.fire({
+                    title:"confirm Logout",
+                    showCancelButton:true,
+                    confirmButtonText:'Logout',
+                    cancelButtonText:'Cancel'
+                }).then((result) =>{
+                    if(result.isConfirmed){
+                        localStorage.removeItem("user");
+                        sessionStorage.removeItem("token");
+                    }
+                }).then(() =>{
+                    window.location.href = "../index.html";
+                })
+            }
+
+            function closeSubmissionModal() {
+                submitAssignmentModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                submitAssignmentForm.reset();
+                selectedSubmissionFiles = [];
+                updateSelectedFiles('submission');
+            }
+
+            // Event listeners for modals
+            addAssignmentBtn.addEventListener('click', openCreateAssignmentModal);
+            closeCreateModal.addEventListener('click', closeCreateAssignmentModal);
+            closeSubmitModal.addEventListener('click', closeSubmissionModal);
+            document.getElementById('cancelCreateAssignment').addEventListener('click', closeCreateAssignmentModal);
+            document.getElementById('cancelSubmitAssignment').addEventListener('click', closeSubmissionModal);
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === createAssignmentModal) {
+                    closeCreateAssignmentModal();
+                }
+                if (event.target === submitAssignmentModal) {
+                    closeSubmissionModal();
+                }
+            });
+
+            // File upload handling
+            function setupFileUpload(uploadAreaId, inputId, type) {
+                const uploadArea = document.getElementById(uploadAreaId);
+                const fileInput = document.getElementById(inputId);
+                
+                uploadArea.addEventListener('click', () => fileInput.click());
+                
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.background = '#222529';
+                    uploadArea.style.borderColor = '#1164a3';
+                });
+                
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.style.background = '#1a1d29';
+                    uploadArea.style.borderColor = '#404449';
+                });
+                
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.background = '#1a1d29';
+                    uploadArea.style.borderColor = '#404449';
+                    
+                    const files = Array.from(e.dataTransfer.files);
+                    handleFileSelection(files, type);
+                });
+                
+                fileInput.addEventListener('change', (e) => {
+                    const files = Array.from(e.target.files);
+                    handleFileSelection(files, type);
+                });
+            }
+
+            function handleFileSelection(files, type) {
+                if (type === 'assignment') {
+                    selectedAssignmentFiles = [...selectedAssignmentFiles, ...files];
+                } else {
+                    selectedSubmissionFiles = [...selectedSubmissionFiles, ...files];
+                }
+                updateSelectedFiles(type);
+            }
+
+            function updateSelectedFiles(type) {
+                const files = type === 'assignment' ? selectedAssignmentFiles : selectedSubmissionFiles;
+                const containerId = type === 'assignment' ? 'assignmentSelectedFiles' : 'submissionSelectedFiles';
+                const container = document.getElementById(containerId);
+                
+                if (files.length === 0) {
+                    container.style.display = 'none';
+                    return;
+                }
+                
+                container.style.display = 'block';
+                container.innerHTML = files.map((file, index) => `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <i class="fas fa-file file-icon"></i>
+                            <span>${file.name}</span>
+                            <span style="color: #8d8d8d; font-size: 12px;">(${formatFileSize(file.size)})</span>
+                        </div>
+                        <button type="button" class="remove-file" onclick="removeFile(${index}, '${type}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            window.removeFile = function(index, type) {
+                if (type === 'assignment') {
+                    selectedAssignmentFiles.splice(index, 1);
+                } else {
+                    selectedSubmissionFiles.splice(index, 1);
+                }
+                updateSelectedFiles(type);
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Setup file uploads
+            setupFileUpload('assignmentFileUpload', 'assignmentFiles', 'assignment');
+            setupFileUpload('submissionFileUpload', 'submissionFiles', 'submission');
+
+            // Handle form submissions
+            createAssignmentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    title: document.getElementById('assignmentTitle').value,
+                    description: document.getElementById('assignmentDescription').value,
+                    dueDate: document.getElementById('assignmentDueDate').value,
+                    points: document.getElementById('assignmentPoints').value,
+                    files: selectedAssignmentFiles
+                };
+                
+                console.log('Creating assignment:', formData);
+                
+                // Here you would typically send the data to your server
+                // For demo purposes, we'll add the assignment to the list
+                addAssignmentToList(formData);
+                
+                closeCreateAssignmentModal();
+                
+                // Show success message
+                alert('Assignment created successfully!');
+            });
+
+            submitAssignmentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    comments: document.getElementById('submissionText').value,
+                    files: selectedSubmissionFiles,
+                    assignmentTitle: document.getElementById('submitModalTitle').textContent.replace('Submit: ', '')
+                };
+                
+                console.log('Submitting assignment:', formData);
+                
+                // Here you would typically send the data to your server
+                closeSubmissionModal();
+                
+                // Show success message
+                alert('Assignment submitted successfully!');
+            });
+
+            function addAssignmentToList(assignmentData) {
+                const assignmentsList = document.getElementById('assignmentsList');
+                const dueDate = new Date(assignmentData.dueDate);
+                const formattedDate = dueDate.toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+                
+                const assignmentCard = document.createElement('div');
+                assignmentCard.className = 'assignment-card';
+                assignmentCard.innerHTML = `
+                    <div class="assignment-card-header">
+                        <div>
+                            <div class="assignment-card-title">${assignmentData.title}</div>
+                            <div class="assignment-card-meta">
+                                <span><i class="fas fa-calendar"></i> Due: ${formattedDate}</span>
+                                <span><i class="fas fa-users"></i> 25 students</span>
+                                <span><i class="fas fa-star"></i> ${assignmentData.points} points</span>
+                            </div>
+                        </div>
+                        <div class="assignment-status active">Active</div>
+                    </div>
+                    <div class="assignment-card-description">
+                        ${assignmentData.description}
+                    </div>
+                    <div class="assignment-card-footer">
+                        <div class="assignment-actions">
+                            <button class="assignment-action-btn">View Details</button>
+                            <button class="assignment-action-btn submit" onclick="openSubmissionModal('${assignmentData.title}')">Submit Assignment</button>
+                        </div>
+                    </div>
+                `;
+                
+                assignmentsList.insertBefore(assignmentCard, assignmentsList.firstChild);
+            }
+
+            // Handle toolbar formatting buttons
+            toolbarBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const format = this.getAttribute('data-format');
+                    const isCurrentlyActive = this.classList.contains('active');
+                    
+                    // Toggle active state
+                    this.classList.toggle('active');
+                    
+                    if (this.classList.contains('active')) {
+                        activeFormats.add(format);
+                        // Apply formatting
+                        document.execCommand(format, false, null);
+                    } else {
+                        activeFormats.delete(format);
+                        // Remove formatting
+                        document.execCommand(format, false, null);
+                    }
+                    
+                    // Focus back to input
+                    messageInput.focus();
+                });
+            });
+
+            // Function to apply formatting
+            function applyFormatting(format) {
+                // This function is now handled directly in the click event
+                // but kept for backward compatibility if needed
+                document.execCommand(format, false, null);
+            }
+
+            // Handle input in the contenteditable div
+            messageInput.addEventListener('input', function() {
+                // This is now handled in the enhanced input management section above
+                // Keeping this comment for reference
+            });
+
+            // Apply active formatting to newly typed text
+            function applyActiveFormatting() {
+                // Check current formatting state and sync with active buttons
+                setTimeout(() => {
+                    updateFormattingButtons();
+                }, 10);
+            }
+
+            // Handle key events for formatting shortcuts
+            messageInput.addEventListener('keydown', function(e) {
+                // Ctrl+B for bold
+                if (e.ctrlKey && e.key === 'b') {
+                    e.preventDefault();
+                    const boldBtn = document.querySelector('[data-format="bold"]');
+                    boldBtn.click();
+                }
+                
+                // Ctrl+I for italic
+                if (e.ctrlKey && e.key === 'i') {
+                    e.preventDefault();
+                    const italicBtn = document.querySelector('[data-format="italic"]');
+                    italicBtn.click();
+                }
+                
+                // Ctrl+U for underline
+                if (e.ctrlKey && e.key === 'u') {
+                    e.preventDefault();
+                    const underlineBtn = document.querySelector('[data-format="underline"]');
+                    underlineBtn.click();
+                }
+                
+                // Enter key to send message
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Update formatting buttons based on cursor position
+            messageInput.addEventListener('selectionchange', updateFormattingButtons);
+            messageInput.addEventListener('keyup', updateFormattingButtons);
+            messageInput.addEventListener('mouseup', updateFormattingButtons);
+
+            function updateFormattingButtons() {
+                toolbarBtns.forEach(btn => {
+                    const format = btn.getAttribute('data-format');
+                    const isActive = document.queryCommandState(format);
+                    
+                    if (isActive) {
+                        btn.classList.add('active');
+                        activeFormats.add(format);
+                    } else {
+                        btn.classList.remove('active');
+                        activeFormats.delete(format);
+                    }
+                });
+            }
+
+            // Handle sidebar member item clicks
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    // Remove active class from nav items
+                    navItems.forEach(i => i.classList.remove('active'));
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Show discussions content for direct messages
+                    discussionsContent.style.display = 'flex';
+                    assignmentContent.style.display = 'none';
+                    
+                    // Update chat header and welcome message
+                    const userName = this.querySelector('.user-name');
+                    if (userName) {
+                        const name = userName.textContent.trim();
+                        chatTitle.textContent = name;
+                        welcomeName.textContent = name;
+                        
+                        // Update message input for direct message
+                        updateMessageInput('direct', `Message ${name}`);
+                        updateContextIndicator('direct', name);
+                        showMessageInput();
+                        
+                        // Update welcome message mention
+                        const welcomeMessage = document.querySelector('.welcome-message');
+                        welcomeMessage.innerHTML = `This conversation is just between <span class="mention">@${name}</span> and you.`;
+                    }
+                    
+                    // Remove notification badge when user is selected
+                    const badge = this.querySelector('.notification-badge');
+                    if (badge) {
+                        badge.style.display = 'none';
+                    }
+                });
+            });
+
+            // Handle left navigation menu clicks
+            navMenuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navMenuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Get the menu text to show different content
+                    const menuText = this.querySelector('.nav-menu-text').textContent;
+                    console.log(`Navigated to: ${menuText}`);
+                });
+            });
+
+            // Handle search functionality
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                sidebarItems.forEach(item => {
+                    const userName = item.querySelector('.user-name');
+                    if (userName) {
+                        const name = userName.textContent.toLowerCase();
+                        if (name.includes(searchTerm)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    }
+                });
+                
+                // Show all items if search is empty
+                if (searchTerm === '') {
+                    sidebarItems.forEach(item => {
+                        item.style.display = 'flex';
+                    });
+                }
+            });
+
+            // Handle members section collapse/expand
+            membersHeader.addEventListener('click', function() {
+                this.classList.toggle('collapsed');
+                
+                if (this.classList.contains('collapsed')) {
+                    membersList.style.display = 'none';
+                } else {
+                    membersList.style.display = 'block';
+                }
+            });
+
+            // Handle message input and send
+            function sendMessage() {
+                const message = messageInput.innerHTML.trim();
+                const textContent = messageInput.textContent.trim();
+                
+                if (textContent) {
+                    console.log(`Sending formatted message: "${message}" to ${chatTitle.textContent}`);
+                    console.log(`Plain text: "${textContent}"`);
+                    
+                    // Here you would typically send the message to a server
+                    // For now, we'll just clear the input and show a console message
+                    messageInput.innerHTML = '';
+                    
+                    // Clear active formats
+                    activeFormats.clear();
+                    toolbarBtns.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Update send button state
+                    sendBtn.disabled = true;
+                    sendBtn.style.opacity = '0.5';
+                    
+                    // You could add the message to the chat area here
+                    // addMessageToChat(message, 'You');
+                }
+            }
+
+            // Send message on button click
+            sendBtn.addEventListener('click', sendMessage);
+
+            // Handle tool buttons (emoji, mention, file, etc.)
+            toolBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tool = this.getAttribute('data-tool');
+                    console.log(`Tool clicked: ${tool}`);
+                    
+                    // Add visual feedback with scale animation
+                    this.style.transform = 'scale(0.95)';
+                    this.style.background = '#404449';
+                    this.style.color = '#ffffff';
+                    
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.background = '';
+                        this.style.color = '';
+                    }, 150);
+                    
+                    // Handle different tools
+                    switch(tool) {
+                        case 'text':
+                            console.log('Opening text formatting options...');
+                            break;
+                        case 'emoji':
+                            console.log('Opening emoji picker...');
+                            // You could show an emoji popup here
+                            break;
+                        case 'mention':
+                            // Insert @ symbol and focus
+                            const selection = window.getSelection();
+                            const range = document.createRange();
+                            
+                            // Insert @ at cursor position
+                            const atNode = document.createTextNode('@');
+                            if (selection.rangeCount > 0) {
+                                const currentRange = selection.getRangeAt(0);
+                                currentRange.deleteContents();
+                                currentRange.insertNode(atNode);
+                                range.setStartAfter(atNode);
+                                range.collapse(true);
+                                selection.removeAllRanges();
+                                selection.addRange(range);
+                            } else {
+                                messageInput.appendChild(atNode);
+                                range.setStartAfter(atNode);
+                                range.collapse(true);
+                                selection.removeAllRanges();
+                                selection.addRange(range);
+                            }
+                            
+                            messageInput.focus();
+                            break;
+                        case 'file':
+                            console.log('Opening file picker...');
+                            // Create hidden file input and trigger click
+                            const fileInput = document.createElement('input');
+                            fileInput.type = 'file';
+                            fileInput.multiple = true;
+                            fileInput.style.display = 'none';
+                            fileInput.addEventListener('change', function() {
+                                console.log('Files selected:', this.files);
+                            });
+                            document.body.appendChild(fileInput);
+                            fileInput.click();
+                            document.body.removeChild(fileInput);
+                            break;
+                        default:
+                            console.log(`${tool} tool functionality not implemented yet`);
+                    }
+                });
+            });
+
+            // Initialize send button state
+            sendBtn.disabled = true;
+            sendBtn.style.opacity = '0.5';
+
+            // Handle navigation items clicks
+            const allNavItems = document.querySelectorAll('.nav-item');
+            allNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Add visual feedback
+                    this.style.background = 'rgba(255, 255, 255, 0.1)';
+                    this.style.color = '#ffffff';
+                    
+                    setTimeout(() => {
+                        this.style.background = '';
+                        this.style.color = '';
+                    }, 200);
+                    
+                    const itemText = this.textContent.trim();
+                    console.log(`Navigation item clicked: ${itemText}`);
+                });
+            });
+
+            // Add hover effects for better UX
+            function addHoverEffect(elements, hoverStyle, normalStyle) {
+                elements.forEach(element => {
+                    element.addEventListener('mouseenter', function() {
+                        Object.assign(this.style, hoverStyle);
+                    });
+                    
+                    element.addEventListener('mouseleave', function() {
+                        Object.assign(this.style, normalStyle);
+                    });
+                });
+            }
+
+            // Add click feedback to user avatar
+            document.querySelector('.user-avatar-nav').addEventListener('click', function() {
+                console.log('User profile clicked');
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+
+            // Simulate real-time notifications (for demo purposes)
+            function simulateNotification() {
+                const items = document.querySelectorAll('.section-item:not(.active)');
+                if (items.length > 0) {
+                    const randomItem = items[Math.floor(Math.random() * items.length)];
+                    const badge = randomItem.querySelector('.notification-badge');
+                    
+                    if (badge && badge.style.display !== 'none') {
+                        const currentCount = parseInt(badge.textContent) || 1;
+                        badge.textContent = currentCount + 1;
+                    }
+                }
+            }
+
+            // Simulate notifications every 30 seconds (for demo)
+            setInterval(simulateNotification, 30000);
+
+            // Message input management functions
+            function updateMessageInput(type, placeholder) {
+                const messageInputContainer = document.querySelector('.message-input-container');
+                const messageToolbar = document.querySelector('.message-toolbar');
+                const messageControls = document.querySelector('.message-controls');
+                
+                if (type === 'direct') {
+                    // Direct message style - more personal
+                    messageInput.setAttribute('data-placeholder', placeholder);
+                    messageInput.style.minHeight = '20px';
+                    
+                    // Update placeholder dynamically
+                    updatePlaceholderText(placeholder);
+                    
+                    // Show all formatting tools for direct messages
+                    messageToolbar.style.display = 'flex';
+                    messageControls.style.display = 'flex';
+                    
+                } else if (type === 'group') {
+                    // Group discussion style
+                    messageInput.setAttribute('data-placeholder', placeholder);
+                    messageInput.style.minHeight = '20px';
+                    
+                    // Update placeholder dynamically
+                    updatePlaceholderText(placeholder);
+                    
+                    // Show all formatting tools for group discussions
+                    messageToolbar.style.display = 'flex';
+                    messageControls.style.display = 'flex';
+                }
+            }
+
+            function updatePlaceholderText(text) {
+                // Clear existing content if empty
+                if (messageInput.textContent.trim() === '') {
+                    messageInput.innerHTML = '';
+                }
+                
+                // Update the placeholder attribute
+                messageInput.setAttribute('data-placeholder', text);
+                
+                // Add CSS to show placeholder when empty
+                if (messageInput.textContent.trim() === '') {
+                    messageInput.classList.add('empty');
+                } else {
+                    messageInput.classList.remove('empty');
+                }
+            }
+
+            function showMessageInput() {
+                const messageInputArea = document.querySelector('.message-input-area');
+                messageInputArea.style.display = 'block';
+            }
+
+            function hideMessageInput() {
+                const messageInputArea = document.querySelector('.message-input-area');
+                messageInputArea.style.display = 'none';
+            }
+
+            // Enhanced message input styling and context management
+            messageInput.addEventListener('focus', function() {
+                this.classList.remove('empty');
+            });
+
+            messageInput.addEventListener('blur', function() {
+                if (this.textContent.trim() === '') {
+                    this.classList.add('empty');
+                }
+            });
+
+            messageInput.addEventListener('input', function() {
+                if (this.textContent.trim() === '') {
+                    this.classList.add('empty');
+                } else {
+                    this.classList.remove('empty');
+                }
+                
+                // Update send button state
+                const hasContent = this.textContent.trim().length > 0;
+                sendBtn.disabled = !hasContent;
+                sendBtn.style.opacity = hasContent ? '1' : '0.5';
+                
+                // Apply active formatting to new text
+                applyActiveFormatting();
+            });
+
+            // Update context indicators when switching between sections
+            function updateContextIndicator(type, name = '') {
+                const welcomeMessage = document.querySelector('.welcome-message');
+                let contextHtml = '';
+                
+                if (type === 'direct') {
+                    contextHtml = `<div class="context-indicator direct">Direct Message</div>`;
+                    welcomeMessage.innerHTML = `This conversation is just between <span class="mention">@${name}</span> and you.`;
+                } else if (type === 'group') {
+                    contextHtml = `<div class="context-indicator group">Group Discussion</div>`;
+                    welcomeMessage.innerHTML = `This is the beginning of the <span class="mention">#general</span> channel for IJSE Internet Technologies B72.`;
+                }
+                
+                // Update context indicator
+                const existingIndicator = document.querySelector('.context-indicator');
+                if (existingIndicator) {
+                    existingIndicator.outerHTML = contextHtml;
+                } else {
+                    welcomeMessage.insertAdjacentHTML('beforebegin', contextHtml);
+                }
+            }
+
+            // Initial setup - start with discussions active
+            updateMessageInput('group', 'Message #general');
+            updateContextIndicator('group');
+            showMessageInput();
+
+            // Set default due date to next week
+            const nextWeek = new Date();
+            nextWeek.setDate(nextWeek.getDate() + 7);
+            nextWeek.setHours(23, 59);
+            document.getElementById('assignmentDueDate').value = nextWeek.toISOString().slice(0, 16);
+
+            console.log('IJSE Interface with Assignment System initialized successfully!');
+        });
+    </script>
+</body>
+</html>

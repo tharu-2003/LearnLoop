@@ -1220,21 +1220,21 @@
         const $uploadBtn = $('.upload-btn');
         const $body = $('body');
 
-        $(".nav-menu-item").on('click' , function(){
-            console.log("ebuna ..");
+        // $(".nav-menu-item").on('click' , function(){
+        //     console.log("ebuna ..");
 
-            localStorage.removeItem("token");
-            localStorage.removeItem("email");
+        //     localStorage.removeItem("token");
+        //     localStorage.removeItem("email");
 
-            Swal.fire({
-                title:"logout",
-                text:"successfully logout",
-                timer:1500
-            }).then(() => {
-                console.log("methnt awa ..!");
-                window.location.href = '../index.html'
-            })
-        })
+        //     Swal.fire({
+        //         title:"logout",
+        //         text:"successfully logout",
+        //         timer:1500
+        //     }).then(() => {
+        //         console.log("methnt awa ..!");
+        //         window.location.href = '../index.html'
+        //     })
+        // })
 
         // Open modal
         $editProfileBtn.on('click', function() {
@@ -1324,6 +1324,20 @@
                 const navText = $(this).find('.nav-menu-text').text();
                 if (navText === 'Classes') {
                     navigateToClasses();
+                }else if(navText === 'Document'){
+
+                }else if(navText === 'LogOut'){
+                    sessionStorage.clear();
+                    localStorage.clear();
+
+                    Swal.fire({
+                        title:"logout",
+                        text:"successfully logout",
+                        timer:1500
+                    }).then(() => {
+                        console.log("logout successful");
+                        window.location.href = '../index.html'
+                    })
                 }
             });
         });

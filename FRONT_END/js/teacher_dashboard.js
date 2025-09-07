@@ -665,6 +665,7 @@ $(document).ready(function() {
             
             if (response.code === 200) {
                 showToast('Class created successfully!', 'success');
+                window.location.reload();
                 
                 const classData = response.data;
                 const imageUrl = classData.imageUrl || null;
@@ -770,10 +771,15 @@ function loadUserData(userId) {
                     avatarDiv.append('<i class="fas fa-user"></i>');
                 }
 
-
+                
                 $('.edit-form #teacherName').val(user.username);
                 $('.edit-form #teacherEmail').val(user.email );
                 $('.edit-form #teacherPhone').val(user.phoneNumber );
+                
+                const userName = user.username;
+                const firstChar = userName.substring(0, 1);
+                $('.user-avatar-nav').text(firstChar);
+
             }
         },
         error: function(xhr, status, error) {

@@ -1962,10 +1962,13 @@
             // Get the menu text to show different content
             const menuText = $(this).find('.nav-menu-text').text();
                 if (menuText === 'Classes') {
+                    localStorage.removeItem("classId");
                     navigateToClasses();
                 }else if(menuText === 'Document'){
+                    localStorage.removeItem("classId");
                     
                 }else if(menuText === 'Dashboard'){
+                    localStorage.removeItem("classId");
                     navigateToDashboard();
                 }else if(menuText === 'LogOut'){
                     sessionStorage.clear();

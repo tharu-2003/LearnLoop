@@ -1,5 +1,6 @@
 package com.ijse.gdse72.back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,10 +25,12 @@ public class Submission {
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignment_id", nullable = false)
+    @JsonIgnore
     private Assignment assignment;
 
     @PrePersist

@@ -1,5 +1,6 @@
 package com.ijse.gdse72.back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class Discussion {
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id", nullable = false)
+    @JsonIgnore
     private Class classEntity;
 
     @ManyToMany
@@ -39,6 +41,7 @@ public class Discussion {
             joinColumns = @JoinColumn(name = "discussion_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonIgnore
     private List<User> users;
 
     @PrePersist

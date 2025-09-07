@@ -1,5 +1,6 @@
 package com.ijse.gdse72.back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,10 +29,12 @@ public class Chat {
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id", nullable = false)
+    @JsonIgnore
     private Class classEntity;
 
     @PrePersist

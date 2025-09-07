@@ -351,17 +351,109 @@ $(document).ready(function() {
             }else if(navText === 'Document'){
 
             }else if(navText === 'LogOut'){
+                // Clear storage
                 sessionStorage.clear();
                 localStorage.clear();
-
+                
+                // Beautiful logout SweetAlert
                 Swal.fire({
-                    title:"logout",
-                    text:"successfully logout",
-                    timer:1500
+                    title: 'Logging Out...',
+                    html: `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                margin: 0 auto 20px; 
+                                border-radius: 50%; 
+                                background: linear-gradient(45deg, #667eea, #764ba2); 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center;
+                                animation: rotateGlow 2s ease-in-out infinite;
+                            ">
+                                <i class="fas fa-sign-out-alt" style="font-size: 32px; color: white;"></i>
+                            </div>
+                            <p style="font-size: 18px; color: #6b7280; margin: 0; font-weight: 300;">
+                                Thank you for using our service!
+                            </p>
+                            <p style="font-size: 14px; color: #9ca3af; margin: 10px 0 0; font-style: italic;">
+                                Redirecting you safely...
+                            </p>
+                        </div>
+                    `,
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    backdrop: `rgba(0,0,123,0.4)`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'beautiful-logout',
+                        timerProgressBar: 'custom-progress-bar'
+                    },
+                    didOpen: () => {
+                        const popup = Swal.getPopup();
+                        popup.style.borderRadius = '25px';
+                        popup.style.border = 'none';
+                        popup.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+                        popup.style.background = 'white';
+                        popup.style.overflow = 'hidden';
+                        popup.style.position = 'relative';
+                        
+                        // Add a subtle background pattern
+                        popup.style.backgroundImage = `
+                            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.05) 0%, transparent 50%),
+                            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.05) 0%, transparent 50%)
+                        `;
+                        
+                        // Add CSS animations if not already added
+                        if (!document.getElementById('logout-animations')) {
+                            const style = document.createElement('style');
+                            style.id = 'logout-animations';
+                            style.textContent = `
+                                @keyframes rotateGlow {
+                                    0% { 
+                                        transform: rotate(0deg) scale(1);
+                                        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                                    }
+                                    50% { 
+                                        transform: rotate(180deg) scale(1.05);
+                                        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+                                    }
+                                    100% { 
+                                        transform: rotate(360deg) scale(1);
+                                        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                                    }
+                                }
+                                
+                                .beautiful-logout {
+                                    animation: slideInFromTop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+                                }
+                                
+                                .custom-progress-bar {
+                                    background: linear-gradient(90deg, #667eea, #764ba2) !important;
+                                    height: 6px !important;
+                                    border-radius: 3px !important;
+                                }
+                                
+                                @keyframes slideInFromTop {
+                                    from {
+                                        opacity: 0;
+                                        transform: translate3d(0, -60px, 0) scale(0.9);
+                                    }
+                                    to {
+                                        opacity: 1;
+                                        transform: translate3d(0, 0, 0) scale(1);
+                                    }
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+                    }
                 }).then(() => {
                     console.log("logout successful");
-                    window.location.href = '../index.html'
-                })
+                    window.location.href = '../index.html';
+                });
             }
         });
     });

@@ -1,7 +1,41 @@
+const CLOUD_NAME = "dodxgayab"; // your Cloudinary cloud name
+const UPLOAD_PRESET = "learnloop_unsigned"; // your unsigned preset
+
+// Toast functionality variables
+let toastCount = 0;
+const activeToasts = new Set();
+
+// Upload function
+async function uploadImageToCloudinary(file) {
+    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("folder", "learnloop/classes"); // optional: organize uploads
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            body: formData
+        });
+        const data = await response.json();
+        if (data.secure_url) {
+            return data.secure_url; // Cloudinary hosted URL
+        } else {
+            throw new Error("Cloudinary upload failed");
+        }
+    } catch (error) {
+        console.error("Cloudinary upload failed:", error);
+        showToast("Image upload failed!", "error");
+        return null;
+    }
+}
+
 $(document).ready(function() {
 
     const currentUser = JSON.parse(localStorage.getItem("current User"));
-    console.log("User : "+ currentUser.userId);
+    console.log("User : " + currentUser.userId);
 
     const userName = currentUser.username;
     const firstChar = userName.substring(0, 1);
@@ -17,7 +51,6 @@ $(document).ready(function() {
     // Load initial data
     if (currentUser && currentUser.userId) {
         loadTeacherClasses(currentUser.userId);
-        // updateClassStatistics(currentUser.userId);
     }
 
     function loadTeacherClasses(teacherId) {
@@ -210,8 +243,6 @@ $(document).ready(function() {
             }
         });
 
-        
-        
         // Update search results display
         if (visibleCount === 0) {
             // No results found
@@ -263,18 +294,110 @@ $(document).ready(function() {
                 navigateToDashboard();
             } else if(navText === 'Document'){
                 // Handle document navigation
-            } else if(navText === 'LogOut'){
+            }else if(navText === 'LogOut'){
+                // Clear storage
                 sessionStorage.clear();
                 localStorage.clear();
-
+                
+                // Beautiful logout SweetAlert
                 Swal.fire({
-                    title:"Logout",
-                    text:"Successfully logged out",
-                    timer:1500
+                    title: 'Logging Out...',
+                    html: `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                margin: 0 auto 20px; 
+                                border-radius: 50%; 
+                                background: linear-gradient(45deg, #667eea, #764ba2); 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center;
+                                animation: rotateGlow 2s ease-in-out infinite;
+                            ">
+                                <i class="fas fa-sign-out-alt" style="font-size: 32px; color: white;"></i>
+                            </div>
+                            <p style="font-size: 18px; color: #6b7280; margin: 0; font-weight: 300;">
+                                Thank you for using our service!
+                            </p>
+                            <p style="font-size: 14px; color: #9ca3af; margin: 10px 0 0; font-style: italic;">
+                                Redirecting you safely...
+                            </p>
+                        </div>
+                    `,
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    backdrop: `rgba(0,0,123,0.4)`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'beautiful-logout',
+                        timerProgressBar: 'custom-progress-bar'
+                    },
+                    didOpen: () => {
+                        const popup = Swal.getPopup();
+                        popup.style.borderRadius = '25px';
+                        popup.style.border = 'none';
+                        popup.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+                        popup.style.background = 'white';
+                        popup.style.overflow = 'hidden';
+                        popup.style.position = 'relative';
+                        
+                        // Add a subtle background pattern
+                        popup.style.backgroundImage = `
+                            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.05) 0%, transparent 50%),
+                            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.05) 0%, transparent 50%)
+                        `;
+                        
+                        // Add CSS animations if not already added
+                        if (!document.getElementById('logout-animations')) {
+                            const style = document.createElement('style');
+                            style.id = 'logout-animations';
+                            style.textContent = `
+                                @keyframes rotateGlow {
+                                    0% { 
+                                        transform: rotate(0deg) scale(1);
+                                        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                                    }
+                                    50% { 
+                                        transform: rotate(180deg) scale(1.05);
+                                        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+                                    }
+                                    100% { 
+                                        transform: rotate(360deg) scale(1);
+                                        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                                    }
+                                }
+                                
+                                .beautiful-logout {
+                                    animation: slideInFromTop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+                                }
+                                
+                                .custom-progress-bar {
+                                    background: linear-gradient(90deg, #667eea, #764ba2) !important;
+                                    height: 6px !important;
+                                    border-radius: 3px !important;
+                                }
+                                
+                                @keyframes slideInFromTop {
+                                    from {
+                                        opacity: 0;
+                                        transform: translate3d(0, -60px, 0) scale(0.9);
+                                    }
+                                    to {
+                                        opacity: 1;
+                                        transform: translate3d(0, 0, 0) scale(1);
+                                    }
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+                    }
                 }).then(() => {
                     console.log("logout successful");
-                    window.location.href = '../index.html'
-                })
+                    window.location.href = '../index.html';
+                });
             }
             console.log(`Navigated to: ${navText}`);
         });
@@ -311,7 +434,7 @@ $(document).ready(function() {
         });
     }
 
-    // NEW: Attach settings event listeners using event delegation
+    // Attach settings event listeners using event delegation
     function attachSettingsEventListeners() {
         console.log('Attaching settings event listeners...');
         
@@ -369,10 +492,162 @@ $(document).ready(function() {
     }
 
     // Settings modal functionality
+    const $classDpInput = $('#classDpInput');
     const $settingsModal = $('#settingsModal');
     const $editClassModal = $('#editClassModal');
-    const $modalTitle = $('#settingsModalTitle');
-    
+
+    // Handle edit form submission - FIXED VERSION
+    $('#editClassForm').on('submit', async function(e) {
+        e.preventDefault();
+        
+        const classId = localStorage.getItem("classId");
+        
+        if (!classId) {
+            showToast('Error: Class ID not found', 'error');
+            return;
+        }
+        
+        // Get the current user for createdBy field
+        const currentUser = JSON.parse(localStorage.getItem("current User"));
+        
+        // Handle image upload first if there's a new image
+        let uploadedImageUrl = null;
+        const imageFile = $classDpInput[0].files[0];
+        if (imageFile) {
+            showToast('Uploading image...', 'info');
+            uploadedImageUrl = await uploadImageToCloudinary(imageFile);
+            if (!uploadedImageUrl) {
+                return; // Stop if upload fails
+            }
+        }
+        
+        // Prepare form data according to CreateClassDTO structure
+        const formData = {
+            name: $('#className').val().trim(),
+            description: $('#classDescription').val().trim(),
+            passcode: $('#classPasscode').val().trim() || null,
+            priority: currentVisibility.toUpperCase(), // Convert to uppercase to match Priority enum
+            createdBy: currentUser.userId, // Required field from DTO
+            imageUrl: uploadedImageUrl // Will be null if no new image was uploaded
+        };
+        
+        console.log('Updating class data:', formData);
+        
+        // Validate required fields
+        if (!formData.name) {
+            showToast('Class name is required', 'error');
+            $('#className').focus();
+            return;
+        }
+        
+        const token = sessionStorage.getItem("token");
+        
+        if (!token) {
+            showToast('Authentication token not found. Please login again.', 'error');
+            return;
+        }
+        
+        // Show loading state
+        showToast('Updating class...', 'info');
+        
+        // Disable form elements during submission
+        $('#editClassForm input, #editClassForm textarea, #editClassForm button').prop('disabled', true);
+        
+        $.ajax({
+            url: `http://localhost:8080/api/classes/${classId}`,
+            type: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(formData),
+            success: function(response) {
+                console.log('Update response:', response);
+                
+                if (response.code === 200 && response.data) {
+                    const updatedClass = response.data;
+                    
+                    showToast(`Class "${updatedClass.name}" has been updated successfully!`, 'success');
+                    
+                    // Update the class card in the UI
+                    const $classCard = $(`.class-card[data-class-id="${classId}"]`);
+                    if ($classCard.length) {
+                        // Update class name
+                        $classCard.find('.class-name').text(updatedClass.name);
+                        
+                        // Update priority badge
+                        const isPublic = updatedClass.priority === 'PUBLIC';
+                        const $statusBadge = $classCard.find('.status-badge');
+                        $statusBadge.removeClass('status-public status-private');
+                        $statusBadge.addClass(isPublic ? 'status-public' : 'status-private');
+                        $statusBadge.text(isPublic ? 'Public' : 'Private');
+                        
+                        // Update image if provided
+                        if (updatedClass.imageUrl) {
+                            const $cardImage = $classCard.find('.card-image');
+                            $cardImage.html(`
+                                <img src="${updatedClass.imageUrl}" alt="${updatedClass.name}" 
+                                    onerror="this.parentElement.classList.add('placeholder'); this.parentElement.innerHTML='📚';">
+                                <span class="status-badge ${isPublic ? 'status-public' : 'status-private'}">${isPublic ? 'Public' : 'Private'}</span>
+                                <div class="settings-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                            `);
+                        }
+                    }
+                    
+                    // Update global variables
+                    currentClass = updatedClass.name;
+                    
+                    // Close the modal
+                    setTimeout(() => {
+                        closeEditModal();
+                    }, 1000);
+                    
+                    // Re-initialize event listeners for updated elements
+                    attachCardEventListeners();
+                    attachSettingsEventListeners();
+                } else {
+                    showToast(response.message || 'Failed to update class. Please try again.', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating class:', {
+                    status: status,
+                    error: error,
+                    response: xhr.responseText,
+                    classId: classId
+                });
+                
+                let errorMessage = 'Failed to update class. Please try again.';
+                
+                // Handle specific HTTP status codes
+                if (xhr.status === 400) {
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        errorMessage = errorResponse.message || 'Invalid data provided. Please check your input.';
+                    } catch (e) {
+                        errorMessage = 'Invalid data provided. Please check your input.';
+                    }
+                } else if (xhr.status === 401) {
+                    errorMessage = 'Authentication failed. Please login again.';
+                } else if (xhr.status === 403) {
+                    errorMessage = 'You do not have permission to update this class.';
+                } else if (xhr.status === 404) {
+                    errorMessage = 'Class not found. It may have been deleted.';
+                } else if (xhr.status === 500) {
+                    errorMessage = 'Server error occurred. Please try again later.';
+                }
+                
+                showToast(errorMessage, 'error');
+            },
+            complete: function() {
+                // Re-enable form elements
+                $('#editClassForm input, #editClassForm textarea, #editClassForm button').prop('disabled', false);
+            }
+        });
+    });
+        
     // Settings actions
     $('.settings-item').on('click', function() {
         const action = $(this).data('action') || $(this).attr('onclick')?.match(/'([^']+)'/)?.[1];
@@ -392,13 +667,10 @@ $(document).ready(function() {
                 openEditModal();
                 break;
             case 'delete':
-                if(confirm(`Are you sure you want to delete: ${currentClass}? This action cannot be undone.`)) {
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: `${currentClass} has been deleted successfully.`,
-                        icon: 'success',
-                        timer: 2000
-                    });
+                // Use custom confirmation dialog with toast
+                const confirmDelete = confirm(`Are you sure you want to delete: ${currentClass}? This action cannot be undone.`);
+                if (confirmDelete) {
+                    showToast(`${currentClass} has been deleted successfully.`, 'success');
                 }
                 break;
         }
@@ -409,16 +681,97 @@ $(document).ready(function() {
     }
 
     function openEditModal() {
-        // Pre-fill the form with current class data
-        $('#className').val(currentClass || '');
-        $('#classDescription').val('This is a sample description for the class.');
-        $('#classPasscode').val('');
+        const classId = localStorage.getItem("classId");
+
+        const token = sessionStorage.getItem("token");
+        $.ajax({
+            url: `http://localhost:8080/api/classes/${classId}`,
+            type: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            success: function(response) {
+                console.log('Class details response:', response);
+                
+                if (response.code === 200 && response.data) {
+                    const classData = response.data;
+                    
+                    // Update modal title with class name
+                    $('#editModalTitle').text(`Edit ${classData.name}`);
+                    
+                    // Populate form fields
+                    $('#className').val(classData.name || '');
+                    $('#classDescription').val(classData.description || '');
+                    $('#classPasscode').val(classData.passcode || '');
+                    
+                    // Set visibility toggle based on priority
+                    if (classData.priority) {
+                        const isPublic = classData.priority.toLowerCase() === 'public';
+                        setToggleState(isPublic ? 'public' : 'private');
+                    }
+                    
+                    // Handle class image if available
+                    if (classData.imageUrl) {
+                        $('#classDpPreview').html(`<img src="${classData.imageUrl}" alt="Class Avatar">`);
+                    } else {
+                        $('#classDpPreview').html('<i class="fas fa-book"></i>');
+                    }
+                    
+                    // Enable form elements
+                    $('#editClassForm input, #editClassForm textarea, #editClassForm button').prop('disabled', false);
+                    
+                    console.log('Form populated with class data:', classData);
+                    
+                    // Show the edit modal
+                    $editClassModal.addClass('active');
+                    
+                } else {
+                    console.error('Invalid response format:', response);
+                    showToast('Failed to load class details', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching class details:', {
+                    status: status,
+                    error: error,
+                    response: xhr.responseText
+                });
+                
+                let errorMessage = 'Failed to load class details';
+                
+                if (xhr.status === 404) {
+                    errorMessage = 'Class not found';
+                } else if (xhr.status === 403) {
+                    errorMessage = 'Access denied';
+                } else if (xhr.status === 401) {
+                    errorMessage = 'Authentication required';
+                }
+                
+                showToast(errorMessage, 'error');
+            }
+        });
+    }
+
+    function setToggleState(state) {
+        const $container = $('#toggleContainer');
+        const $buttons = $('.toggle-button');
         
-        // Reset toggle to public
-        resetToggle();
+        // Remove active class from all buttons
+        $buttons.removeClass('active');
         
-        // Show the edit modal
-        $editClassModal.addClass('active');
+        // Set active state based on the parameter
+        if (state === 'private') {
+            $buttons.filter('[data-state="private"]').addClass('active');
+            $container.addClass('private-active');
+            currentVisibility = 'private';
+        } else {
+            $buttons.filter('[data-state="public"]').addClass('active');
+            $container.removeClass('private-active');
+            currentVisibility = 'public';
+        }
+        
+        console.log('Toggle state set to:', state);
     }
 
     // Toggle functionality for visibility
@@ -470,42 +823,6 @@ $(document).ready(function() {
         }
     });
 
-    // Handle edit form submission
-    $('#editClassForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            className: $('#className').val(),
-            description: $('#classDescription').val(),
-            passcode: $('#classPasscode').val(),
-            visibility: currentVisibility,
-            classId: currentClassId
-        };
-        
-        console.log('Saving class data:', formData);
-        
-        Swal.fire({
-            title: 'Success!',
-            text: `Class "${formData.className}" has been updated successfully!`,
-            icon: 'success',
-            timer: 2000
-        });
-        
-        // Update the class name in the UI if changed
-        if (formData.className !== currentClass) {
-            // Find and update the class card
-            $('.class-card').each(function() {
-                const $card = $(this);
-                if ($card.find('.class-name').text() === currentClass) {
-                    $card.find('.class-name').text(formData.className);
-                    currentClass = formData.className;
-                }
-            });
-        }
-        
-        closeEditModal();
-    });
-
     // Close modal events
     $('.close-btn').on('click', function() {
         if ($(this).closest('#editClassModal').length) {
@@ -539,7 +856,7 @@ $(document).ready(function() {
         }
     });
 
-    // Global functions for backward compatibility (if needed elsewhere)
+    // Global functions for backward compatibility
     window.openSettingsModal = function(event, className, classId) {
         event.stopPropagation();
         
@@ -575,11 +892,93 @@ $(document).ready(function() {
     window.clearSearch = function() {
         clearSearch();
     };
-
-    // Helper function for toast notifications (if not already defined)
-    window.showToast = function(message, type = 'info') {
-        console.log(`Toast: ${message} (${type})`);
-        // You can implement actual toast notifications here
-        // For now, just using console.log
-    };
 });
+
+// TOAST ALERT FUNCTIONALITY
+function showToast(message, type = 'info', duration = 4000) {
+    const toast = document.createElement('div');
+    const toastId = ++toastCount;
+    toast.className = `toast toast-${type}`;
+    toast.setAttribute('data-toast-id', toastId);
+    
+    const config = {
+        info: { 
+            icon: 'ℹ️', 
+            title: 'Information',
+            gradient: 'linear-gradient(135deg, #4ecdc4, #44a08d)'
+        },
+        success: { 
+            icon: '✅', 
+            title: 'Success',
+            gradient: 'linear-gradient(135deg, #4ade80, #22c55e)'
+        },
+        error: { 
+            icon: '❌', 
+            title: 'Error',
+            gradient: 'linear-gradient(135deg, #f87171, #ef4444)'
+        },
+        warning: { 
+            icon: '⚠️', 
+            title: 'Warning',
+            gradient: 'linear-gradient(135deg, #fbbf24, #f59e0b)'
+        }
+    };
+
+    const currentConfig = config[type];
+    
+    toast.innerHTML = `
+        <div class="toast-icon">${currentConfig.icon}</div>
+        <div class="toast-content">
+            <div class="toast-title">${currentConfig.title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="closeToast(${toastId})">&times;</button>
+        <div class="toast-progress"></div>
+    `;
+
+    const existingToasts = document.querySelectorAll('.toast');
+    let topOffset = 20;
+    existingToasts.forEach(existingToast => {
+        topOffset += existingToast.offsetHeight + 15;
+    });
+    toast.style.top = `${topOffset}px`;
+
+    document.body.appendChild(toast);
+    activeToasts.add(toastId);
+
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        closeToast(toastId);
+    }, duration);
+
+    return toastId;
+}
+
+function closeToast(toastId) {
+    const toast = document.querySelector(`[data-toast-id="${toastId}"]`);
+    if (!toast || !activeToasts.has(toastId)) return;
+
+    toast.classList.add('hide');
+    toast.classList.remove('show');
+    
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.remove();
+            activeToasts.delete(toastId);
+            repositionToasts();
+        }
+    }, 400);
+}
+
+function repositionToasts() {
+    const toasts = document.querySelectorAll('.toast.show');
+    let topOffset = 20;
+    
+    toasts.forEach(toast => {
+        toast.style.top = `${topOffset}px`;
+        topOffset += toast.offsetHeight + 15;
+    });
+}

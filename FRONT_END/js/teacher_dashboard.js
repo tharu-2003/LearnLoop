@@ -275,13 +275,10 @@ $(document).ready(function() {
     const currentUser = JSON.parse(localStorage.getItem("current User"));
     const avatarUrl = currentUser.avatarUrl;
 
+    loadUserData(currentUser.userId);
+
     console.log("Logged User Id " + currentUser.userId);
     console.log("avatarUrl " + avatarUrl);
-
-    if(avatarUrl != null){
-        const teacherAvatar = document.querySelector('.teacher-avatar');
-        teacherAvatar.innerHTML = `<img src="${avatarUrl}" style="border-radius: 50%;">`;
-    }
         
     $('.teacher-name').text(currentUser.username || "Teacher");
 
@@ -309,19 +306,6 @@ $(document).ready(function() {
 
     // Open edit profile modal
     $editProfileBtn.on('click', function() {
-        const currentUser = JSON.parse(localStorage.getItem("current User"));
-        console.log(currentUser);
-
-        $('.edit-form #teacherName').val(currentUser.username);
-        $('.edit-form #teacherEmail').val(currentUser.email );
-        $('.edit-form #teacherPhone').val(currentUser.phoneNumber );
-
-        const profileAvatarPreview = document.querySelector('.teacher-avatar#profileAvatarPreview');
-
-        if (currentUser && currentUser.avatarUrl) {
-            const avatarUrl = currentUser.avatarUrl;
-            profileAvatarPreview.innerHTML = `<img src="${avatarUrl}" style="border-radius: 50%;">`;
-        }
 
         $editProfileModal.addClass('active');
         $body.css('overflow', 'hidden');
@@ -570,22 +554,12 @@ $(document).ready(function() {
                 // Try different ways to check success
                 if (xhr.status === 200) {
                     console.log("HTTP 200 - treating as success");
-                    
-                    // Update based on actual response structure
-                    // if (data && data.data) {
-                    //     localStorage.setItem("current User", JSON.stringify(data.data));
-                    // } else {
-                    //     console.log("Unexpected data structure, but HTTP 200 so treating as success");
-                    // }
+
 
                     // Get current user from localStorage
                     let currentUser = JSON.parse(localStorage.getItem("current User"));
 
-                    // Update specific fields
-                    // currentUser.username = data.username;
-                    // currentUser.email = data.email;
-                    // currentUser.phoneNumber = data.phoneNumber;
-                    // currentUser.avatarUrl = data.avatarUrl;
+                    loadUserData(currentUser.userId);
 
                     // Save back to localStorage
                     localStorage.setItem("current User", JSON.stringify(currentUser));
@@ -769,6 +743,41 @@ function validatePasscode(passcode, callback) {
         },
         error: function() {
             callback(false);
+        }
+    });
+}
+
+// Function to get user data and set it in the dashboard
+function loadUserData(userId) {
+    $.ajax({
+        url: `http://localhost:8080/auth/user/${userId}`, // Your GET endpoint
+        method: 'GET',
+        success: function(response) {
+            if (response && response.data) {
+                const user = response.data;
+
+                // Set user name
+                $('#teachername').text(user.username || 'User Name');
+
+                // Set user avatar
+                const avatarDiv = $('.teacher-avatar');
+                avatarDiv.empty(); // Remove existing content
+
+                if (user.avatarUrl) {
+                    // avatarDiv.append(`<img src="${user.avatarUrl}" alt="${user.name}" class="user-avatar-img" style="border-radius: 50%;"> `);
+                    avatarDiv.append(`<img src="${user.avatarUrl}" alt="${user.name}" class="user-avatar-img" style="border-radius: 50%; width: 100%; height: 100%; object-fit: cover;"> `);
+                } else {
+                    avatarDiv.append('<i class="fas fa-user"></i>');
+                }
+
+
+                $('.edit-form #teacherName').val(user.username);
+                $('.edit-form #teacherEmail').val(user.email );
+                $('.edit-form #teacherPhone').val(user.phoneNumber );
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Failed to fetch user data:', error);
         }
     });
 }

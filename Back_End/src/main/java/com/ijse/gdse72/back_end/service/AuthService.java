@@ -11,4 +11,5 @@ public interface AuthService {
     AuthResponseDTO authenticate(AuthDTO authDTO);
     String register(RegisterDTO registerDTO);
     User updateUser(Long userId, UpdateUserDTO dto);
+    User getUserById(Long userId);
 }

@@ -81,4 +81,11 @@ public class AuthServiceImpl implements AuthService {
 
         return userRepository.save(user);
     }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(Math.toIntExact(userId)).orElse(null);
+    }
+
+
 }

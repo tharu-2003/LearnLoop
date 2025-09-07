@@ -1,12 +1,11 @@
 package com.ijse.gdse72.back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-
 
 @Entity
 @Getter
@@ -33,7 +32,7 @@ public class Class {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    
+
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
@@ -47,6 +46,7 @@ public class Class {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
+    // Don't add @JsonIgnore here - we want to see who created the class
     private User createdBy;
 
     @ManyToMany
@@ -55,20 +55,23 @@ public class Class {
             joinColumns = @JoinColumn(name = "class_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonIgnore // Add this to prevent circular reference with users
     private List<User> users;
 
     @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Add this to prevent deep nesting and potential circular references
     private List<Assignment> assignments;
 
     @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Add this to prevent deep nesting and potential circular references
     private List<Discussion> discussions;
 
     @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Add this to prevent deep nesting and potential circular references
     private List<Chat> chats;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
-
 }

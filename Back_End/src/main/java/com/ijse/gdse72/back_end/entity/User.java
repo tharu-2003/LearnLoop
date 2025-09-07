@@ -1,8 +1,8 @@
 package com.ijse.gdse72.back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
 
 import java.util.List;
 
@@ -35,30 +35,36 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "avatar_url")
+    private String avatarUrl;
 
-    // Relationships
+    // Relationships - Add @JsonIgnore to prevent circular references
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Class> createdClasses;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Notification> notifications;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Document> documents;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Chat> chats;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Submission> submissions;
 
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private List<Class> classes;
 
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private List<Discussion> discussions;
-
 }

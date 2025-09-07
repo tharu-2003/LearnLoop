@@ -3,6 +3,7 @@ package com.ijse.gdse72.back_end.service.impl;
 import com.ijse.gdse72.back_end.dto.AuthDTO;
 import com.ijse.gdse72.back_end.dto.AuthResponseDTO;
 import com.ijse.gdse72.back_end.dto.RegisterDTO;
+import com.ijse.gdse72.back_end.dto.UpdateUserDTO;
 import com.ijse.gdse72.back_end.entity.Role;
 import com.ijse.gdse72.back_end.entity.User;
 import com.ijse.gdse72.back_end.repository.UserRepository;
@@ -21,6 +22,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+
 
     @Override
     public AuthResponseDTO authenticate(AuthDTO authDTO) {
@@ -42,7 +45,8 @@ public class AuthServiceImpl implements AuthService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().name(),
-                user.getPhoneNumber()
+                user.getPhoneNumber(),
+                user.getAvatarUrl()
         );
     }
 
@@ -63,5 +67,18 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user);
         return "User Registration Success";
+    }
+
+    @Override
+    public User updateUser(Long userId, UpdateUserDTO dto) {
+        User user = userRepository.findById(Math.toIntExact(userId))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (dto.getUsername() != null) user.setUsername(dto.getUsername());
+        if (dto.getEmail() != null) user.setEmail(dto.getEmail());
+        if (dto.getPhoneNumber() != null) user.setPhoneNumber(dto.getPhoneNumber());
+        if (dto.getAvatarUrl() != null) user.setAvatarUrl(dto.getAvatarUrl());
+
+        return userRepository.save(user);
     }
 }

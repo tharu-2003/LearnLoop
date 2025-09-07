@@ -34,14 +34,6 @@ async function uploadImageToCloudinary(file) {
 
 ////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-
 // Flexible Pie Chart Class
 class FlexiblePieChart {
     constructor(containerSelector, options = {}) {
@@ -275,13 +267,21 @@ class FlexiblePieChart {
 let pieChart;
 let toastCount = 0;
 const activeToasts = new Set();
+let classType = 'private';
 
 // Initialize when document is ready
 $(document).ready(function() {
     const token = sessionStorage.getItem("token");
     const currentUser = JSON.parse(localStorage.getItem("current User"));
+    const avatarUrl = currentUser.avatarUrl;
 
     console.log("Logged User Id " + currentUser.userId);
+    console.log("avatarUrl " + avatarUrl);
+
+    if(avatarUrl != null){
+        const teacherAvatar = document.querySelector('.teacher-avatar');
+        teacherAvatar.innerHTML = `<img src="${avatarUrl}" style="border-radius: 50%;">`;
+    }
         
     $('.teacher-name').text(currentUser.username || "Teacher");
 
@@ -296,16 +296,57 @@ $(document).ready(function() {
     const $profileAvatarPreview = $('#profileAvatarPreview');
     const $body = $('body');
 
-    // Open modal
+    // CLASS CREATION MODAL ELEMENTS
+    const $addClassModal = $('#addClassModal');
+    const $addClassBtn = $('.add-class-btn');
+    const $closeClassModalBtn = $('#closeClassModal');
+    const $cancelAddClassBtn = $('#cancelAddClass');
+    const $addClassForm = $('#addClassForm');
+    const $classDpInput = $('#classDpInput');
+    const $uploadClassDpBtn = $('#uploadClassDp');
+    const $classDpPreview = $('#classDpPreview');
+    const $toggleButtons = $('.toggle-button');
+
+    // Open edit profile modal
     $editProfileBtn.on('click', function() {
+        const currentUser = JSON.parse(localStorage.getItem("current User"));
+        console.log(currentUser);
+
+        $('.edit-form #teacherName').val(currentUser.username);
+        $('.edit-form #teacherEmail').val(currentUser.email );
+        $('.edit-form #teacherPhone').val(currentUser.phoneNumber );
+
+        const profileAvatarPreview = document.querySelector('.teacher-avatar#profileAvatarPreview');
+
+        if (currentUser && currentUser.avatarUrl) {
+            const avatarUrl = currentUser.avatarUrl;
+            profileAvatarPreview.innerHTML = `<img src="${avatarUrl}" style="border-radius: 50%;">`;
+        }
+
         $editProfileModal.addClass('active');
         $body.css('overflow', 'hidden');
     });
 
-    // Close modal function
+    // Open add class modal
+    $addClassBtn.on('click', function() {
+        $addClassModal.addClass('active');
+        $body.css('overflow', 'hidden');
+    });
+
+    // Close modal functions
     function closeModal() {
         $editProfileModal.removeClass('active');
         $body.css('overflow', 'auto');
+    }
+
+    function closeClassModal() {
+        $addClassModal.removeClass('active');
+        $body.css('overflow', 'auto');
+        $addClassForm[0].reset();
+        $classDpPreview.html('<i class="fas fa-book"></i>');
+        classType = 'private';
+        updateToggleButtons();
+        $('#classPasscode').css('border-color', '#404449');
     }
 
     function navigateToClasses() {
@@ -344,6 +385,8 @@ $(document).ready(function() {
     // Close modal events
     $closeModalBtn.on('click', closeModal);
     $cancelEditBtn.on('click', closeModal);
+    $closeClassModalBtn.on('click', closeClassModal);
+    $cancelAddClassBtn.on('click', closeClassModal);
 
     // Close modal when clicking outside
     $editProfileModal.on('click', function(e) {
@@ -352,10 +395,21 @@ $(document).ready(function() {
         }
     });
 
+    $addClassModal.on('click', function(e) {
+        if (e.target === this) {
+            closeClassModal();
+        }
+    });
+
     // Close modal with Escape key
     $(document).on('keydown', function(e) {
-        if (e.key === 'Escape' && $editProfileModal.hasClass('active')) {
-            closeModal();
+        if (e.key === 'Escape') {
+            if ($editProfileModal.hasClass('active')) {
+                closeModal();
+            }
+            if ($addClassModal.hasClass('active')) {
+                closeClassModal();
+            }
         }
     });
 
@@ -376,21 +430,67 @@ $(document).ready(function() {
         }
     });
 
-    // Form submission
-    $editProfileForm.on('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            name: $('#teacherName').val(),
-            email: $('#teacherEmail').val(),
-            phone: $('#teacherPhone').val()
-        };
+    // Class image upload functionality
+    $uploadClassDpBtn.on('click', function() {
+        $classDpInput.click();
+    });
 
-        $('.teacher-name').text(formData.name);
-        console.log('Profile updated:', formData);
-        
-        showToast('Profile updated successfully!', 'success');
-        closeModal();
+    $classDpInput.on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (!file.type.match('image.*')) {
+                showToast('Please select an image file', 'error');
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('Image must be less than 5MB', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $classDpPreview.html(`<img src="${e.target.result}" alt="Class Image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10%;">`);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Toggle button functionality
+    function updateToggleButtons() {
+        $toggleButtons.each(function() {
+            const buttonState = $(this).data('state');
+            if (buttonState === classType) {
+                $(this).addClass('on').removeClass('off');
+            } else {
+                $(this).addClass('off').removeClass('on');
+            }
+        });
+    }
+
+    // Initialize toggle buttons
+    updateToggleButtons();
+
+    // Handle toggle button clicks
+    $toggleButtons.on('click', function() {
+        classType = $(this).data('state');
+        updateToggleButtons();
+    });
+
+    // Add passcode validation on input
+    $('#classPasscode').on('blur', function() {
+        const passcode = $(this).val().trim();
+        if (passcode) {
+            validatePasscode(passcode, function(isUnique) {
+                const $passcodeInput = $('#classPasscode');
+                if (!isUnique) {
+                    $passcodeInput.css('border-color', '#f87171');
+                    showToast('Passcode already exists', 'warning');
+                } else {
+                    $passcodeInput.css('border-color', '#2eb67d');
+                }
+            });
+        }
     });
 
     // Load initial data
@@ -404,210 +504,191 @@ $(document).ready(function() {
         initializePieChart();
         startPieChartAutoRefresh();
     }, 500);
-});
 
-// CLASS CREATION MODAL FUNCTIONALITY
-const $addClassModal = $('#addClassModal');
-const $addClassBtn = $('.add-class-btn');
-const $closeClassModalBtn = $('#closeClassModal');
-const $cancelAddClassBtn = $('#cancelAddClass');
-const $addClassForm = $('#addClassForm');
-const $classDpInput = $('#classDpInput');
-const $uploadClassDpBtn = $('#uploadClassDp');
-const $classDpPreview = $('#classDpPreview');
-const $toggleButtons = $('.toggle-button');
-const $body = $('body');
+    // ========================== FORM SUBMISSIONS - FIXED ==========================
 
-let classType = 'private';
+    $editProfileForm.on('submit',async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-// Open modal
-$addClassBtn.on('click', function() {
-    $addClassModal.addClass('active');
-    $body.css('overflow', 'hidden');
-});
+        console.log("Form submitted");
 
-// Close modal function
-function closeClassModal() {
-    $addClassModal.removeClass('active');
-    $body.css('overflow', 'auto');
-    $addClassForm[0].reset();
-    $classDpPreview.html('<i class="fas fa-book"></i>');
-    classType = 'private';
-    updateToggleButtons();
-    $('#classPasscode').css('border-color', '#404449');
-}
+        const $submitBtn = $(this).find('button[type="submit"]');
+        const originalText = $submitBtn.text();
+        $submitBtn.text('Saving...').prop('disabled', true);
 
-// Close modal events
-$closeClassModalBtn.on('click', closeClassModal);
-$cancelAddClassBtn.on('click', closeClassModal);
+        const token = sessionStorage.getItem("token");
+        const currentUser = JSON.parse(localStorage.getItem("current User"));
 
-// Close modal when clicking outside
-$addClassModal.on('click', function(e) {
-    if (e.target === this) {
-        closeClassModal();
-    }
-});
-
-// Close modal with Escape key
-$(document).on('keydown', function(e) {
-    if (e.key === 'Escape' && $addClassModal.hasClass('active')) {
-        closeClassModal();
-    }
-});
-
-// Class image upload functionality
-$uploadClassDpBtn.on('click', function() {
-    $classDpInput.click();
-});
-
-$classDpInput.on('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        if (!file.type.match('image.*')) {
-            showToast('Please select an image file', 'error');
+        if (!currentUser || !currentUser.userId) {
+            showToast('User not found. Please login again.', 'error');
+            $submitBtn.text(originalText).prop('disabled', false);
             return;
         }
-        
-        if (file.size > 5 * 1024 * 1024) {
-            showToast('Image must be less than 5MB', 'error');
-            return;
-        }
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            $classDpPreview.html(`<img src="${e.target.result}" alt="Class Image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10%;">`);
+
+        // Get form data exactly like in Postman
+        const formData = {
+            username: $('#teacherName').val().trim(),
+            email: $('#teacherEmail').val().trim(),
+            phoneNumber: parseInt($('#teacherPhone').val().trim().replace(/[^0-9]/g, '')) || null,
+            avatarUrl: currentUser.avatarUrl || null
         };
-        reader.readAsDataURL(file);
-    }
-});
 
-// Toggle button functionality
-function updateToggleButtons() {
-    $toggleButtons.each(function() {
-        const buttonState = $(this).data('state');
-        if (buttonState === classType) {
-            $(this).addClass('on').removeClass('off');
-        } else {
-            $(this).addClass('off').removeClass('on');
-        }
-    });
-}
 
-// Initialize toggle buttons
-updateToggleButtons();
+        const avatarFile = $profileAvatarInput[0].files[0];
+            if (avatarFile) {
+                // Upload to Cloudinary
+                const uploadedUrl = await uploadImageToCloudinary(avatarFile);
 
-// Handle toggle button clicks
-$toggleButtons.on('click', function() {
-    classType = $(this).data('state');
-    updateToggleButtons();
-});
-
-// Function to validate passcode uniqueness
-function validatePasscode(passcode, callback) {
-    if (!passcode || passcode.trim() === '') {
-        callback(true);
-        return;
-    }
-    
-    const token = sessionStorage.getItem("token");
-    
-    $.ajax({
-        url: 'http://localhost:8080/api/classes/check-passcode',
-        type: 'GET',
-        data: { passcode: passcode },
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-            if (response.code === 200) {
-                callback(response.data.isUnique);
-            } else {
-                callback(false);
+                console.log("uploadedUrl " + uploadedUrl);
+                if (!uploadedUrl) {
+                    showToast('Failed to upload avatar', 'error');
+                    return;
+                }
+                formData.avatarUrl = uploadedUrl;
             }
-        },
-        error: function() {
-            callback(false);
-        }
-    });
-}
 
-// Add passcode validation on input
-$('#classPasscode').on('blur', function() {
-    const passcode = $(this).val().trim();
-    if (passcode) {
-        validatePasscode(passcode, function(isUnique) {
-            const $passcodeInput = $('#classPasscode');
-            if (!isUnique) {
-                $passcodeInput.css('border-color', '#f87171');
-                showToast('Passcode already exists', 'warning');
-            } else {
-                $passcodeInput.css('border-color', '#2eb67d');
+        console.log("Sending data:", formData);
+        console.log("URL:", `http://localhost:8080/auth/update/${currentUser.userId}`);
+        console.log("Token exists:", !!token);
+
+        $.ajax({
+            url: `http://localhost:8080/auth/update/${currentUser.userId}`,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            success: function(data, textStatus, xhr) {
+                console.log("=== SUCCESS RESPONSE ===");
+                console.log("HTTP Status:", xhr.status);
+                console.log("Response data:", data);
+                console.log("Type of response:", typeof data);
+                console.log("Response keys:", Object.keys(data || {}));
+                
+                // Try different ways to check success
+                if (xhr.status === 200) {
+                    console.log("HTTP 200 - treating as success");
+                    
+                    // Update based on actual response structure
+                    // if (data && data.data) {
+                    //     localStorage.setItem("current User", JSON.stringify(data.data));
+                    // } else {
+                    //     console.log("Unexpected data structure, but HTTP 200 so treating as success");
+                    // }
+
+                    // Get current user from localStorage
+                    let currentUser = JSON.parse(localStorage.getItem("current User"));
+
+                    // Update specific fields
+                    // currentUser.username = data.username;
+                    // currentUser.email = data.email;
+                    // currentUser.phoneNumber = data.phoneNumber;
+                    // currentUser.avatarUrl = data.avatarUrl;
+
+                    // Save back to localStorage
+                    localStorage.setItem("current User", JSON.stringify(currentUser));
+
+                    showToast('Profile updated successfully!', 'success');
+                    closeModal();
+                } else {
+                    console.log("Non-200 status in success callback:", xhr.status);
+                    showToast('Unexpected response status', 'error');
+                }
+                
+                $submitBtn.text(originalText).prop('disabled', false);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log("=== ERROR RESPONSE ===");
+                console.log("HTTP Status:", xhr.status);
+                console.log("Status Text:", xhr.statusText);
+                console.log("Error thrown:", errorThrown);
+                console.log("Response text:", xhr.responseText);
+                
+                try {
+                    const errorData = JSON.parse(xhr.responseText);
+                    console.log("Parsed error data:", errorData);
+                } catch (e) {
+                    console.log("Could not parse error response as JSON");
+                }
+                
+                let errorMessage = 'Failed to update profile';
+                
+                if (xhr.status === 401) {
+                    errorMessage = 'Unauthorized. Please login again.';
+                } else if (xhr.status === 0) {
+                    errorMessage = 'Unable to connect to server.';
+                }
+                
+                showToast(errorMessage, 'error');
+                $submitBtn.text(originalText).prop('disabled', false);
             }
         });
-    }
-});
+    });
 
-// Form submission with AJAX
-$addClassForm.on('submit',async function(e) {
-    e.preventDefault();
+    // ADD CLASS FORM SUBMISSION - FIXED
+    $addClassForm.on('submit', async function(e) {
+        e.preventDefault(); // PREVENT PAGE REFRESH - CRITICAL!
+        e.stopPropagation();
+        
+        console.log("Add class form submitted");
 
-    var button = $('.btn-primary');
-    button.prop('disabled', true);
-    
-    // Re-enable after 3 seconds
-    setTimeout(function() {
-        button.prop('disabled', false);
-    }, 3000);
-    
-    const className = $('#className').val().trim();
-    if (!className) {
-        showToast('Class name is required', 'error');
-        $('#className').focus();
-        return;
-    }
-    
-    const currentUser = JSON.parse(localStorage.getItem("current User"));
-    if (!currentUser || !currentUser.userId) {
-        showToast('User not found. Please login again.', 'error');
-        return;
-    }
-    
-    
-    // Upload image to Cloudinary first
-    const imageFile = $classDpInput[0].files[0];
-    let imageUrl = null;
-    if (imageFile) {
-        imageUrl = await uploadImageToCloudinary(imageFile);
-        if (!imageUrl) {
-            return; // stop if upload fails
+        const className = $('#className').val().trim();
+        if (!className) {
+            showToast('Class name is required', 'error');
+            $('#className').focus();
+            return;
         }
-    }
+        
+        const currentUser = JSON.parse(localStorage.getItem("current User"));
+        if (!currentUser || !currentUser.userId) {
+            showToast('User not found. Please login again.', 'error');
+            return;
+        }
+        
+        const $submitBtn = $(this).find('button[type="submit"]');
+        const originalText = $submitBtn.text();
+        $submitBtn.text('Creating...').prop('disabled', true);
+        
+        // Re-enable after timeout as backup
+        setTimeout(function() {
+            $submitBtn.text(originalText).prop('disabled', false);
+        }, 10000);
 
-    // Prepare JSON payload
-    const newClass = {
-        name: className,
-        description: $('#classDescription').val().trim(),
-        passcode: $('#classPasscode').val().trim(),
-        priority: classType.toUpperCase(),
-        createdBy: currentUser.userId,
-        imageUrl: imageUrl // Cloudinary URL
-    };
-    
-    const token = sessionStorage.getItem("token");
-    
-    const $submitBtn = $addClassForm.find('button[type="submit"]');
-    const originalText = $submitBtn.text();
-    $submitBtn.text('Creating...').prop('disabled', true);
-    
-    $.ajax({
-        url: 'http://localhost:8080/api/classes/create',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(newClass),
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
+        try {
+            // Upload image to Cloudinary first
+            const imageFile = $classDpInput[0].files[0];
+            let imageUrl = null;
+            if (imageFile) {
+                imageUrl = await uploadImageToCloudinary(imageFile);
+                if (!imageUrl) {
+                    return; // stop if upload fails
+                }
+            }
+
+            // Prepare JSON payload
+            const newClass = {
+                name: className,
+                description: $('#classDescription').val().trim(),
+                passcode: $('#classPasscode').val().trim(),
+                priority: classType.toUpperCase(),
+                createdBy: currentUser.userId,
+                imageUrl: imageUrl // Cloudinary URL
+            };
+            
+            const token = sessionStorage.getItem("token");
+            
+            const response = await $.ajax({
+                url: 'http://localhost:8080/api/classes/create',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(newClass),
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+            
             if (response.code === 200) {
                 showToast('Class created successfully!', 'success');
                 
@@ -640,28 +721,57 @@ $addClassForm.on('submit',async function(e) {
             } else {
                 showToast(response.message || 'Failed to create class', 'error');
             }
-        },
-        error: function(xhr, status, error) {
+            
+        } catch (error) {
             let errorMessage = 'Failed to create class';
             
-            if (xhr.responseJSON && xhr.responseJSON.message) {
-                errorMessage = xhr.responseJSON.message;
-            } else if (xhr.status === 401) {
+            if (error.responseJSON && error.responseJSON.message) {
+                errorMessage = error.responseJSON.message;
+            } else if (error.status === 401) {
                 errorMessage = 'Unauthorized. Please login again.';
-            } else if (xhr.status === 403) {
+            } else if (error.status === 403) {
                 errorMessage = 'Access denied.';
-            } else if (xhr.status === 0) {
+            } else if (error.status === 0) {
                 errorMessage = 'Unable to connect to server.';
             }
             
             showToast(errorMessage, 'error');
             console.error('Error creating class:', error);
-        },
-        complete: function() {
+            
+        } finally {
             $submitBtn.text(originalText).prop('disabled', false);
         }
     });
 });
+
+// Function to validate passcode uniqueness
+function validatePasscode(passcode, callback) {
+    if (!passcode || passcode.trim() === '') {
+        callback(true);
+        return;
+    }
+    
+    const token = sessionStorage.getItem("token");
+    
+    $.ajax({
+        url: 'http://localhost:8080/api/classes/check-passcode',
+        type: 'GET',
+        data: { passcode: passcode },
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+            if (response.code === 200) {
+                callback(response.data.isUnique);
+            } else {
+                callback(false);
+            }
+        },
+        error: function() {
+            callback(false);
+        }
+    });
+}
 
 // Function to update class statistics
 function updateClassStatistics(teacherId) {
@@ -678,7 +788,6 @@ function updateClassStatistics(teacherId) {
                 const stats = response.data;
                 
                 $('.total-classes .stat-number').text(stats.totalClasses || 0);
-
 
                 $('.stat-card.stats-1 .stat-number').text(stats.totalClasses || 0);
                 $('.stat-card.stats-2 .stat-number').text(stats.privateClasses || 0);
@@ -728,7 +837,6 @@ function loadTeacherClasses(teacherId) {
         },
         success: function(response) {
             if (response.code === 200) {
-
                 console.log(response);
 
                 const classes = response.data;
@@ -737,7 +845,7 @@ function loadTeacherClasses(teacherId) {
                 $classesGrid.empty();
                 
                 if (classes.length === 0) {
-                    $classesGrid.html(`G
+                    $classesGrid.html(`
                         <div class="class-item" style="grid-column: 1 / -1;">
                             <div class="class-item-icon">
                                 <i class="fas fa-book"></i>
@@ -751,7 +859,6 @@ function loadTeacherClasses(teacherId) {
                 classes.forEach(function(classData) {
                     const imageUrl = classData.imageUrl || null;
 
-                    
                     const classHtml = `
                         <div class="class-item" data-class-id="${classData.classId}">
                             <div class="class-item-icon">
@@ -773,12 +880,12 @@ function loadTeacherClasses(teacherId) {
                     console.log(`Clicked on class: ${className} (ID: ${classId})`);
                 });
             } else {
-                showToast('Failed to load classes', 'error');
+                showToast('Failed to load classess', 'error');
             }
         },
         error: function(xhr, status, error) {
             console.error('Error loading classes:', error);
-            showToast('Failed to load classes', 'error');
+            showToast('Failed to load classess', 'error');
         }
     });
 }
@@ -943,3 +1050,34 @@ function repositionToasts() {
         topOffset += toast.offsetHeight + 15;
     });
 }
+
+// ========================== SAFETY MEASURES ==========================
+
+// Prevent any accidental form submissions globally
+$(document).on('submit', 'form', function(e) {
+    // Only log for our main forms
+    if ($(this).is('#addClassForm, #editProfileForm')) {
+        console.log('Form submission intercepted:', $(this).attr('id'));
+        // The specific handlers above will handle the actual submission
+    }
+});
+
+// Alternative event binding using document delegation (backup)
+$(document).on('submit', '#addClassForm', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Add class form submitted via delegation (backup)');
+});
+
+$(document).on('submit', '#editProfileForm', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Edit profile form submitted via delegation (backup)');
+});
+
+// Debug function to check event handlers
+function checkEventHandlers() {
+    console.log('Add Class Form Events:', $._data($('#addClassForm')[0], 'events'));
+    console.log('Edit Profile Form Events:', $._data($('#editProfileForm')[0], 'events'));
+}
+

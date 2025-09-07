@@ -19,4 +19,5 @@ public class AuthResponseDTO {
     private String email;
     private String role;
     private Integer phoneNumber;
+    private String avatarUrl;
 }

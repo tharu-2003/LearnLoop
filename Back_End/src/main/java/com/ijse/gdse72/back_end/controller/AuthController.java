@@ -3,6 +3,8 @@ package com.ijse.gdse72.back_end.controller;
 import com.ijse.gdse72.back_end.dto.ApiResponse;
 import com.ijse.gdse72.back_end.dto.AuthDTO;
 import com.ijse.gdse72.back_end.dto.RegisterDTO;
+import com.ijse.gdse72.back_end.dto.UpdateUserDTO;
+import com.ijse.gdse72.back_end.entity.User;
 import com.ijse.gdse72.back_end.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,19 @@ public class AuthController {
                 200,
                 "OK",
                 authService.authenticate(authDTO)
+        ));
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<ApiResponse> updateUser(
+            @PathVariable Long userId,
+            @RequestBody UpdateUserDTO dto) {
+
+        User updatedUser = authService.updateUser(userId, dto);
+        return ResponseEntity.ok(new ApiResponse(
+                200,
+                "Profile Updated Successfully",
+                updatedUser
         ));
     }
 }

@@ -514,7 +514,8 @@ $("#login-btn").click(function(e){
         username: userData.username || '',
         role: userData.role,
         phoneNumber: userData.phoneNumber,
-        loginTime: new Date().toISOString()
+        loginTime: new Date().toISOString(),
+        avatarUrl: userData.avatarUrl
       };
       
       console.log("User data stored:", window.currentUser);

@@ -657,7 +657,8 @@ $(document).ready(function() {
     });
 
     function handleSettingsAction(action) {
-        console.log(`Action: ${action} for class: ${currentClass} (ID: ${currentClassId})`);
+        // console.log(`Action: ${action} for class: ${currentClass} (ID: ${currentClassId})`);
+
         
         // Handle different settings actions
         switch(action) {
@@ -667,11 +668,51 @@ $(document).ready(function() {
                 openEditModal();
                 break;
             case 'delete':
-                // Use custom confirmation dialog with toast
-                const confirmDelete = confirm(`Are you sure you want to delete: ${currentClass}? This action cannot be undone.`);
-                if (confirmDelete) {
-                    showToast(`${currentClass} has been deleted successfully.`, 'success');
-                }
+                // Use SweetAlert2 for beautiful confirmation dialog
+                Swal.fire({
+                    title: 'Are you absolutely sure?',
+                    text: 'This action cannot be undone!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: '<i class="fa fa-trash-alt"></i> Delete',
+                    cancelButtonText: '<i class="fa fa-times"></i> Cancel',
+                    customClass: {
+                        popup: 'my-popup-custom-class',
+                        confirmButton: 'btn btn-danger btn-lg',
+                        cancelButton: 'btn btn-secondary btn-lg'
+                    },
+                    showClass: {
+                        popup: 'animate__animated animate__tada'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutDown'
+                    },
+                    reverseButtons: true,
+                    focusConfirm: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the delete action here
+                        deleteClass();
+                        
+                        // Show success message
+                        // Swal.fire({
+                        //     title: 'Deleted!',
+                        //     text: `${currentClass} has been deleted successfully.`,
+                        //     icon: 'success',
+                        //     timer: 2000,
+                        //     showConfirmButton: false,
+                        //     toast: true,
+                        //     position: 'top-end',
+                        //     customClass: {
+                        //         popup: 'animated fadeInRight'
+                        //     }
+                        // });
+                        
+                        // Alternative: Use your existing toast function
+                        showToast(`Class has been deleted successfully.`, 'success');
+                    }
+                });
                 break;
         }
         
@@ -679,6 +720,121 @@ $(document).ready(function() {
             closeModal();
         }
     }
+
+    function deleteClass() {
+        const currentClassId = localStorage.getItem("classId");
+        
+        if (!currentClassId) {
+            showToast('Error: Class ID not found', 'error');
+            return;
+        }
+        
+        const token = sessionStorage.getItem("token");
+        
+        if (!token) {
+            showToast('Authentication token not found. Please login again.', 'error');
+            return;
+        }
+        
+        // Show loading state
+        showToast('Deleting class...', 'info');
+        
+        $.ajax({
+            url: `http://localhost:8080/api/classes/${currentClassId}`,
+            type: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            success: function(response) {
+                console.log('Delete response:', response);
+                
+                if (response.code === 200) {
+                    // Remove the class card from the UI
+                    const $classCard = $(`.class-card[data-class-id="${currentClassId}"]`);
+                    if ($classCard.length) {
+                        // Add fade-out animation
+                        $classCard.css({
+                            'animation': 'fadeOut 0.5s ease-out forwards',
+                            'pointer-events': 'none'
+                        });
+                        
+                        // Remove the card after animation
+                        setTimeout(() => {
+                            $classCard.remove();
+                            
+                            // Check if any cards are left
+                            const remainingCards = $('.class-card').not('.loading').length;
+                            if (remainingCards === 0) {
+                                // Show "no classes" message
+                                const cardsGrid = document.getElementById('cardsGrid');
+                                cardsGrid.innerHTML = `
+                                    <div class="class-card" style="grid-column: 1 / -1; text-align: center;">
+                                        <div class="card-image placeholder">
+                                            📚
+                                        </div>
+                                        <div class="card-content">
+                                            <h3 class="class-name">No classes found</h3>
+                                            <div class="student-count">
+                                                <i class="fas fa-plus"></i>
+                                                <span>Create your first class!</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }, 500);
+                    }
+                    
+                    // Clear the stored class ID
+                    localStorage.removeItem("classId");
+                    
+                    // Reset current class variables
+                    currentClass = null;
+                    currentClassId = null;
+                    
+                    // Close any open modals
+                    closeModal();
+                    
+                    console.log(`Class ${currentClassId} deleted successfully`);
+                    
+                } else {
+                    showToast(response.message || 'Failed to delete class. Please try again.', 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting class:', {
+                    status: status,
+                    error: error,
+                    response: xhr.responseText,
+                    classId: currentClassId
+                });
+                
+                let errorMessage = 'Failed to delete class. Please try again.';
+                
+                // Handle specific HTTP status codes
+                if (xhr.status === 400) {
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        errorMessage = errorResponse.message || 'Invalid request. Cannot delete this class.';
+                    } catch (e) {
+                        errorMessage = 'Invalid request. Cannot delete this class.';
+                    }
+                } else if (xhr.status === 401) {
+                    errorMessage = 'Authentication failed. Please login again.';
+                } else if (xhr.status === 403) {
+                    errorMessage = 'You do not have permission to delete this class.';
+                } else if (xhr.status === 404) {
+                    errorMessage = 'Class not found. It may have already been deleted.';
+                } else if (xhr.status === 500) {
+                    errorMessage = 'Server error occurred. Please try again later.';
+                }
+                
+                showToast(errorMessage, 'error');
+            }
+        });
+    }
+        
 
     function openEditModal() {
         const classId = localStorage.getItem("classId");

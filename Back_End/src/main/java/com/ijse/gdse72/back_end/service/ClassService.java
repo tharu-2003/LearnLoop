@@ -26,4 +26,7 @@ public interface ClassService {
     Map<String, Long> getTeacherClassStatistics(Long teacherId);
 
     boolean isPasscodeUnique(String passcode);
+
+    List<ClassResponseDTO> getClassesByStudent(Long studentId);
+
 }

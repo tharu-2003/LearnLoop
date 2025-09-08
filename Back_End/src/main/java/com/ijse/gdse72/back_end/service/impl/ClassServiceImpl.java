@@ -115,11 +115,15 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public Map<String, Long> getTeacherClassStatistics(Long teacherId) {
+
         Map<String, Long> statistics = new HashMap<>();
+
         Long totalClasses = (long) classRepository.findByCreatedByUserIdAndStatus(teacherId, Status.ACTIVE).size();
         statistics.put("totalClasses", totalClasses);
+
         Long privateClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PRIVATE);
         statistics.put("privateClasses", privateClasses);
+
         Long publicClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PUBLIC);
         statistics.put("publicClasses", publicClasses);
         return statistics;
@@ -130,8 +134,23 @@ public class ClassServiceImpl implements ClassService {
         return !classRepository.existsByPasscode(passcode);
     }
 
+    @Override
+    public List<ClassResponseDTO> getClassesByStudent(Long studentId) {
+        // Optional: check if student exists
+        User student = userRepository.findById(Math.toIntExact(studentId))
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        List<Class> classes = classRepository.findClassesByStudentId(studentId);
+
+        return classes.stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+
     private ClassResponseDTO convertToResponseDTO(Class classEntity) {
         ClassResponseDTO dto = new ClassResponseDTO();
+
         dto.setClassId(classEntity.getClassId());
         dto.setName(classEntity.getName());
         dto.setDescription(classEntity.getDescription());
@@ -140,8 +159,12 @@ public class ClassServiceImpl implements ClassService {
         dto.setStatus(classEntity.getStatus());
         dto.setImageUrl(classEntity.getImageUrl());
         dto.setCreatedAt(classEntity.getCreatedAt());
+
+        // Teacher info
         dto.setCreatedByName(classEntity.getCreatedBy().getUsername());
         dto.setCreatedById(classEntity.getCreatedBy().getUserId());
+        dto.setCreatedByAvatarUrl(classEntity.getCreatedBy().getAvatarUrl()); // ✅ new field
         return dto;
     }
+
 }

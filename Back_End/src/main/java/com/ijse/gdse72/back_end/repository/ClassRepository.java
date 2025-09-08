@@ -31,4 +31,9 @@ public interface ClassRepository extends JpaRepository<Class, Long> {
     // Custom query to count classes by priority for a teacher
     @Query("SELECT COUNT(c) FROM Class c WHERE c.createdBy.userId = :teacherId AND c.priority = :priority")
     Long countByTeacherAndPriority(@Param("teacherId") Long teacherId, @Param("priority") Priority priority);
+
+    // Find all active classes where a user (student) is enrolled
+    @Query("SELECT c FROM Class c JOIN c.users u WHERE u.userId = :studentId AND c.status = 'ACTIVE'")
+    List<Class> findClassesByStudentId(@Param("studentId") Long studentId);
+
 }

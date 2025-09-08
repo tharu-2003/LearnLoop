@@ -638,44 +638,44 @@ function setupPage() {
                 'Authorization': 'Bearer ' + token
             },
             success: function(data, textStatus, xhr) {
-    console.log("=== SUCCESS RESPONSE ===");
-    console.log("HTTP Status:", xhr.status);
-    console.log("Response data:", data);
+                console.log("=== SUCCESS RESPONSE ===");
+                console.log("HTTP Status:", xhr.status);
+                console.log("Response data:", data);
 
-    if (xhr.status === 200) {
-        // response data structure: data.data.user and data.data.token
-        const respData = data && data.data ? data.data : null;
+                if (xhr.status === 200) {
+                    // response data structure: data.data.user and data.data.token
+                    const respData = data && data.data ? data.data : null;
 
-        if (respData) {
-            // Update token in sessionStorage
-            if (respData.token) {
-                sessionStorage.setItem("token", respData.token);
-                console.log("Updated token in sessionStorage");
-            }
+                    if (respData) {
+                        // Update token in sessionStorage
+                        if (respData.token) {
+                            sessionStorage.setItem("token", respData.token);
+                            console.log("Updated token in sessionStorage");
+                        }
 
-            // Update current user in localStorage
-            if (respData.user) {
-                localStorage.setItem("current User", JSON.stringify(respData.user));
-                console.log("Updated current User in localStorage");
-            }
+                        // Update current user in localStorage
+                        if (respData.user) {
+                            localStorage.setItem("current User", JSON.stringify(respData.user));
+                            console.log("Updated current User in localStorage");
+                        }
 
-            // reload UI from updated user
-            const currentUser = respData.user || JSON.parse(localStorage.getItem("current User"));
-            if (currentUser && currentUser.userId) {
-                loadUserData(currentUser.userId);
-            }
+                        // reload UI from updated user
+                        const currentUser = respData.user || JSON.parse(localStorage.getItem("current User"));
+                        if (currentUser && currentUser.userId) {
+                            loadUserData(currentUser.userId);
+                        }
 
-            showToast('Profile updated successfully!', 'success');
-            closeModal();
-        } else {
-            showToast('Profile updated but unexpected response format', 'warning');
-        }
-    } else {
-        showToast('Unexpected response status', 'error');
-    }
+                        showToast('Profile updated successfully!', 'success');
+                        closeModal();
+                    } else {
+                        showToast('Profile updated but unexpected response format', 'warning');
+                    }
+                } else {
+                    showToast('Unexpected response status', 'error');
+                }
 
-    $submitBtn.text(originalText).prop('disabled', false);
-},
+                $submitBtn.text(originalText).prop('disabled', false);
+            },
 
             error: function(xhr, textStatus, errorThrown) {
                 console.log("=== ERROR RESPONSE ===");

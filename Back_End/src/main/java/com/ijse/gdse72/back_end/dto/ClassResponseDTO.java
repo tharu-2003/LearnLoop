@@ -23,6 +23,9 @@ public class ClassResponseDTO {
     private Status status;
     private String imageUrl;
     private LocalDateTime createdAt;
+
     private String createdByName; // Teacher's name
     private Long createdById;    // Teacher's ID
+
+    private String createdByAvatarUrl; //Teacher's profile image
 }

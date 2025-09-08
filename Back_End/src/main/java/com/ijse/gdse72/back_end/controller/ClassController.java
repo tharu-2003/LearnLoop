@@ -147,4 +147,22 @@ public class ClassController {
                 Map.of("isUnique", isUnique)
         ));
     }
+
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<ApiResponse> getClassesByStudent(@PathVariable Long studentId) {
+        try {
+            List<ClassResponseDTO> classes = classService.getClassesByStudent(studentId);
+            return ResponseEntity.ok(new ApiResponse(
+                    200,
+                    "Student classes retrieved successfully",
+                    classes
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(
+                    400,
+                    e.getMessage(),
+                    null
+            ));
+        }
+    }
 }

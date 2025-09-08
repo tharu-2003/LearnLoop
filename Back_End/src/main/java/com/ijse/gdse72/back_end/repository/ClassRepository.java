@@ -13,6 +13,13 @@ import java.util.List;
 @Repository
 public interface ClassRepository extends JpaRepository<Class, Long> {
 
+    // Find all active classes
+    List<Class> findByStatus(Status status);
+
+    // Find all active classes
+    @Query("SELECT c FROM Class c WHERE c.status = 'ACTIVE'")
+    List<Class> findAllActiveClasses();
+
     // Find classes by teacher (created by)
     List<Class> findByCreatedByUserId(Long teacherId);
 
@@ -35,6 +42,10 @@ public interface ClassRepository extends JpaRepository<Class, Long> {
     // Find all active classes where a user (student) is enrolled
     @Query("SELECT c FROM Class c JOIN c.users u WHERE u.userId = :studentId AND c.status = 'ACTIVE'")
     List<Class> findClassesByStudentId(@Param("studentId") Long studentId);
+
+    // Check if a user is already enrolled in a class
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Class c JOIN c.users u WHERE c.classId = :classId AND u.userId = :userId")
+    boolean existsUserInClass(@Param("classId") Long classId, @Param("userId") Long userId);
 
 
 }

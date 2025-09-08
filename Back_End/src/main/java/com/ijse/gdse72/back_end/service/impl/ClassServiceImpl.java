@@ -1,9 +1,6 @@
 package com.ijse.gdse72.back_end.service.impl;
 
-import com.ijse.gdse72.back_end.dto.ClassResponseDTO;
-import com.ijse.gdse72.back_end.dto.CreateClassDTO;
-import com.ijse.gdse72.back_end.dto.StudentClassStatisticsDTO;
-import com.ijse.gdse72.back_end.dto.TeacherClassStatisticsDTO;
+import com.ijse.gdse72.back_end.dto.*;
 import com.ijse.gdse72.back_end.entity.Class;
 import com.ijse.gdse72.back_end.entity.Priority;
 import com.ijse.gdse72.back_end.entity.Status;
@@ -14,6 +11,7 @@ import com.ijse.gdse72.back_end.service.ClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +23,21 @@ public class ClassServiceImpl implements ClassService {
 
     private final ClassRepository classRepository;
     private final UserRepository userRepository;
+
+
+    @Override
+    public List<ClassResponseDTO> getAllClasses() {
+        List<Class> classes = classRepository.findAllActiveClasses();
+        return classes.stream()
+                .map(cls -> {
+                    ClassResponseDTO dto = convertToResponseDTO(cls);
+                    // Add student count
+                    dto.setStudentCount(cls.getUsers() != null ? cls.getUsers().size() : 0);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public ClassResponseDTO createClass(CreateClassDTO createClassDTO) {
@@ -207,6 +220,36 @@ public class ClassServiceImpl implements ClassService {
                 .publicStudents(publicStudents)
                 .build();
     }
+
+    @Override
+    public void joinClass(JoinClassDTO joinDTO) {
+        // Fetch student
+        User student = userRepository.findById(Math.toIntExact(joinDTO.getUserId()))
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        // Fetch class
+        Class classEntity = classRepository.findById(joinDTO.getClassId())
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+
+        // Initialize users list if null
+        if (classEntity.getUsers() == null) {
+            classEntity.setUsers(new ArrayList<>());
+        }
+
+        // Check if student already joined
+        boolean alreadyJoined = classEntity.getUsers().stream()
+                .anyMatch(u -> u.getUserId().equals(student.getUserId()));
+
+        if (alreadyJoined) {
+            throw new RuntimeException("Already joined this class");
+        }
+
+        // Add student and save
+        classEntity.getUsers().add(student);
+        classRepository.save(classEntity);
+    }
+
+
 
 
     private ClassResponseDTO convertToResponseDTO(Class classEntity) {

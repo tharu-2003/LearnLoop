@@ -24,8 +24,9 @@ public class ClassResponseDTO {
     private String imageUrl;
     private LocalDateTime createdAt;
 
-    private String createdByName; // Teacher's name
-    private Long createdById;    // Teacher's ID
+    private String createdByName;        // Teacher's name
+    private Long createdById;            // Teacher's ID
+    private String createdByAvatarUrl;   // Teacher's profile image
 
-    private String createdByAvatarUrl; //Teacher's profile image
+    private int studentCount;            // New: number of students
 }

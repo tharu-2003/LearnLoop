@@ -196,4 +196,33 @@ public class ClassController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllClasses() {
+        try {
+            List<ClassResponseDTO> classes = classService.getAllClasses();
+            return ResponseEntity.ok(new ApiResponse(
+                    200,
+                    "All classes retrieved successfully",
+                    classes
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(
+                    400,
+                    e.getMessage(),
+                    null
+            ));
+        }
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<ApiResponse> joinClass(@RequestBody JoinClassDTO joinDTO) {
+        try {
+            classService.joinClass(joinDTO);
+            return ResponseEntity.ok(new ApiResponse(200, "Joined class successfully", null));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(new ApiResponse(400, e.getMessage(), null));
+        }
+    }
+
+
 }

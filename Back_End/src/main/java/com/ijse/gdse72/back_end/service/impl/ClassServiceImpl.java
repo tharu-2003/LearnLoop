@@ -2,6 +2,8 @@ package com.ijse.gdse72.back_end.service.impl;
 
 import com.ijse.gdse72.back_end.dto.ClassResponseDTO;
 import com.ijse.gdse72.back_end.dto.CreateClassDTO;
+import com.ijse.gdse72.back_end.dto.StudentClassStatisticsDTO;
+import com.ijse.gdse72.back_end.dto.TeacherClassStatisticsDTO;
 import com.ijse.gdse72.back_end.entity.Class;
 import com.ijse.gdse72.back_end.entity.Priority;
 import com.ijse.gdse72.back_end.entity.Status;
@@ -113,21 +115,21 @@ public class ClassServiceImpl implements ClassService {
         return classes.stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
-    @Override
-    public Map<String, Long> getTeacherClassStatistics(Long teacherId) {
-
-        Map<String, Long> statistics = new HashMap<>();
-
-        Long totalClasses = (long) classRepository.findByCreatedByUserIdAndStatus(teacherId, Status.ACTIVE).size();
-        statistics.put("totalClasses", totalClasses);
-
-        Long privateClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PRIVATE);
-        statistics.put("privateClasses", privateClasses);
-
-        Long publicClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PUBLIC);
-        statistics.put("publicClasses", publicClasses);
-        return statistics;
-    }
+//    @Override
+//    public Map<String, Long> getTeacherClassStatistics(Long teacherId) {
+//
+//        Map<String, Long> statistics = new HashMap<>();
+//
+//        Long totalClasses = (long) classRepository.findByCreatedByUserIdAndStatus(teacherId, Status.ACTIVE).size();
+//        statistics.put("totalClasses", totalClasses);
+//
+//        Long privateClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PRIVATE);
+//        statistics.put("privateClasses", privateClasses);
+//
+//        Long publicClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PUBLIC);
+//        statistics.put("publicClasses", publicClasses);
+//        return statistics;
+//    }
 
     @Override
     public boolean isPasscodeUnique(String passcode) {
@@ -145,6 +147,65 @@ public class ClassServiceImpl implements ClassService {
         return classes.stream()
                 .map(this::convertToResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public StudentClassStatisticsDTO getStudentClassStatistics(Long studentId) {
+        User student = userRepository.findById(Math.toIntExact(studentId))
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        List<Class> classes = classRepository.findClassesByStudentId(studentId);
+
+        long totalClasses = classes.size();
+        long privateClasses = classes.stream().filter(c -> c.getPriority() == Priority.PRIVATE).count();
+        long publicClasses = classes.stream().filter(c -> c.getPriority() == Priority.PUBLIC).count();
+
+        // Count students in each category
+        long totalStudents = classes.stream().mapToLong(c -> c.getUsers().size()).sum();
+        long privateStudents = classes.stream()
+                .filter(c -> c.getPriority() == Priority.PRIVATE)
+                .mapToLong(c -> c.getUsers().size()).sum();
+        long publicStudents = classes.stream()
+                .filter(c -> c.getPriority() == Priority.PUBLIC)
+                .mapToLong(c -> c.getUsers().size()).sum();
+
+        return new StudentClassStatisticsDTO(
+                totalClasses,
+                privateClasses,
+                publicClasses,
+                totalStudents,
+                privateStudents,
+                publicStudents
+        );
+    }
+
+
+    @Override
+    public TeacherClassStatisticsDTO getTeacherClassStatistics(Long teacherId) {
+        List<Class> classes = classRepository.findByCreatedByUserIdAndStatus(teacherId, Status.ACTIVE);
+
+        long totalClasses = classes.size();
+        long privateClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PRIVATE);
+        long publicClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PUBLIC);
+
+        long totalStudents = classes.stream().mapToLong(c -> c.getUsers().size()).sum();
+        long privateStudents = classes.stream()
+                .filter(c -> c.getPriority() == Priority.PRIVATE)
+                .mapToLong(c -> c.getUsers().size())
+                .sum();
+        long publicStudents = classes.stream()
+                .filter(c -> c.getPriority() == Priority.PUBLIC)
+                .mapToLong(c -> c.getUsers().size())
+                .sum();
+
+        return TeacherClassStatisticsDTO.builder()
+                .totalClasses(totalClasses)
+                .privateClasses(privateClasses)
+                .publicClasses(publicClasses)
+                .totalStudents(totalStudents)
+                .privateStudents(privateStudents)
+                .publicStudents(publicStudents)
+                .build();
     }
 
 

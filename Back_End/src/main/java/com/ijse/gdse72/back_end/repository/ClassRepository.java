@@ -36,4 +36,5 @@ public interface ClassRepository extends JpaRepository<Class, Long> {
     @Query("SELECT c FROM Class c JOIN c.users u WHERE u.userId = :studentId AND c.status = 'ACTIVE'")
     List<Class> findClassesByStudentId(@Param("studentId") Long studentId);
 
+
 }

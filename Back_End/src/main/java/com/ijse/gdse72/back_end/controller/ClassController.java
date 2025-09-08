@@ -1,8 +1,6 @@
 package com.ijse.gdse72.back_end.controller;
 
-import com.ijse.gdse72.back_end.dto.ApiResponse;
-import com.ijse.gdse72.back_end.dto.ClassResponseDTO;
-import com.ijse.gdse72.back_end.dto.CreateClassDTO;
+import com.ijse.gdse72.back_end.dto.*;
 import com.ijse.gdse72.back_end.entity.Priority;
 import com.ijse.gdse72.back_end.service.ClassService;
 import lombok.RequiredArgsConstructor;
@@ -120,14 +118,32 @@ public class ClassController {
         }
     }
 
+//    @GetMapping("/statistics/{teacherId}")
+//    public ResponseEntity<ApiResponse> getTeacherStatistics(@PathVariable Long teacherId) {
+//        try {
+//            Map<String, Long> statistics = classService.getTeacherClassStatistics(teacherId);
+//            return ResponseEntity.ok(new ApiResponse(
+//                    200,
+//                    "Statistics retrieved successfully",
+//                    statistics
+//            ));
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(new ApiResponse(
+//                    400,
+//                    e.getMessage(),
+//                    null
+//            ));
+//        }
+//    }
+
     @GetMapping("/statistics/{teacherId}")
     public ResponseEntity<ApiResponse> getTeacherStatistics(@PathVariable Long teacherId) {
         try {
-            Map<String, Long> statistics = classService.getTeacherClassStatistics(teacherId);
+            TeacherClassStatisticsDTO stats = classService.getTeacherClassStatistics(teacherId);
             return ResponseEntity.ok(new ApiResponse(
                     200,
                     "Statistics retrieved successfully",
-                    statistics
+                    stats
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new ApiResponse(
@@ -165,4 +181,19 @@ public class ClassController {
             ));
         }
     }
+
+    @GetMapping("/student-statistics/{studentId}")
+    public ResponseEntity<ApiResponse> getStudentClassStatistics(@PathVariable Long studentId) {
+        try {
+            StudentClassStatisticsDTO stats = classService.getStudentClassStatistics(studentId);
+            return ResponseEntity.ok(new ApiResponse(
+                    200,
+                    "Student class statistics retrieved successfully",
+                    stats
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
+        }
+    }
+
 }

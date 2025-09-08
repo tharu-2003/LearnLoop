@@ -912,10 +912,19 @@ function updateClassStatistics(teacherId) {
                 const stats = response.data;
                 
                 $('.total-classes .stat-number').text(stats.totalClasses || 0);
+                // Assuming stats object has totalClasses and totalStudents
+                $('.stat-item.total-classes .stat-number').text(stats.totalClasses || 0);
+                $('.stat-item.total-students .stat-number').text(stats.totalStudents || 0);
+
 
                 $('.stat-card.stats-1 .stat-number').text(stats.totalClasses || 0);
                 $('.stat-card.stats-2 .stat-number').text(stats.privateClasses || 0);
                 $('.stat-card.stats-3 .stat-number').text(stats.publicClasses || 0);
+
+                // Update student counts
+                $('.stat-card.stats-1 .stat-details strong').eq(0).text(stats.totalStudents || 0);
+                $('.stat-card.stats-2 .stat-details strong').eq(0).text(stats.privateStudents || 0);
+                $('.stat-card.stats-3 .stat-details strong').eq(0).text(stats.publicStudents || 0);
                 
                 $('.legend-item:first .legend-number').text(stats.totalClasses || 0);
                 $('.legend-item:nth-child(2) .legend-number').text(stats.privateClasses || 0);

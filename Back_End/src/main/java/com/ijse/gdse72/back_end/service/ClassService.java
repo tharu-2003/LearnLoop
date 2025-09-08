@@ -2,6 +2,8 @@ package com.ijse.gdse72.back_end.service;
 
 import com.ijse.gdse72.back_end.dto.ClassResponseDTO;
 import com.ijse.gdse72.back_end.dto.CreateClassDTO;
+import com.ijse.gdse72.back_end.dto.StudentClassStatisticsDTO;
+import com.ijse.gdse72.back_end.dto.TeacherClassStatisticsDTO;
 import com.ijse.gdse72.back_end.entity.Priority;
 
 import java.util.List;
@@ -23,10 +25,15 @@ public interface ClassService {
 
     List<ClassResponseDTO> getClassesByPriority(Priority priority);
 
-    Map<String, Long> getTeacherClassStatistics(Long teacherId);
+//    Map<String, Long> getTeacherClassStatistics(Long teacherId);
 
     boolean isPasscodeUnique(String passcode);
 
     List<ClassResponseDTO> getClassesByStudent(Long studentId);
+
+    StudentClassStatisticsDTO getStudentClassStatistics(Long studentId);
+
+    TeacherClassStatisticsDTO getTeacherClassStatistics(Long teacherId);
+
 
 }

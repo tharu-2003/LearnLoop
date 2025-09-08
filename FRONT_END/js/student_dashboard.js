@@ -672,10 +672,21 @@ function updateClassStatistics(studentId) {
                 const stats = response.data;
                 
                 // Update stat cards
-                $('.student-stat-card.student-all-classes-card .student-stat-number').text(stats.totalClasses || 0);
-                $('.student-stat-card.student-private-classes-card .student-stat-number').text(stats.privateClasses || 0);
-                $('.student-stat-card.student-public-classes-card .student-stat-number').text(stats.publicClasses || 0);
-                
+                $('.student-stat-card.student-all-classes-card .student-stat-number')
+                    .text(stats.totalClasses || 0);
+                $('.student-stat-card.student-all-classes-card .student-stat-details .student-stat-detail strong')
+                    .text(stats.totalStudents || 0);
+
+                $('.student-stat-card.student-private-classes-card .student-stat-number')
+                    .text(stats.privateClasses || 0);
+                $('.student-stat-card.student-private-classes-card .student-stat-details .student-stat-detail strong')
+                    .text(stats.privateStudents || 0);
+
+                $('.student-stat-card.student-public-classes-card .student-stat-number')
+                    .text(stats.publicClasses || 0);
+                $('.student-stat-card.student-public-classes-card .student-stat-details .student-stat-detail strong')
+                    .text(stats.publicStudents || 0);
+
                 // Update legend
                 $('.student-legend-item:first .student-legend-number').text(stats.totalClasses || 0);
                 $('.student-legend-item:nth-child(2) .student-legend-number').text(stats.privateClasses || 0);

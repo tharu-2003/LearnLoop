@@ -34,6 +34,7 @@ async function uploadImageToCloudinary(file) {
 
 ////////////////////////////////////////////////////
 
+
 // Flexible Pie Chart Class
 class FlexiblePieChart {
     constructor(containerSelector, options = {}) {
@@ -269,9 +270,9 @@ let toastCount = 0;
 const activeToasts = new Set();
 let classType = 'private';
 
-// Initialize when document is ready
-$(document).ready(function() {
-    const token = sessionStorage.getItem("token");
+function setupPage() {
+  console.log("Setting up page logic...");
+  const token = sessionStorage.getItem("token");
     const currentUser = JSON.parse(localStorage.getItem("current User"));
     const avatarUrl = currentUser.avatarUrl;
 
@@ -637,34 +638,45 @@ $(document).ready(function() {
                 'Authorization': 'Bearer ' + token
             },
             success: function(data, textStatus, xhr) {
-                console.log("=== SUCCESS RESPONSE ===");
-                console.log("HTTP Status:", xhr.status);
-                console.log("Response data:", data);
-                console.log("Type of response:", typeof data);
-                console.log("Response keys:", Object.keys(data || {}));
-                
-                // Try different ways to check success
-                if (xhr.status === 200) {
-                    console.log("HTTP 200 - treating as success");
+    console.log("=== SUCCESS RESPONSE ===");
+    console.log("HTTP Status:", xhr.status);
+    console.log("Response data:", data);
 
+    if (xhr.status === 200) {
+        // response data structure: data.data.user and data.data.token
+        const respData = data && data.data ? data.data : null;
 
-                    // Get current user from localStorage
-                    let currentUser = JSON.parse(localStorage.getItem("current User"));
+        if (respData) {
+            // Update token in sessionStorage
+            if (respData.token) {
+                sessionStorage.setItem("token", respData.token);
+                console.log("Updated token in sessionStorage");
+            }
 
-                    loadUserData(currentUser.userId);
+            // Update current user in localStorage
+            if (respData.user) {
+                localStorage.setItem("current User", JSON.stringify(respData.user));
+                console.log("Updated current User in localStorage");
+            }
 
-                    // Save back to localStorage
-                    localStorage.setItem("current User", JSON.stringify(currentUser));
+            // reload UI from updated user
+            const currentUser = respData.user || JSON.parse(localStorage.getItem("current User"));
+            if (currentUser && currentUser.userId) {
+                loadUserData(currentUser.userId);
+            }
 
-                    showToast('Profile updated successfully!', 'success');
-                    closeModal();
-                } else {
-                    console.log("Non-200 status in success callback:", xhr.status);
-                    showToast('Unexpected response status', 'error');
-                }
-                
-                $submitBtn.text(originalText).prop('disabled', false);
-            },
+            showToast('Profile updated successfully!', 'success');
+            closeModal();
+        } else {
+            showToast('Profile updated but unexpected response format', 'warning');
+        }
+    } else {
+        showToast('Unexpected response status', 'error');
+    }
+
+    $submitBtn.text(originalText).prop('disabled', false);
+},
+
             error: function(xhr, textStatus, errorThrown) {
                 console.log("=== ERROR RESPONSE ===");
                 console.log("HTTP Status:", xhr.status);
@@ -809,6 +821,11 @@ $(document).ready(function() {
             $submitBtn.text(originalText).prop('disabled', false);
         }
     });
+}
+
+// Initialize when document is ready
+$(document).ready(function() {
+    setupPage();
 });
 
 // Function to validate passcode uniqueness
@@ -924,6 +941,7 @@ function updateClassStatistics(teacherId) {
 // Function to load existing classes
 function loadTeacherClasses(teacherId) {
     const token = sessionStorage.getItem("token");
+    console.log("tokkkkkkkkkkkkkkk "+ token);
     
     // Show loading state
     const $classesGrid = $('.classes-grid');
@@ -987,7 +1005,7 @@ function loadTeacherClasses(teacherId) {
                     console.log(`Clicked on class: ${className} (ID: ${classId})`);
                 });
             } else {
-                showToast('Failed to load classess', 'error');
+                showToast('Failed to load classes', 'error');
             }
         },
         error: function(xhr, status, error) {

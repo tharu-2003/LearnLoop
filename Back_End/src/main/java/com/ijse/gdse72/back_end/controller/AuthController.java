@@ -6,9 +6,13 @@ import com.ijse.gdse72.back_end.dto.RegisterDTO;
 import com.ijse.gdse72.back_end.dto.UpdateUserDTO;
 import com.ijse.gdse72.back_end.entity.User;
 import com.ijse.gdse72.back_end.service.AuthService;
+import com.ijse.gdse72.back_end.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -17,6 +21,29 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<ApiResponse> updateUser(
+            @PathVariable Long userId,
+            @RequestBody UpdateUserDTO dto) {
+
+        User updatedUser = authService.updateUser(userId, dto);
+
+        // generate a new token with the updated username
+        String newToken = jwtUtil.generateToken(updatedUser.getUsername());
+
+        // return both user and token in the response data
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("user", updatedUser);
+        payload.put("token", newToken);
+
+        return ResponseEntity.ok(new ApiResponse(
+                200,
+                "Profile Updated Successfully",
+                payload
+        ));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUser(@RequestBody RegisterDTO registerDTO){
@@ -36,18 +63,18 @@ public class AuthController {
         ));
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<ApiResponse> updateUser(
-            @PathVariable Long userId,
-            @RequestBody UpdateUserDTO dto) {
-
-        User updatedUser = authService.updateUser(userId, dto);
-        return ResponseEntity.ok(new ApiResponse(
-                200,
-                "Profile Updated Successfully",
-                updatedUser
-        ));
-    }
+//    @PutMapping("/update/{userId}")
+//    public ResponseEntity<ApiResponse> updateUser(
+//            @PathVariable Long userId,
+//            @RequestBody UpdateUserDTO dto) {
+//
+//        User updatedUser = authService.updateUser(userId, dto);
+//        return ResponseEntity.ok(new ApiResponse(
+//                200,
+//                "Profile Updated Successfully",
+//                updatedUser
+//        ));
+//    }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {

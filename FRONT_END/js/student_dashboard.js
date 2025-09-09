@@ -763,8 +763,8 @@ function loadStudentClasses(studentId) {
                     const classHtml = `
                         <div class="class-item student-class-item" data-class-id="${classData.classId}">
                             <div class="class-item-icon student-class-icon">
-                                ${avatarUrl ? 
-                                    `<img src="${avatarUrl}" alt="${classData.name}" class="class-dp-image student-class-image">` : 
+                                ${imageUrl ? 
+                                    `<img src="${imageUrl}" alt="${classData.name}" class="class-dp-image student-class-image">` : 
                                     `<i class="fas fa-book"></i>`
                                 }
                             </div>

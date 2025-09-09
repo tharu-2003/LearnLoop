@@ -274,7 +274,13 @@ $(document).ready(function() {
             const className = card.find('.class-name').text();
             const passcode = card.data('passcode');
             const currentUser = JSON.parse(localStorage.getItem("current User"));
+            const token = sessionStorage.getItem("token"); 
+            
             if (!currentUser) return;
+
+            console.log("User Id " + currentUser.userId);
+            console.log("class Id " + classId);
+
 
             if (priority === 'PUBLIC') {
                 // Join public class directly
@@ -282,6 +288,9 @@ $(document).ready(function() {
                     url: 'http://localhost:8080/api/classes/join',
                     type: 'POST',
                     contentType: 'application/json',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token  // Add JWT token here
+                    },
                     data: JSON.stringify({ userId: currentUser.userId, classId: classId }),
                     success: function() {
                         showToast(`Joined ${className}`, 'success');
@@ -303,6 +312,7 @@ $(document).ready(function() {
         const modal = $('#passcodeModal');
         const passInput = $('#passcode');
         const errorMsg = $('#errorMessage');
+        const token = sessionStorage.getItem("token");
 
         modal.data('passcode', correctPasscode);
         modal.data('className', className);
@@ -317,17 +327,24 @@ $(document).ready(function() {
         });
 
         $('.btn-enter').off('click').on('click', function() {
+            
             const entered = passInput.val().trim();
             if (!entered) {
                 showError('Please enter a passcode');
                 return;
             }
             if (entered === modal.data('passcode')) {
+
+                console.log("User Id sssssssssss " + userId);
+                console.log("class Id sssssssss " + classId);
                 // Join class after correct passcode
                 $.ajax({
                     url: 'http://localhost:8080/api/classes/join',
                     type: 'POST',
                     contentType: 'application/json',
+                    headers: { 
+                        'Authorization': 'Bearer ' + token 
+                    },
                     data: JSON.stringify({ userId: userId, classId: classId }),
                     success: function() {
                         showToast(`Joined ${modal.data('className')}`, 'success');

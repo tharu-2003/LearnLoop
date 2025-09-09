@@ -757,7 +757,8 @@ function loadStudentClasses(studentId) {
 
                 classes.forEach(function(classData) {
                     // const avatarUrl = classData.avatarUrl || null;
-                    const avatarUrl = classData.createdByAvatarUrl || classData.imageUrl || null;
+                    const avatarUrl = classData.createdByAvatarUrl || null;
+                    const imageUrl = classData.imageUrl || null;
 
                     const classHtml = `
                         <div class="class-item student-class-item" data-class-id="${classData.classId}">
@@ -779,7 +780,10 @@ function loadStudentClasses(studentId) {
                     const classId = $(this).data('class-id');
                     const className = $(this).find('.class-item-name, .student-class-name').text();
                     console.log(`Clicked on class: ${className} (ID: ${classId})`);
-                    // Navigate to class details or classroom
+
+
+                    localStorage.setItem("classId", `${classId}`);
+                    window.location.href = '/pages/student_message_section.html';
                 });
             } else {
                 showToast('Failed to load classes', 'error');

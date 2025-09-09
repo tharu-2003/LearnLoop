@@ -15,7 +15,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/classes")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://127.0.0.1:5501", "http://localhost:5501"})
+//@CrossOrigin(origins = {"http://127.0.0.1:5501", "http://localhost:5501"})
+@CrossOrigin(
+        origins = "http://localhost:5501",
+        allowedHeaders = "*",
+        allowCredentials = "true",
+        methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS }
+)
 public class ClassController {
 
     private final ClassService classService;

@@ -35,8 +35,10 @@ public class SecurityConfig {
 
         http.csrf(AbstractHttpConfigurer::disable) //crosstite riquest karanna puluwan widihata hadanawa
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .authorizeHttpRequests(auth ->
+//                        auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
+                        auth.requestMatchers("/auth/**", "/api/classes/join").permitAll().anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //awasthawa save karaganne
                 .authenticationProvider(authenticationProvider())

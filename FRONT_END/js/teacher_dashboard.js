@@ -336,6 +336,7 @@ function setupPage() {
 
     function navigateToClasses() {
         window.location.href = '/pages/teacher_classess.html';
+        
     }
 
     // Add interactivity to navigation items using jQuery
@@ -1012,6 +1013,9 @@ function loadTeacherClasses(teacherId) {
                     const classId = $(this).data('class-id');
                     const className = $(this).find('.class-item-name').text();
                     console.log(`Clicked on class: ${className} (ID: ${classId})`);
+
+                    localStorage.setItem("classId", `${classId}`);
+                    window.location.href = '/pages/teacher_message_section.html';
                 });
             } else {
                 showToast('Failed to load classes', 'error');

@@ -46,32 +46,46 @@ $(document).ready(function() {
                     const statusBadge = isPublic ? 'status-public' : 'status-private';
                     const statusText = isPublic ? 'Public' : 'Private';
 
-                    const cardHtml = `<div class="class-card" data-class-id="${cls.classId}" data-priority="${cls.priority}" data-passcode="${cls.passcode || ''}">
+                    const cardHtml = `
+                    <div class="class-card" data-class-id="${cls.classId}" data-priority="${cls.priority}" data-passcode="${cls.passcode || ''}">
                         <div class="card-image">
-                            <img src="${cls.imageUrl || ''}" onerror="$(this).parent().addClass('placeholder').html('📚');">
+                            <img src="${cls.imageUrl || ''}" alt="${cls.name}" 
+                                onerror="$(this).parent().addClass('placeholder').html('📚');">
+                            <div class="class-dp">
+                                <img src="${cls.createdByAvatarUrl || ''}" alt="Course DP" 
+                                    onerror="$(this).parent().html('JS');">
+                            </div>
                             <span class="status-badge ${statusBadge}">${statusText}</span>
                         </div>
                         <div class="card-content">
                             <h3 class="class-name">${cls.name}</h3>
                             <div class="teacher-info">
                                 <div class="teacher-avatar">
-                                    <img src="${cls.createdByAvatarUrl || ''}" onerror="$(this).parent().html('EM');">
+                                    <img src="${cls.createdByAvatarUrl || ''}" alt="Teacher" 
+                                        onerror="$(this).parent().html('EM');">
                                 </div>
                                 <span class="teacher-name">by ${cls.createdByName || 'Unknown'}</span>
                             </div>
                             <div class="class-description">${cls.description || ''}</div>
                             <div class="card-footer">
-                                <div class="student-count"><i class="fas fa-users"></i> <span>${studentCount} students</span></div>
-                                <button class="join-btn"><i class="fas ${isPublic ? 'fa-door-open':'fa-lock'}"></i> Join Class</button>
+                                <div class="student-count">
+                                    <i class="fas fa-users"></i> 
+                                    <span>${studentCount} students</span>
+                                </div>
+                                <button class="join-btn">
+                                    <i class="fas ${isPublic ? 'fa-door-open':'fa-lock'}"></i> Join Class
+                                </button>
                             </div>
                         </div>
                     </div>`;
+
                     cardsGrid.append(cardHtml);
                 });
 
                 allCards = $('.class-card').clone(true);
                 attachCardEventListeners();
             },
+
             error: function() {
                 cardsGrid.html(`<div class="class-card" style="grid-column:1/-1;text-align:center;">
                     <div class="card-image placeholder">❌</div>

@@ -6,31 +6,10 @@ const activeToasts = new Set();
 let savedTemplates = [
     {
         id: 1,
-        type: 'notes',
+        type: 'note',
         title: 'Computer Science - Data Structures',
         date: '2025-09-08',
         lastModified: '2 days ago'
-    },
-    {
-        id: 2,
-        type: 'exam',
-        title: 'Final Examination - Programming',
-        date: '2025-09-07',
-        lastModified: '3 days ago'
-    },
-    {
-        id: 3,
-        type: 'notes',
-        title: 'Machine Learning - Algorithms',
-        date: '2025-09-06',
-        lastModified: '4 days ago'
-    },
-    {
-        id: 4,
-        type: 'exam',
-        title: 'Mid-term - Database Systems',
-        date: '2025-09-05',
-        lastModified: '5 days ago'
     }
 ];
 
@@ -38,6 +17,7 @@ let savedTemplates = [
 $(document).ready(function() {
     const token = sessionStorage.getItem("token");
     const currentUser = JSON.parse(localStorage.getItem("current User"));
+    
     
     if (!token || !currentUser?.userId) {
         console.error("No user found, redirecting to login");
@@ -117,16 +97,29 @@ function loadSavedTemplatesFromAPI(token) {
 }
 
 function formatLastModified(dateString) {
+    if (!dateString) return "Unknown";
+
     const now = new Date();
     const updated = new Date(dateString);
-    const diffTime = Math.abs(now - updated);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return "1 day ago";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
-    
-    return updated.toLocaleDateString();
+    if (isNaN(updated)) return "Unknown";
+
+    const diffMs = now - updated; // difference in milliseconds
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) {
+        if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+        if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? "s" : ""} ago`;
+        return updated.toLocaleDateString();
+    } else if (diffHours > 0) {
+        return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    } else if (diffMinutes > 0) {
+        return `${diffMinutes} minute${diffMinutes > 1 ? "s" : ""} ago`;
+    } else {
+        return "Just now";
+    }
 }
 
 // Left Navigation JavaScript Functions
@@ -294,9 +287,15 @@ function openTemplate(id) {
         showToast(`Opening: ${template.title}`, 'info');
         
         // Navigate to the appropriate template editor
-        if (template.type === 'notes') {
+        if (template.type === 'note') {
+            localStorage.setItem('currentDocumentId', id);
+            const currentDocumentId = localStorage.getItem("currentDocumentId");
+
             window.location.href = `/pages/note_template.html?id=${id}`;
         } else {
+            localStorage.setItem('currentDocumentId', JSON.stringify(id));
+            const currentDocumentId = localStorage.getItem("currentDocumentId");
+
             window.location.href = `/pages/paper_template.html?id=${id}`;
         }
     }
@@ -659,7 +658,7 @@ function loadSavedTemplates() {
     const templatesHtml = savedTemplates.map(template => `
         <div class="saved-item">
             <h4>
-                <i class="fas fa-${template.type === 'notes' ? 'sticky-note' : 'file-text'}"></i>
+                <i class="fas fa-${template.type === 'note' ? 'sticky-note' : 'file-text'}"></i>
                 ${template.title}
             </h4>
             <p>
@@ -692,8 +691,8 @@ function loadSavedTemplates() {
 }
 
 function updateStats() {
-    const notesCount = savedTemplates.filter(t => t.type === 'notes').length;
-    const examCount = savedTemplates.filter(t => t.type === 'exam').length;
+    const notesCount = savedTemplates.filter(t => t.type === 'NOTE').length;
+    const examCount = savedTemplates.filter(t => t.type === 'PAPER').length;
     const totalCount = savedTemplates.length;
     
     // Update stats if elements exist

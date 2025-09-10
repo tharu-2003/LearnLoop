@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Notes</title>
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="http://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=K-qj_J5YeiZqlWOYaSnzBd6wnACSOwvYp3tS13d-4TuE7ZBiykGMfmI_rR2IzhnQ4WvpwalvbWZ-r6PPy2mTeA" charset="UTF-8"></script><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         * {
             box-sizing: border-box;
@@ -367,7 +365,7 @@
             }
         }
     </style>
-</head>
+<div id="uuidMachine">0c1abe3c-186a-4043-b918-516bc14c8324</div></head>
 <body>
     <button class="btn btn-primary go-back" id="goBackBtn"><i class="fa-solid fa-arrow-left"></i> Back to Templates</button>
     <button class="btn btn-success toggle-edit" id="toggleEditBtn"><i class="fa-solid fa-pen-to-square"></i> Edit Mode</button>
@@ -387,7 +385,7 @@
         
         <div class="info-bar">
             <span>Date: <span class="editable" contenteditable="false">September 9, 2025</span></span>
-            <span>Topic: <span class="editable" contenteditable="false">Variables & Data Types</span></span>
+            <span>Topic: <span class="editable" contenteditable="false">Variables &amp; Data Types</span></span>
             <span>Page: <span class="editable" contenteditable="false">1 of 1</span></span>
         </div>
         
@@ -466,12 +464,6 @@ boolean isStudent = true;</span>
         let editMode = false;
 
         $(document).ready(function() {
-            const currentDocumentId = localStorage.getItem("currentDocumentId");
-
-            if(currentDocumentId){
-                getTamplateDetails(currentDocumentId);
-            }
-
             // Event handlers using jQuery
             $('#goBackBtn').click(goBack);
             $('#toggleEditBtn').click(toggleEditMode);
@@ -695,91 +687,44 @@ boolean isStudent = true;</span>
             });
         });
 
-        function getTamplateDetails(currentDocumentId) {
-            const token = sessionStorage.getItem("token");
-            
-            $.ajax({
-                url: `http://localhost:8080/auth/documents/${currentDocumentId}`,
-                method: "GET",
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                },
-                success: function(response) {
-                    // 1️⃣ Fill the header
-                    $('h1 .editable').text(response.title || 'Untitled Exam');
-                    $('.subtitle .editable').text(response.subtitle || 'Exam Paper');
-
-                    // 2️⃣ Fill exam-info
-                    $('.exam-info').find('.info-item:nth-child(1) .editable').text(response.date || 'Date Not Set');
-                    $('.exam-info').find('.info-item:nth-child(2) .editable').text(response.timeAllowed || 'Time Not Set');
-                    $('.exam-info').find('.info-item:nth-child(3) .editable').text(response.maxMarks || 'Marks Not Set');
-
-                    // Candidate Name remains blank, no need to populate
-                    // $('.exam-info').find('.info-item:nth-child(4) span').text(response.candidateName || '__________________');
-
-                    // 3️⃣ Fill instructions
-                    if(response.instructions && Array.isArray(response.instructions)){
-                        const instructionsList = $('.instructions ul');
-                        instructionsList.empty();
-                        response.instructions.forEach(inst => {
-                            instructionsList.append(`<li><span class="editable" contenteditable="false">${inst}</span></li>`);
-                        });
-                    }
-
-                    // 4️⃣ Fill questions
-                    if(response.questions && Array.isArray(response.questions)){
-                        const sections = $('.questions-container .section');
-                        sections.each(function(sectionIndex){
-                            $(this).find('.question').remove(); // Clear existing questions
-
-                            const sectionQuestions = response.questions.filter(q => q.section === sectionIndex + 1);
-                            
-                            sectionQuestions.forEach((q, index) => {
-                                let questionNumber = (index + 1) < 10 ? `0${index + 1}` : index + 1;
-                                let questionHtml = '';
-
-                                if(q.type === 'MCQ'){
-                                    questionHtml = `
-                                        <div class="question">
-                                            <button class="delete-question" title="Delete Question"><i class="fas fa-times"></i></button>
-                                            <p class="question-text"><span class="editable" contenteditable="false">${questionNumber}. ${q.text}</span></p>
-                                            <div class="mcq-options">
-                                                ${q.options.map((opt, idx) => `
-                                                    <div class="mcq-option">
-                                                        <input type="radio" name="q${sectionIndex}_${index}" id="q${sectionIndex}_${index}_${idx}">
-                                                        <label for="q${sectionIndex}_${index}_${idx}"><span class="editable" contenteditable="false">${opt}</span></label>
-                                                    </div>
-                                                `).join('')}
-                                            </div>
-                                        </div>
-                                    `;
-                                } else {
-                                    const height = q.type === 'Long' ? '180px' : '100px';
-                                    questionHtml = `
-                                        <div class="question">
-                                            <button class="delete-question" title="Delete Question"><i class="fas fa-times"></i></button>
-                                            <p class="question-text"><span class="editable" contenteditable="false">${questionNumber}. ${q.text}</span></p>
-                                            <div class="answer-space" style="min-height: ${height};"></div>
-                                        </div>
-                                    `;
-                                }
-
-                                $(this).append(questionHtml);
-                            });
-                        });
-                    }
-
-                    // 5️⃣ Fill footer
-                    $('.footer .editable').text(response.footer || '© 2025 University Examination Board. All rights reserved.');
-                },
-                error: function(err) {
-                    console.error("Error fetching document details:", err);
-                    alert("Failed to load document. Please try again.");
-                }
-            });
-        }
-
-
     </script>
-</body>
-</html>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+</body></html>

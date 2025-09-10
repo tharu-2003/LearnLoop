@@ -138,7 +138,7 @@ $(document).ready(function() {
                                     <h3 class="class-name">${classData.name}</h3>
                                     <div class="student-count">
                                         <i class="fas fa-users"></i>
-                                        <span>${studentCount.toLocaleString()} students</span>
+                                        <span>${studentCount} students</span>
                                     </div>
                                 </div>
                             </div>

@@ -2,10 +2,18 @@ let activeToasts = new Set();
 let toastCount = 0;
 
 $(document).ready(function() {
+
+    const token = sessionStorage.getItem("token")
     const currentUser = JSON.parse(localStorage.getItem("current User"));
-    if (!currentUser) return;
+    
+    if (!token || !currentUser.userId) {
+        console.error("No user found, redirecting to login");
+        window.location.href = '../index.html';
+        return;
+    }
 
     $('.user-avatar-nav').text(currentUser.username[0]);
+    
     let allCards = $(); // store original cards for search/filter
 
     loadAllClasses();
@@ -109,7 +117,7 @@ $(document).ready(function() {
             if (navText === 'Dashboard') {
                 navigateToDashboard();
             } else if(navText === 'Document'){
-                // document nav
+                navigateToDocument();
             } else if(navText === 'LogOut'){
                 // Clear storage
                 sessionStorage.clear();
@@ -221,6 +229,11 @@ $(document).ready(function() {
     function navigateToDashboard() {
         // localStorage.removeItem("classId");
         window.location.href = '/pages/student_dashboard.html';
+    }
+
+    function navigateToDocument() {
+        window.location.href = '/pages/document_templates.html';
+        
     }
 
     // ---------------- SEARCH FUNCTIONALITY ----------------

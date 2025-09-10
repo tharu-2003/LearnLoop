@@ -270,6 +270,7 @@ const activeToasts = new Set();
 
 function setupPage() {
     console.log("Setting up student page logic...");
+    
     const token = sessionStorage.getItem("token");
     const currentUser = JSON.parse(localStorage.getItem("current User"));
 
@@ -312,6 +313,11 @@ function setupPage() {
         window.location.href = '/pages/student_classess.html';
     }
 
+    function navigateToDocument() {
+        window.location.href = '/pages/document_templates.html';
+        
+    }
+
     // Add interactivity to navigation items using jQuery
     $('.nav-menu-item, .student-nav-item').each(function() {
         $(this).on('click', function() {
@@ -324,7 +330,7 @@ function setupPage() {
             if (navText === 'Classes') {
                 navigateToClasses();
             } else if(navText === 'Document') {
-                // Document functionality
+                navigateToDocument();
             } else if(navText === 'LogOut') {
                 // Clear storage
                 sessionStorage.clear();

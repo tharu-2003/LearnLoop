@@ -1,4 +1,17 @@
 $(document).ready(function() {
+
+        const token = sessionStorage.getItem("token")
+        const currentUser = JSON.parse(localStorage.getItem("current User"));
+        
+        if (!token || !currentUser.userId) {
+            console.error("No user found, redirecting to login");
+            window.location.href = '../index.html';
+            return;
+        }
+
+        $('.user-avatar-nav').text(currentUser.username[0]);
+
+
         // Cache frequently used elements
         const $sidebarItems = $('.section-item');
         const $navMenuItems = $('.nav-menu-item');
@@ -440,7 +453,7 @@ $(document).ready(function() {
                     navigateToClasses();
                 }else if(menuText === 'Document'){
                     localStorage.removeItem("classId");
-                    
+                    navigateToDocument();
                 }else if(menuText === 'Dashboard'){
                     localStorage.removeItem("classId");
                     navigateToDashboard();
@@ -467,6 +480,11 @@ $(document).ready(function() {
         function navigateToDashboard() {
             
             window.location.href = '/pages/student_dashboard.html';
+        }
+
+        function navigateToDocument() {
+            window.location.href = '/pages/document_templates.html';
+            
         }
 
         // Handle search functionality

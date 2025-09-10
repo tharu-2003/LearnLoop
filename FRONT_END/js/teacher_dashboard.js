@@ -272,11 +272,17 @@ let classType = 'private';
 
 function setupPage() {
   console.log("Setting up page logic...");
-  const token = sessionStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const currentUser = JSON.parse(localStorage.getItem("current User"));
     const avatarUrl = currentUser.avatarUrl;
 
     loadUserData(currentUser.userId);
+
+    if (!token || !currentUser.userId) {
+        console.error("No user found, redirecting to login");
+        window.location.href = '../index.html';
+        return;
+    }
 
     console.log("Logged User Id " + currentUser.userId);
     console.log("avatarUrl " + avatarUrl);
@@ -337,7 +343,13 @@ function setupPage() {
     function navigateToClasses() {
         window.location.href = '/pages/teacher_classess.html';
         
+    }function navigateToDocument() {
+        window.location.href = '/pages/document_templates.html';
+        
     }
+
+    
+    
 
     // Add interactivity to navigation items using jQuery
     $('.nav-menu-item').each(function() {
@@ -351,7 +363,7 @@ function setupPage() {
             if (navText === 'Classes') {
                 navigateToClasses();
             }else if(navText === 'Document'){
-
+                navigateToDocument();
             }else if(navText === 'LogOut'){
                 // Clear storage
                 sessionStorage.clear();

@@ -293,7 +293,7 @@ $(document).ready(function() {
             if (navText === 'Dashboard') {
                 navigateToDashboard();
             } else if(navText === 'Document'){
-                // Handle document navigation
+                navigateToDocument();
             }else if(navText === 'LogOut'){
                 // Clear storage
                 sessionStorage.clear();
@@ -406,6 +406,11 @@ $(document).ready(function() {
     // Navigation functionality
     function navigateToDashboard() {
         window.location.href = '/pages/teacher_dashboard.html';
+    }
+
+    function navigateToDocument() {
+        window.location.href = '/pages/document_templates.html';
+        
     }
 
     function attachCardEventListeners() {

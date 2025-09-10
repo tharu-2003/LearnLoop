@@ -124,24 +124,6 @@ public class ClassController {
         }
     }
 
-//    @GetMapping("/statistics/{teacherId}")
-//    public ResponseEntity<ApiResponse> getTeacherStatistics(@PathVariable Long teacherId) {
-//        try {
-//            Map<String, Long> statistics = classService.getTeacherClassStatistics(teacherId);
-//            return ResponseEntity.ok(new ApiResponse(
-//                    200,
-//                    "Statistics retrieved successfully",
-//                    statistics
-//            ));
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body(new ApiResponse(
-//                    400,
-//                    e.getMessage(),
-//                    null
-//            ));
-//        }
-//    }
-
     @GetMapping("/statistics/{teacherId}")
     public ResponseEntity<ApiResponse> getTeacherStatistics(@PathVariable Long teacherId) {
         try {
@@ -199,6 +181,24 @@ public class ClassController {
             ));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/available/{studentId}")
+    public ResponseEntity<ApiResponse> getClassesNotJoinedByStudent(@PathVariable Long studentId) {
+        try {
+            List<ClassResponseDTO> classes = classService.getClassesNotJoinedByStudent(studentId);
+            return ResponseEntity.ok(new ApiResponse(
+                    200,
+                    "Available classes retrieved successfully",
+                    classes
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(
+                    400,
+                    e.getMessage(),
+                    null
+            ));
         }
     }
 

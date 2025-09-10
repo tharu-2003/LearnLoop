@@ -128,22 +128,6 @@ public class ClassServiceImpl implements ClassService {
         return classes.stream().map(this::convertToResponseDTO).collect(Collectors.toList());
     }
 
-//    @Override
-//    public Map<String, Long> getTeacherClassStatistics(Long teacherId) {
-//
-//        Map<String, Long> statistics = new HashMap<>();
-//
-//        Long totalClasses = (long) classRepository.findByCreatedByUserIdAndStatus(teacherId, Status.ACTIVE).size();
-//        statistics.put("totalClasses", totalClasses);
-//
-//        Long privateClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PRIVATE);
-//        statistics.put("privateClasses", privateClasses);
-//
-//        Long publicClasses = classRepository.countByTeacherAndPriority(teacherId, Priority.PUBLIC);
-//        statistics.put("publicClasses", publicClasses);
-//        return statistics;
-//    }
-
     @Override
     public boolean isPasscodeUnique(String passcode) {
         return !classRepository.existsByPasscode(passcode);
@@ -249,7 +233,17 @@ public class ClassServiceImpl implements ClassService {
         classRepository.save(classEntity);
     }
 
+    @Override
+    public List<ClassResponseDTO> getClassesNotJoinedByStudent(Long studentId) {
+        User student = userRepository.findById(Math.toIntExact(studentId))
+                .orElseThrow(() -> new RuntimeException("Student not found"));
 
+        List<Class> classes = classRepository.findClassesNotJoinedByStudent(student);
+        return classes.stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+
+    }
 
 
     private ClassResponseDTO convertToResponseDTO(Class classEntity) {

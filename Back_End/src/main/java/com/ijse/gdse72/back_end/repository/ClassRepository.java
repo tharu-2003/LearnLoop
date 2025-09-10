@@ -3,6 +3,7 @@ package com.ijse.gdse72.back_end.repository;
 import com.ijse.gdse72.back_end.entity.Class;
 import com.ijse.gdse72.back_end.entity.Priority;
 import com.ijse.gdse72.back_end.entity.Status;
+import com.ijse.gdse72.back_end.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,6 +47,16 @@ public interface ClassRepository extends JpaRepository<Class, Long> {
     // Check if a user is already enrolled in a class
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Class c JOIN c.users u WHERE c.classId = :classId AND u.userId = :userId")
     boolean existsUserInClass(@Param("classId") Long classId, @Param("userId") Long userId);
+
+    // ClassRepository.java
+//    @Query("SELECT c FROM Class c WHERE c.status = 'ACTIVE' AND :student NOT MEMBER OF c.users")
+//    List<Class> findClassesNotJoinedByStudent(@Param("student") User student);
+
+//    @Query("SELECT c FROM Class c LEFT JOIN FETCH c.users u WHERE :student NOT MEMBER OF c.users AND c.status = 'ACTIVE'")
+//    List<Class> findClassesNotJoinedByStudent(@Param("student") User student);
+
+    @Query("SELECT c FROM Class c WHERE c.status = 'ACTIVE' AND :student NOT MEMBER OF c.users")
+    List<Class> findClassesNotJoinedByStudent(@Param("student") User student);
 
 
 }

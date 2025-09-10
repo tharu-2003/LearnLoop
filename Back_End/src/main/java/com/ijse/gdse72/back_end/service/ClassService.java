@@ -38,7 +38,7 @@ public interface ClassService {
 
     void joinClass(JoinClassDTO joinDTO);
 
-
+    List<ClassResponseDTO> getClassesNotJoinedByStudent(Long studentId);
 
 
 }

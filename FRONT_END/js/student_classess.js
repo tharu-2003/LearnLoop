@@ -20,6 +20,7 @@ $(document).ready(function() {
 
     // ---------------- LOAD CLASSES ----------------
     function loadAllClasses() {
+        const currentUser = JSON.parse(localStorage.getItem("current User"));
         const token = sessionStorage.getItem("token");
         const cardsGrid = $('#cardsGrid');
 
@@ -32,7 +33,7 @@ $(document).ready(function() {
         </div>`);
 
         $.ajax({
-            url: 'http://localhost:8080/api/classes',
+            url: `http://localhost:8080/api/classes/available/${currentUser.userId}`,
             type: 'GET',
             headers: { 'Authorization': 'Bearer ' + token },
             success: function(response) {
@@ -50,6 +51,7 @@ $(document).ready(function() {
 
                 response.data.forEach(cls => {
                     const studentCount = cls.users ? cls.users.length : 0;
+                    console.log("stuuuuuuu "+studentCount);
                     const isPublic = cls.priority === 'PUBLIC';
                     const statusBadge = isPublic ? 'status-public' : 'status-private';
                     const statusText = isPublic ? 'Public' : 'Private';

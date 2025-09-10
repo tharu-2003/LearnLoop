@@ -268,6 +268,8 @@ public class ClassServiceImpl implements ClassService {
         dto.setCreatedByName(classEntity.getCreatedBy().getUsername());
         dto.setCreatedById(classEntity.getCreatedBy().getUserId());
         dto.setCreatedByAvatarUrl(classEntity.getCreatedBy().getAvatarUrl()); // ✅ new field
+
+        dto.setStudentCount(classEntity.getUsers() != null ? classEntity.getUsers().size() : 0);
         return dto;
     }
 

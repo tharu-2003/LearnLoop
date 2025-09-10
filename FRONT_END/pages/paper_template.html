@@ -245,6 +245,13 @@
 
         .toggle-edit {
             position: fixed;
+            top: 80px; 
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .go-back {
+            position: fixed;
             top: 20px;
             left: 20px;
             z-index: 1000;
@@ -252,7 +259,7 @@
         
         /* PDF-specific styles */
         @media print {
-            .toggle-edit, .edit-mode, .action-buttons {
+            .toggle-edit, .edit-mode, .action-buttons, .go-back {
                 display: none !important;
             }
             
@@ -308,6 +315,15 @@
                 max-width: 300px;
             }
 
+            .go-back {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 10px auto 5px auto;
+                display: block;
+                max-width: 90%;
+            }
+
             .edit-mode, .toggle-edit {
                 position: relative;
                 top: auto;
@@ -320,6 +336,7 @@
     </style>
 </head>
 <body>
+    <button class="btn btn-primary go-back" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i> Back to Templates</button>
     <button class="btn btn-success toggle-edit" onclick="toggleEditMode()"><i class="fa-solid fa-pen-to-square"></i> Edit Mode</button>
     
     <div class="edit-mode" id="editHelp" style="display: none;">
@@ -456,6 +473,10 @@
 
     <script>
         let editMode = false;
+
+        function goBack() {
+            //navigate to Templates Bord
+        }
 
         function toggleEditMode() {
             editMode = !editMode;

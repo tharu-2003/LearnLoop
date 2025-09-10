@@ -4828,3 +4828,650 @@ io.jsonwebtoken.MalformedJwtException: JWT strings must contain exactly 2 period
 2025-09-10T17:30:58.188+05:30  INFO 12200 --- [Back_End] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-09-10T17:30:58.191+05:30  INFO 12200 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-09-10T17:30:58.202+05:30  INFO 12200 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-09-10T17:35:15.346+05:30  INFO 22896 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : Starting Application using Java 21.0.5 with PID 22896 (E:\AAD\FINAL_PROJECT\LearnLoop\Back_End\target\classes started by Asus in E:\AAD\FINAL_PROJECT\LearnLoop)
+2025-09-10T17:35:15.349+05:30  INFO 22896 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : No active profile set, falling back to 1 default profile: "default"
+2025-09-10T17:35:16.228+05:30  INFO 22896 --- [Back_End] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-10T17:35:16.301+05:30  INFO 22896 --- [Back_End] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 64 ms. Found 3 JPA repository interfaces.
+2025-09-10T17:35:16.966+05:30  INFO 22896 --- [Back_End] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-09-10T17:35:16.984+05:30  INFO 22896 --- [Back_End] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-09-10T17:35:16.984+05:30  INFO 22896 --- [Back_End] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-09-10T17:35:17.045+05:30  INFO 22896 --- [Back_End] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-09-10T17:35:17.045+05:30  INFO 22896 --- [Back_End] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1652 ms
+2025-09-10T17:35:17.216+05:30  INFO 22896 --- [Back_End] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-10T17:35:17.291+05:30  INFO 22896 --- [Back_End] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-09-10T17:35:17.346+05:30  INFO 22896 --- [Back_End] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-10T17:35:17.681+05:30  INFO 22896 --- [Back_End] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-10T17:35:17.716+05:30  INFO 22896 --- [Back_End] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-10T17:35:18.171+05:30  INFO 22896 --- [Back_End] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@59a5bb61
+2025-09-10T17:35:18.172+05:30  INFO 22896 --- [Back_End] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-10T17:35:18.233+05:30  WARN 22896 --- [Back_End] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-10T17:35:18.254+05:30  INFO 22896 --- [Back_End] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.39
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-10T17:35:19.695+05:30  INFO 22896 --- [Back_End] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-10T17:35:19.866+05:30  INFO 22896 --- [Back_End] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-10T17:35:20.381+05:30  INFO 22896 --- [Back_End] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-10T17:35:21.309+05:30  WARN 22896 --- [Back_End] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-10T17:35:21.366+05:30  INFO 22896 --- [Back_End] [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-09-10T17:35:21.367+05:30  WARN 22896 --- [Back_End] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-09-10T17:35:21.559+05:30 DEBUG 22896 --- [Back_End] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 24 mappings in 'requestMappingHandlerMapping'
+2025-09-10T17:35:21.680+05:30 DEBUG 22896 --- [Back_End] [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /uploads/**] in 'resourceHandlerMapping'
+2025-09-10T17:35:21.845+05:30 DEBUG 22896 --- [Back_End] [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-09-10T17:35:21.913+05:30 DEBUG 22896 --- [Back_End] [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-09-10T17:35:22.138+05:30  INFO 22896 --- [Back_End] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-09-10T17:35:22.146+05:30  INFO 22896 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : Started Application in 7.345 seconds (process running for 8.347)
+2025-09-10T17:35:27.027+05:30  INFO 22896 --- [Back_End] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-10T17:35:27.028+05:30  INFO 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-09-10T17:35:27.028+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-09-10T17:35:27.028+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-09-10T17:35:27.028+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-09-10T17:35:27.029+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@5c2fb167
+2025-09-10T17:35:27.030+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@35d9d10b
+2025-09-10T17:35:27.030+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-09-10T17:35:27.030+05:30  INFO 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-09-10T17:35:27.107+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : POST "/auth/login", parameters={}
+2025-09-10T17:35:27.110+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#login(AuthDTO)
+2025-09-10T17:35:27.214+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.AuthDTO@9ac125b]
+2025-09-10T17:35:27.525+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:35:27.527+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@16defae8]
+2025-09-10T17:35:27.540+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:35:28.757+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T17:35:28.759+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T17:35:28.826+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:35:28.826+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@8065942]
+2025-09-10T17:35:28.843+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:35:28.933+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T17:35:28.933+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:35:28.934+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T17:35:28.934+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:35:28.963+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:35:28.964+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@324dbf78]
+2025-09-10T17:35:28.971+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:35:29.024+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:35:29.024+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@226ba01e]
+2025-09-10T17:35:29.028+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:35:29.197+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:35:29.198+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:35:29.231+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:35:29.232+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@513c2506]
+2025-09-10T17:35:29.234+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:35:31.641+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:35:31.642+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:35:31.671+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:35:31.672+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@6a48a42e, com.ijse.gdse72.back_end.dto.DocumentDTO@4bdc4c7 (truncated)...]
+2025-09-10T17:35:31.678+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:35:36.621+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:35:36.622+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:35:36.639+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:35:36.640+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@bdf24e1, com.ijse.gdse72.back_end.dto.DocumentDTO@39d12146 (truncated)...]
+2025-09-10T17:35:36.642+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:36:04.749+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : POST "/auth/documents", parameters={}
+2025-09-10T17:36:04.750+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#saveDocument(DocumentDTO, Principal)
+2025-09-10T17:36:04.767+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.DocumentDTO@1a1baf2]
+2025-09-10T17:36:04.863+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:36:04.864+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.entity.Document@3409c43c]
+2025-09-10T17:36:04.865+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:36:06.983+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:36:06.984+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:36:07.005+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:36:07.005+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@5e9ae234, com.ijse.gdse72.back_end.dto.DocumentDTO@1f38721 (truncated)...]
+2025-09-10T17:36:07.007+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:36:59.295+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:36:59.296+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:36:59.309+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:36:59.309+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@1ce18ef0, com.ijse.gdse72.back_end.dto.DocumentDTO@6002972 (truncated)...]
+2025-09-10T17:36:59.310+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:37:10.407+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:37:10.408+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:37:10.421+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:37:10.422+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@45575020, com.ijse.gdse72.back_end.dto.DocumentDTO@489c601 (truncated)...]
+2025-09-10T17:37:10.423+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:39:30.143+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:39:30.144+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:39:30.160+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:39:30.160+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@60e4cb0a, com.ijse.gdse72.back_end.dto.DocumentDTO@5fa1c2f (truncated)...]
+2025-09-10T17:39:30.163+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:39:33.711+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:39:33.711+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:39:33.720+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:39:33.721+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@41bf51b1, com.ijse.gdse72.back_end.dto.DocumentDTO@7ae2186 (truncated)...]
+2025-09-10T17:39:33.723+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:39:44.111+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:39:44.112+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:39:44.124+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:39:44.125+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@2305896b, com.ijse.gdse72.back_end.dto.DocumentDTO@5d853bd (truncated)...]
+2025-09-10T17:39:44.127+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:40:21.032+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : POST "/auth/login", parameters={}
+2025-09-10T17:40:21.033+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#login(AuthDTO)
+2025-09-10T17:40:21.034+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.AuthDTO@4b51e5c5]
+2025-09-10T17:40:21.126+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:40:21.126+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@a09ee93]
+2025-09-10T17:40:21.127+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:40:22.433+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T17:40:22.434+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T17:40:22.447+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:40:22.447+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@7f2e2b58]
+2025-09-10T17:40:22.449+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:40:22.495+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T17:40:22.497+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T17:40:22.499+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:40:22.500+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:40:22.507+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:40:22.507+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@39ad9c9e]
+2025-09-10T17:40:22.509+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:40:22.530+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:40:22.530+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@2f5174b]
+2025-09-10T17:40:22.532+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:40:22.908+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:40:22.909+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:40:22.932+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:40:22.932+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@10248b4e]
+2025-09-10T17:40:22.933+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:40:24.171+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:40:24.172+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:40:24.184+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:40:24.184+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@498deb22, com.ijse.gdse72.back_end.dto.DocumentDTO@347bf82 (truncated)...]
+2025-09-10T17:40:24.186+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:40:42.332+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:40:42.333+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:40:42.347+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:40:42.347+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@68c1f55, com.ijse.gdse72.back_end.dto.DocumentDTO@1cb45a94 (truncated)...]
+2025-09-10T17:40:42.350+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:41:06.809+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T17:41:06.810+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T17:41:06.823+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:41:06.824+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@5eb01bee]
+2025-09-10T17:41:06.826+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:41:06.917+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T17:41:06.918+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T17:41:06.927+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:41:06.928+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:41:06.936+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:41:06.936+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@74ad6f8b]
+2025-09-10T17:41:06.938+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:41:06.961+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:41:06.962+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@4579ac42]
+2025-09-10T17:41:06.964+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:41:07.322+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:41:07.323+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:41:07.346+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:41:07.347+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@4de497b8]
+2025-09-10T17:41:07.347+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:41:08.122+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:41:08.122+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:41:08.135+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:41:08.136+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@1d72989c, com.ijse.gdse72.back_end.dto.DocumentDTO@7551f87 (truncated)...]
+2025-09-10T17:41:08.137+05:30 DEBUG 22896 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:16.100+05:30  INFO 22896 --- [Back_End] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-10T17:48:16.118+05:30  INFO 22896 --- [Back_End] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-10T17:48:16.148+05:30  INFO 22896 --- [Back_End] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-10T17:48:16.167+05:30  INFO 22896 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-10T17:48:16.197+05:30  INFO 22896 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-09-10T17:48:22.883+05:30  INFO 3960 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : Starting Application using Java 21.0.5 with PID 3960 (E:\AAD\FINAL_PROJECT\LearnLoop\Back_End\target\classes started by Asus in E:\AAD\FINAL_PROJECT\LearnLoop)
+2025-09-10T17:48:22.885+05:30  INFO 3960 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : No active profile set, falling back to 1 default profile: "default"
+2025-09-10T17:48:23.695+05:30  INFO 3960 --- [Back_End] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-10T17:48:23.762+05:30  INFO 3960 --- [Back_End] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 58 ms. Found 3 JPA repository interfaces.
+2025-09-10T17:48:24.417+05:30  INFO 3960 --- [Back_End] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-09-10T17:48:24.432+05:30  INFO 3960 --- [Back_End] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-09-10T17:48:24.433+05:30  INFO 3960 --- [Back_End] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-09-10T17:48:24.493+05:30  INFO 3960 --- [Back_End] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-09-10T17:48:24.494+05:30  INFO 3960 --- [Back_End] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1566 ms
+2025-09-10T17:48:24.662+05:30  INFO 3960 --- [Back_End] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-10T17:48:24.735+05:30  INFO 3960 --- [Back_End] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-09-10T17:48:24.793+05:30  INFO 3960 --- [Back_End] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-10T17:48:25.103+05:30  INFO 3960 --- [Back_End] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-10T17:48:25.137+05:30  INFO 3960 --- [Back_End] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-10T17:48:25.569+05:30  INFO 3960 --- [Back_End] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@46a388cc
+2025-09-10T17:48:25.572+05:30  INFO 3960 --- [Back_End] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-10T17:48:25.640+05:30  WARN 3960 --- [Back_End] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-10T17:48:25.661+05:30  INFO 3960 --- [Back_End] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.39
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-10T17:48:26.883+05:30  INFO 3960 --- [Back_End] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-10T17:48:27.116+05:30  INFO 3960 --- [Back_End] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-10T17:48:27.589+05:30  INFO 3960 --- [Back_End] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-10T17:48:28.454+05:30  WARN 3960 --- [Back_End] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-10T17:48:28.505+05:30  INFO 3960 --- [Back_End] [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-09-10T17:48:28.505+05:30  WARN 3960 --- [Back_End] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-09-10T17:48:28.667+05:30 DEBUG 3960 --- [Back_End] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 24 mappings in 'requestMappingHandlerMapping'
+2025-09-10T17:48:28.793+05:30 DEBUG 3960 --- [Back_End] [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /uploads/**] in 'resourceHandlerMapping'
+2025-09-10T17:48:28.940+05:30 DEBUG 3960 --- [Back_End] [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-09-10T17:48:29.007+05:30 DEBUG 3960 --- [Back_End] [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-09-10T17:48:29.226+05:30  INFO 3960 --- [Back_End] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-09-10T17:48:29.235+05:30  INFO 3960 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : Started Application in 6.876 seconds (process running for 7.656)
+2025-09-10T17:48:40.897+05:30  INFO 3960 --- [Back_End] [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-10T17:48:40.897+05:30  INFO 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-09-10T17:48:40.897+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-09-10T17:48:40.897+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-09-10T17:48:40.897+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-09-10T17:48:40.899+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@74e14434
+2025-09-10T17:48:40.899+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@5416bc77
+2025-09-10T17:48:40.899+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-09-10T17:48:40.900+05:30  INFO 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-09-10T17:48:40.982+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : POST "/auth/login", parameters={}
+2025-09-10T17:48:40.985+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#login(AuthDTO)
+2025-09-10T17:48:41.097+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.AuthDTO@3d410c5e]
+2025-09-10T17:48:41.444+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:41.446+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@19ba0bc7]
+2025-09-10T17:48:41.458+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:42.714+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T17:48:42.716+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T17:48:42.784+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:42.785+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@5bef74cc]
+2025-09-10T17:48:42.795+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:42.847+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T17:48:42.847+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:48:42.848+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T17:48:42.848+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:48:42.887+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:42.887+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@b390364]
+2025-09-10T17:48:42.892+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:42.937+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:42.937+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@2570c5cf]
+2025-09-10T17:48:42.941+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:43.200+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T17:48:43.201+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T17:48:43.223+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:43.224+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@4f76e6e4]
+2025-09-10T17:48:43.225+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:44.985+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:48:44.986+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:48:45.008+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:45.009+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@2c6623e0, com.ijse.gdse72.back_end.dto.DocumentDTO@3071bff (truncated)...]
+2025-09-10T17:48:45.014+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:54.281+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T17:48:54.283+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T17:48:54.304+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:54.304+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@3ad8d61c]
+2025-09-10T17:48:54.309+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:48:55.652+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:48:55.653+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:48:55.662+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:48:55.664+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@27af3fb8, com.ijse.gdse72.back_end.dto.DocumentDTO@264f3d1 (truncated)...]
+2025-09-10T17:48:55.666+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:50:05.700+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:50:05.701+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:50:05.716+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:50:05.717+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@631556e5, com.ijse.gdse72.back_end.dto.DocumentDTO@6c61095 (truncated)...]
+2025-09-10T17:50:05.720+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:51:58.298+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:51:58.299+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:51:58.313+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:51:58.314+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@65e7a52d, com.ijse.gdse72.back_end.dto.DocumentDTO@5cdd7f2 (truncated)...]
+2025-09-10T17:51:58.316+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:52:03.008+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:52:03.008+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:52:03.018+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:52:03.018+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@1be19008, com.ijse.gdse72.back_end.dto.DocumentDTO@78150c2 (truncated)...]
+2025-09-10T17:52:03.020+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:52:21.343+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:52:21.344+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:52:21.358+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:52:21.359+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@d368400, com.ijse.gdse72.back_end.dto.DocumentDTO@736e8169 (truncated)...]
+2025-09-10T17:52:21.361+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T17:52:57.632+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T17:52:57.632+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T17:52:57.644+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T17:52:57.645+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@7dca0fba, com.ijse.gdse72.back_end.dto.DocumentDTO@678e498 (truncated)...]
+2025-09-10T17:52:57.647+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:00:32.694+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:00:32.695+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:00:32.709+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:00:32.710+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@1ef6b316, com.ijse.gdse72.back_end.dto.DocumentDTO@63fe96c (truncated)...]
+2025-09-10T18:00:32.713+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:00:34.645+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:00:34.646+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:00:34.658+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:00:34.659+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@1b1e6dfe, com.ijse.gdse72.back_end.dto.DocumentDTO@690cbfd (truncated)...]
+2025-09-10T18:00:34.661+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:00:40.608+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:00:40.609+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:00:40.618+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:00:40.618+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@3294b6ca, com.ijse.gdse72.back_end.dto.DocumentDTO@7c49d68 (truncated)...]
+2025-09-10T18:00:40.620+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:02:59.858+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:02:59.860+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:02:59.875+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:02:59.875+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@5661334e, com.ijse.gdse72.back_end.dto.DocumentDTO@7034c05 (truncated)...]
+2025-09-10T18:02:59.877+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:03:06.083+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:03:06.084+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:03:06.094+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:03:06.095+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@3054275c, com.ijse.gdse72.back_end.dto.DocumentDTO@445fbb9 (truncated)...]
+2025-09-10T18:03:06.097+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:03:29.109+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:03:29.110+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:03:29.121+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:03:29.122+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@75dfd4f, com.ijse.gdse72.back_end.dto.DocumentDTO@37681be8 (truncated)...]
+2025-09-10T18:03:29.123+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:04:19.386+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:04:19.387+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:04:19.402+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:04:19.403+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@6ff44a82, com.ijse.gdse72.back_end.dto.DocumentDTO@5ada20a (truncated)...]
+2025-09-10T18:04:19.407+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:12.156+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:24:12.158+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:24:12.193+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:12.193+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@671bad4d, com.ijse.gdse72.back_end.dto.DocumentDTO@1f6762d (truncated)...]
+2025-09-10T18:24:12.195+05:30 DEBUG 3960 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:16.902+05:30  INFO 3960 --- [Back_End] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-10T18:24:16.943+05:30  INFO 3960 --- [Back_End] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-10T18:24:17.036+05:30  INFO 3960 --- [Back_End] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-10T18:24:17.100+05:30  INFO 3960 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-10T18:24:17.126+05:30  INFO 3960 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-09-10T18:24:28.717+05:30  INFO 7696 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : Starting Application using Java 21.0.5 with PID 7696 (E:\AAD\FINAL_PROJECT\LearnLoop\Back_End\target\classes started by Asus in E:\AAD\FINAL_PROJECT\LearnLoop)
+2025-09-10T18:24:28.720+05:30  INFO 7696 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : No active profile set, falling back to 1 default profile: "default"
+2025-09-10T18:24:29.660+05:30  INFO 7696 --- [Back_End] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-10T18:24:29.738+05:30  INFO 7696 --- [Back_End] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 68 ms. Found 3 JPA repository interfaces.
+2025-09-10T18:24:30.419+05:30  INFO 7696 --- [Back_End] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-09-10T18:24:30.436+05:30  INFO 7696 --- [Back_End] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-09-10T18:24:30.437+05:30  INFO 7696 --- [Back_End] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.44]
+2025-09-10T18:24:30.499+05:30  INFO 7696 --- [Back_End] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-09-10T18:24:30.500+05:30  INFO 7696 --- [Back_End] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1730 ms
+2025-09-10T18:24:30.736+05:30  INFO 7696 --- [Back_End] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-10T18:24:30.864+05:30  INFO 7696 --- [Back_End] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-09-10T18:24:30.930+05:30  INFO 7696 --- [Back_End] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-10T18:24:31.293+05:30  INFO 7696 --- [Back_End] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-10T18:24:31.332+05:30  INFO 7696 --- [Back_End] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-10T18:24:31.795+05:30  INFO 7696 --- [Back_End] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@335b3d6
+2025-09-10T18:24:31.797+05:30  INFO 7696 --- [Back_End] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-10T18:24:31.877+05:30  WARN 7696 --- [Back_End] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-09-10T18:24:31.899+05:30  INFO 7696 --- [Back_End] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0.39
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-10T18:24:33.163+05:30  INFO 7696 --- [Back_End] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-10T18:24:33.363+05:30  INFO 7696 --- [Back_End] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-10T18:24:33.866+05:30  INFO 7696 --- [Back_End] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-09-10T18:24:34.889+05:30  WARN 7696 --- [Back_End] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-10T18:24:34.941+05:30  INFO 7696 --- [Back_End] [main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-09-10T18:24:34.942+05:30  WARN 7696 --- [Back_End] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-09-10T18:24:35.161+05:30 DEBUG 7696 --- [Back_End] [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 24 mappings in 'requestMappingHandlerMapping'
+2025-09-10T18:24:35.287+05:30 DEBUG 7696 --- [Back_End] [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /uploads/**] in 'resourceHandlerMapping'
+2025-09-10T18:24:35.468+05:30 DEBUG 7696 --- [Back_End] [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-09-10T18:24:35.552+05:30 DEBUG 7696 --- [Back_End] [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-09-10T18:24:35.791+05:30  INFO 7696 --- [Back_End] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-09-10T18:24:35.799+05:30  INFO 7696 --- [Back_End] [main] com.ijse.gdse72.back_end.Application     : Started Application in 7.728 seconds (process running for 14.656)
+2025-09-10T18:24:36.028+05:30  INFO 7696 --- [Back_End] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-10T18:24:36.028+05:30  INFO 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-09-10T18:24:36.028+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-09-10T18:24:36.028+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-09-10T18:24:36.028+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-09-10T18:24:36.030+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@24c00206
+2025-09-10T18:24:36.031+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@e0eecbe
+2025-09-10T18:24:36.031+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-09-10T18:24:36.031+05:30  INFO 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-09-10T18:24:36.115+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : POST "/auth/login", parameters={}
+2025-09-10T18:24:36.118+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#login(AuthDTO)
+2025-09-10T18:24:36.226+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.AuthDTO@55a31f44]
+2025-09-10T18:24:36.544+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:36.545+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@b9ff5ac]
+2025-09-10T18:24:36.555+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:37.894+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T18:24:37.898+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T18:24:37.950+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:37.950+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@3a170ff0]
+2025-09-10T18:24:37.959+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:38.003+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:24:38.003+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:24:38.004+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:24:38.004+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:24:38.036+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:38.036+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@886559c]
+2025-09-10T18:24:38.043+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:38.081+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:38.082+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@5f0f5b21]
+2025-09-10T18:24:38.086+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:38.360+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:24:38.361+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:24:38.381+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:38.381+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@399d78ee]
+2025-09-10T18:24:38.383+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:39.743+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:24:39.744+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:24:39.764+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:39.765+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@29fc4279, com.ijse.gdse72.back_end.dto.DocumentDTO@23e62ec (truncated)...]
+2025-09-10T18:24:39.771+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:44.224+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : DELETE "/auth/documents/6", parameters={}
+2025-09-10T18:24:44.226+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#deleteDocument(Long)
+2025-09-10T18:24:44.322+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'text/plain', given [*/*] and supported [text/plain, */*, application/json, application/*+json]
+2025-09-10T18:24:44.323+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["Document deleted successfully"]
+2025-09-10T18:24:44.325+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:47.812+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:24:47.813+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:24:47.833+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:47.834+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@6811d893, com.ijse.gdse72.back_end.dto.DocumentDTO@2405aa9 (truncated)...]
+2025-09-10T18:24:47.837+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:24:53.074+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:24:53.075+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:24:53.091+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:24:53.092+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@4d50532a, com.ijse.gdse72.back_end.dto.DocumentDTO@de99981 (truncated)...]
+2025-09-10T18:24:53.095+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:41.405+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : POST "/auth/documents", parameters={}
+2025-09-10T18:25:41.406+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#saveDocument(DocumentDTO, Principal)
+2025-09-10T18:25:41.425+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.DocumentDTO@55cbd468]
+2025-09-10T18:25:41.509+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:41.510+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.entity.Document@1ae464d1]
+2025-09-10T18:25:41.511+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:44.122+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:25:44.124+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:25:44.136+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:44.138+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@3399f63, com.ijse.gdse72.back_end.dto.DocumentDTO@6b5915cb (truncated)...]
+2025-09-10T18:25:44.140+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:47.500+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:25:47.501+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:25:47.514+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:47.514+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@126dccdb, com.ijse.gdse72.back_end.dto.DocumentDTO@67363f2 (truncated)...]
+2025-09-10T18:25:47.517+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:50.776+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:25:50.777+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:25:50.788+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:50.789+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@6ced97d5]
+2025-09-10T18:25:50.790+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:52.235+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:25:52.235+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:25:52.252+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:52.253+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@37b6841f, com.ijse.gdse72.back_end.dto.DocumentDTO@5825a7b (truncated)...]
+2025-09-10T18:25:52.255+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:53.362+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T18:25:53.363+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T18:25:53.378+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:53.379+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@27a99496]
+2025-09-10T18:25:53.381+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:53.386+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:25:53.387+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:25:53.394+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:25:53.395+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:25:53.401+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:53.402+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@2e03ed3c]
+2025-09-10T18:25:53.405+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:53.433+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:53.433+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@2fba1734]
+2025-09-10T18:25:53.435+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:53.823+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:25:53.823+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:25:53.844+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:53.844+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@5d08fde0]
+2025-09-10T18:25:53.845+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:25:55.070+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:25:55.071+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:25:55.087+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:25:55.088+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@4559bdcd, com.ijse.gdse72.back_end.dto.DocumentDTO@126c782 (truncated)...]
+2025-09-10T18:25:55.091+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:09.708+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : POST "/auth/login", parameters={}
+2025-09-10T18:26:09.708+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#login(AuthDTO)
+2025-09-10T18:26:09.710+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.AuthDTO@40cd9671]
+2025-09-10T18:26:09.802+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:09.802+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@5b6e1cb8]
+2025-09-10T18:26:09.803+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:11.160+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T18:26:11.160+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T18:26:11.173+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:11.173+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@327b4837]
+2025-09-10T18:26:11.175+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:11.223+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:26:11.223+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:26:11.224+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:26:11.224+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:26:11.238+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:11.238+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@1d7cc072]
+2025-09-10T18:26:11.241+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:11.259+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:11.260+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@6632222e]
+2025-09-10T18:26:11.262+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:11.634+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:26:11.634+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:26:11.655+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:11.655+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@54c4f50a]
+2025-09-10T18:26:11.656+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:13.326+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:26:13.327+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:26:13.336+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:13.336+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@38154263, com.ijse.gdse72.back_end.dto.DocumentDTO@7421733 (truncated)...]
+2025-09-10T18:26:13.339+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:17.529+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : DELETE "/auth/documents/7", parameters={}
+2025-09-10T18:26:17.529+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#deleteDocument(Long)
+2025-09-10T18:26:17.555+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'text/plain', given [*/*] and supported [text/plain, */*, application/json, application/*+json]
+2025-09-10T18:26:17.555+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["Document deleted successfully"]
+2025-09-10T18:26:17.556+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:20.243+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T18:26:20.244+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T18:26:20.255+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:20.256+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@14cff9ed]
+2025-09-10T18:26:20.259+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:20.319+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:26:20.319+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:26:20.323+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:26:20.324+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:26:20.333+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:20.333+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@637ec83f]
+2025-09-10T18:26:20.335+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:20.358+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:20.358+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@6a9c9ab3]
+2025-09-10T18:26:20.359+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:20.654+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:26:20.654+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:26:20.673+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:20.673+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@1139ccd1]
+2025-09-10T18:26:20.674+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:21.516+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:26:21.517+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:26:21.533+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:21.534+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@3506774c, com.ijse.gdse72.back_end.dto.DocumentDTO@54e6583 (truncated)...]
+2025-09-10T18:26:21.537+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:50.032+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : POST "/auth/documents", parameters={}
+2025-09-10T18:26:50.032+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#saveDocument(DocumentDTO, Principal)
+2025-09-10T18:26:50.035+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.DocumentDTO@62f9d32f]
+2025-09-10T18:26:50.070+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:50.070+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.entity.Document@4a16c2e6]
+2025-09-10T18:26:50.072+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:51.807+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:26:51.807+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:26:51.822+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:26:51.822+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@41169c16, com.ijse.gdse72.back_end.dto.DocumentDTO@78de5b1 (truncated)...]
+2025-09-10T18:26:51.824+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:26:56.090+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : DELETE "/auth/documents/8", parameters={}
+2025-09-10T18:26:56.091+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#deleteDocument(Long)
+2025-09-10T18:26:56.113+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'text/plain', given [*/*] and supported [text/plain, */*, application/json, application/*+json]
+2025-09-10T18:26:56.113+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["Document deleted successfully"]
+2025-09-10T18:26:56.114+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:27:08.776+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : POST "/auth/documents", parameters={}
+2025-09-10T18:27:08.776+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#saveDocument(DocumentDTO, Principal)
+2025-09-10T18:27:08.779+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.ijse.gdse72.back_end.dto.DocumentDTO@149e91e5]
+2025-09-10T18:27:08.796+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:27:08.796+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.entity.Document@558508fa]
+2025-09-10T18:27:08.798+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:27:10.149+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:27:10.150+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:27:10.161+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:27:10.162+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@1b339a69, com.ijse.gdse72.back_end.dto.DocumentDTO@7f7ec30 (truncated)...]
+2025-09-10T18:27:10.164+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:27:21.943+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : DELETE "/auth/documents/9", parameters={}
+2025-09-10T18:27:21.943+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#deleteDocument(Long)
+2025-09-10T18:27:21.969+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'text/plain', given [*/*] and supported [text/plain, */*, application/json, application/*+json]
+2025-09-10T18:27:21.970+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["Document deleted successfully"]
+2025-09-10T18:27:21.971+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:30:29.055+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:30:29.058+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:30:29.073+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:30:29.074+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@2d54fa1f, com.ijse.gdse72.back_end.dto.DocumentDTO@748c08c (truncated)...]
+2025-09-10T18:30:29.076+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:30:58.484+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:30:58.485+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:30:58.492+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:30:58.492+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@37c2bb79, com.ijse.gdse72.back_end.dto.DocumentDTO@28a84d9 (truncated)...]
+2025-09-10T18:30:58.493+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:01.906+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:31:01.907+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:31:01.914+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:01.915+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@38f097ca, com.ijse.gdse72.back_end.dto.DocumentDTO@5566af7 (truncated)...]
+2025-09-10T18:31:01.917+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:10.276+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : DELETE "/auth/documents/5", parameters={}
+2025-09-10T18:31:10.276+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#deleteDocument(Long)
+2025-09-10T18:31:10.300+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'text/plain', given [*/*] and supported [text/plain, */*, application/json, application/*+json]
+2025-09-10T18:31:10.300+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["Document deleted successfully"]
+2025-09-10T18:31:10.301+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:16.203+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:31:16.205+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:31:16.234+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:16.234+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@61953303]
+2025-09-10T18:31:16.238+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:17.499+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:31:17.500+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:31:17.513+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:17.514+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@7d32e9]]
+2025-09-10T18:31:17.524+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:27.047+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/auth/user/1", parameters={}
+2025-09-10T18:31:27.048+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.AuthController#getUserById(Long)
+2025-09-10T18:31:27.064+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:27.065+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@78d8a3ad]
+2025-09-10T18:31:27.068+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:27.086+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:31:27.087+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:31:27.094+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:31:27.096+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:31:27.102+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:27.103+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@11969dfa]
+2025-09-10T18:31:27.104+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:27.148+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:27.149+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@772b036f]
+2025-09-10T18:31:27.151+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-9] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:27.487+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/statistics/1", parameters={}
+2025-09-10T18:31:27.487+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getTeacherStatistics(Long)
+2025-09-10T18:31:27.507+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:27.507+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@2ef91074]
+2025-09-10T18:31:27.509+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-10] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:28.150+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:31:28.151+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:31:28.164+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:28.168+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@746598fb]
+2025-09-10T18:31:28.171+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:29.382+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : GET "/auth/documents", parameters={}
+2025-09-10T18:31:29.383+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.DocumentController#getAllDocuments()
+2025-09-10T18:31:29.395+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:29.395+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [[com.ijse.gdse72.back_end.dto.DocumentDTO@6ff11178]]
+2025-09-10T18:31:29.397+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:31:43.860+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/classes/teacher/1", parameters={}
+2025-09-10T18:31:43.860+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.ijse.gdse72.back_end.controller.ClassController#getClassesByTeacher(Long)
+2025-09-10T18:31:43.871+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-09-10T18:31:43.871+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.ijse.gdse72.back_end.dto.ApiResponse@274269a4]
+2025-09-10T18:31:43.872+05:30 DEBUG 7696 --- [Back_End] [http-nio-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-09-10T18:35:16.498+05:30  INFO 7696 --- [Back_End] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-10T18:35:16.513+05:30  INFO 7696 --- [Back_End] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-10T18:35:16.528+05:30  INFO 7696 --- [Back_End] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-10T18:35:16.537+05:30  INFO 7696 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-10T18:35:16.549+05:30  INFO 7696 --- [Back_End] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

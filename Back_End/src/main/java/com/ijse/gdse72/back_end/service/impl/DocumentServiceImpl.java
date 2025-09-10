@@ -69,6 +69,25 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void deleteDocument(Long id) {
+        Document document = documentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Document not found"));
+
+        // Delete the HTML file from filesystem
+        String path = document.getDocumentPath(); // e.g., "/assets/templates/filename.html"
+        if (path != null && !path.isEmpty()) {
+            try {
+                // Remove leading slash if present
+                Path filePath = Paths.get(path.startsWith("/") ? path.substring(1) : path);
+                if (Files.exists(filePath)) {
+                    Files.delete(filePath);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to delete HTML file: " + e.getMessage());
+            }
+        }
+
+        // Delete record from database
         documentRepository.deleteById(id);
     }
+
 }

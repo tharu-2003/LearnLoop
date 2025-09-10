@@ -274,7 +274,7 @@ function setupPage() {
     const token = sessionStorage.getItem("token");
     const currentUser = JSON.parse(localStorage.getItem("current User"));
 
-    if (!currentUser || !currentUser.userId) {
+    if (!token || !currentUser.userId) {
         console.error("No user found, redirecting to login");
         window.location.href = '../index.html';
         return;

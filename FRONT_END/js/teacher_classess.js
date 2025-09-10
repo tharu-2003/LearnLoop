@@ -41,6 +41,15 @@ $(document).ready(function() {
     const firstChar = userName.substring(0, 1);
     $('.user-avatar-nav').text(firstChar);
 
+
+    const token = sessionStorage.getItem("token");
+
+    if (!token || !currentUser.userId) {
+        console.error("No user found, redirecting to login");
+        window.location.href = '../index.html';
+        return;
+    }
+
     // Search elements
     const $searchInput = $('#searchInput');
     const $clearButton = $('#clearSearch');

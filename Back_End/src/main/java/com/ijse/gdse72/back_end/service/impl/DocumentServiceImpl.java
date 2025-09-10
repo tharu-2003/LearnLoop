@@ -21,7 +21,7 @@ public class DocumentServiceImpl implements DocumentService {
     private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
 
-    private static final String TEMPLATE_DIR = "src/main/resources/static/assets/templates/";
+    private static final String TEMPLATE_DIR = "assets/templates/";
 
     @Override
     public Document saveDocument(DocumentDTO dto, Long userId) throws IOException {

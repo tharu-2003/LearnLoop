@@ -33,11 +33,23 @@ public class DocumentController {
     }
 
 
-    // Get all documents
     @GetMapping
-    public ResponseEntity<List<Document>> getAllDocuments() {
-        return ResponseEntity.ok(documentService.getAllDocuments());
+    public ResponseEntity<List<DocumentDTO>> getAllDocuments() {
+        List<DocumentDTO> documents = documentService.getAllDocuments()
+                .stream()
+                .map(doc -> DocumentDTO.builder()
+                        .documentId(doc.getDocumentId())
+                        .userId(doc.getUser().getUserId())
+                        .title(doc.getTitle())
+                        .documentType(doc.getDocumentType())
+                        .documentPath(doc.getDocumentPath())
+                        .createdAt(doc.getCreatedAt())
+                        .updatedAt(doc.getUpdatedAt())
+                        .build())
+                .toList();
+        return ResponseEntity.ok(documents);
     }
+
 
     // Get single document
     @GetMapping("/{id}")

@@ -49,6 +49,8 @@
             $('.user-avatar-nav').text(currentUser.username[0]);
             let allCards = $();
 
+            loadSavedTemplatesFromAPI(token);
+
             // Initialize navigation
             initializeNavigation();
             
@@ -86,6 +88,37 @@
                 }
             );
         });
+
+        function loadSavedTemplatesFromAPI(token) {
+            fetch("http://localhost:8080/auth/documents", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Failed to fetch documents");
+                    return response.json();
+                })
+                .then(data => {
+                    savedTemplates = data.map(doc => ({
+                        id: doc.documentId,
+                        type: doc.documentType.toLowerCase(),
+                        title: doc.title,
+                        date: doc.createdAt ? doc.createdAt.split("T")[0] : "Unknown",
+                        lastModified: doc.updatedAt ? doc.updatedAt.split("T")[0] : "Unknown"
+                    }));
+
+                    loadSavedTemplates();
+                    updateStats();
+                })
+                .catch(err => {
+                    console.error("Error fetching documents:", err);
+                    $("#savedTemplates").html("<div class='no-saved'>Error loading documents.</div>");
+                });
+        }
 
         // Left Navigation JavaScript Functions
         function initializeNavigation() {

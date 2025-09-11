@@ -4,6 +4,7 @@ import com.ijse.gdse72.back_end.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,4 +29,21 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    @Override
+    public void sendHtmlEmail(String to, String subject, String htmlContent) {
+        try {
+            var message = mailSender.createMimeMessage();
+            var helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true); // true indicates HTML content
+
+            mailSender.send(message);
+            System.out.println("HTML email sent to: " + to);
+        } catch (Exception e) {
+            System.err.println("Failed to send HTML email: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

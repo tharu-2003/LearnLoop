@@ -107,4 +107,24 @@ public class AuthController {
         }
     }
 
+    @PutMapping("/reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        String newPassword = requestBody.get("newPassword");
+
+        if (email == null || email.isEmpty() || newPassword == null || newPassword.isEmpty()) {
+            return ResponseEntity.badRequest().body(new ApiResponse(400, "Email and new password are required", null));
+        }
+
+        try {
+            authService.resetPasswordByEmail(email, newPassword);
+            return ResponseEntity.ok(new ApiResponse(200, "Password updated successfully", null));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(new ApiResponse(404, e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ApiResponse(500, "Server Error", e.getMessage()));
+        }
+    }
+
+
 }

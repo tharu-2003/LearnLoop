@@ -14,4 +14,6 @@ public interface AuthService {
     User getUserById(Long userId);
 
     String forgotPassword(String email);
+    void resetPasswordByEmail(String email, String newPassword);
+
 }

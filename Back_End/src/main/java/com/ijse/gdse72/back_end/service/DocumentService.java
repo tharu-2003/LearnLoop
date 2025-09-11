@@ -11,4 +11,7 @@ public interface DocumentService {
     List<Document> getAllDocuments();
     Document getDocumentById(Long id);
     void deleteDocument(Long id);
+
+    List<Document> getDocumentsByUserId(Long userId);
+
 }

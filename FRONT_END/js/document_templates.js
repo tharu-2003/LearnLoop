@@ -63,7 +63,11 @@ $(document).ready(function() {
 });
 
 function loadSavedTemplatesFromAPI(token) {
-    fetch("http://localhost:8080/auth/documents", {
+
+    const currentUser = JSON.parse(localStorage.getItem("current User"));
+    const userId = currentUser.userId;
+
+    fetch(`http://localhost:8080/auth/documents/user/${userId}`, {
         method: "GET",
         headers: {
             "Authorization": `Bearer ${token}`,

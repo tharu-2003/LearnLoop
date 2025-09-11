@@ -90,4 +90,9 @@ public class DocumentServiceImpl implements DocumentService {
         documentRepository.deleteById(id);
     }
 
+    @Override
+    public List<Document> getDocumentsByUserId(Long userId) {
+        return documentRepository.findByUser_UserId(userId);
+    }
+
 }

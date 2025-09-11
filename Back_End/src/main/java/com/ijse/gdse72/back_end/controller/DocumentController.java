@@ -33,9 +33,9 @@ public class DocumentController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<DocumentDTO>> getAllDocuments() {
-        List<DocumentDTO> documents = documentService.getAllDocuments()
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<DocumentDTO>> getDocumentsByUserId(@PathVariable Long userId) {
+        List<DocumentDTO> documents = documentService.getDocumentsByUserId(userId)
                 .stream()
                 .map(doc -> DocumentDTO.builder()
                         .documentId(doc.getDocumentId())
@@ -47,6 +47,7 @@ public class DocumentController {
                         .updatedAt(doc.getUpdatedAt())
                         .build())
                 .toList();
+
         return ResponseEntity.ok(documents);
     }
 

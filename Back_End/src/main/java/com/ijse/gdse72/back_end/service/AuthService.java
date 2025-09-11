@@ -12,4 +12,6 @@ public interface AuthService {
     String register(RegisterDTO registerDTO);
     User updateUser(Long userId, UpdateUserDTO dto);
     User getUserById(Long userId);
+
+    String forgotPassword(String email);
 }

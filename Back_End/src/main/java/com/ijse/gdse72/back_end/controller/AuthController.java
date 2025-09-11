@@ -87,4 +87,24 @@ public class AuthController {
         ));
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse> forgotPassword(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse(400, "Email is required", null));
+        }
+
+        try {
+            String result = authService.forgotPassword(email);
+            return ResponseEntity.ok(new ApiResponse(200, result, null));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404)
+                    .body(new ApiResponse(404, e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body(new ApiResponse(500, "Server Error", e.getMessage()));
+        }
+    }
+
 }

@@ -1,4 +1,4 @@
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -476,7 +476,7 @@
             height: 36px;
             border-radius: 8px;
             margin-right: 8px;
-            background: #4a154b;
+            background: #1a2771;
         }
 
         .chat-title {
@@ -528,7 +528,7 @@
             width: 128px;
             height: 128px;
             border-radius: 12px;
-            background: #4a154b;
+            background: #1a2771;
             margin-bottom: 24px;
         }
 
@@ -587,26 +587,6 @@
             font-size: 28px;
             font-weight: 900;
             color: #ffffff;
-        }
-
-        .add-assignment-btn {
-            background: #2eb67d;
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .add-assignment-btn:hover {
-            background: #2aa56c;
-            transform: translateY(-1px);
         }
 
         .assignments-list {
@@ -861,15 +841,6 @@
         .btn-secondary:hover {
             background: #4a4e54;
             color: #ffffff;
-        }
-
-        .btn-primary {
-            background: #1164a3;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #0f5591;
         }
 
         .btn-success {

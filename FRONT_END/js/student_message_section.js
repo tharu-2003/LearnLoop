@@ -126,11 +126,12 @@
 
                             $('.mention').text(classData.createdByName || 'Unnamed Teacher');
 
+                            
                             const avatarDiv = $('.chat-avatar');
-                            avatarDiv.empty();
-
                             const welcomeAvatarDiv = $('.welcome-avatar');
+
                             avatarDiv.empty();
+                            welcomeAvatarDiv.empty();
                             
                             avatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius: 20%; width: 100%; height: 100%; object-fit: cover;"> `);
                             welcomeAvatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius: 10%; width: 100%; height: 100%; object-fit: cover;"> `);
@@ -176,6 +177,8 @@
                                                 <div class="user-avatar" style="background: ${color};">${initial}</div>
                                                 ${user.username}
                                             </div>
+                                            <span class="user-id" style="display: none;">${user.userId}</span>
+                                            <span class="user-avatarUrl" style="display: none;">${user.avatarUrl}</span>
                                             <span class="notification-badge">1</span>
                                         </li>
                                     `;
@@ -406,40 +409,56 @@
                 });
             }
             
-            // Handle sidebar member item clicks
-            $sidebarItems.on('click', function() {
+            // Event delegation for dynamically added members
+            $('#membersList').on('click', '.section-item', function () {
                 // Remove active class from all items
-                $sidebarItems.removeClass('active');
-                // Remove active class from nav items
-                $navItems.removeClass('active');
-                // Add active class to clicked item
+                $('.section-item').removeClass('active');
+                $('.nav-item').removeClass('active');
                 $(this).addClass('active');
-                
+
                 // Show discussions content for direct messages
-                $discussionsContent.css('display', 'flex');
-                $assignmentContent.hide();
-                
+                $('#discussionsContent').css('display', 'flex');
+                $('#assignmentContent').hide();
+
                 // Update chat header and welcome message
                 const userName = $(this).find('.user-name');
+                const url = $(this).find('.user-avatarUrl');
+
                 if (userName.length) {
+
+                    const avatarUrl = url.text().trim();
                     const name = userName.text().trim();
-                    $chatTitle.text(name);
-                    $welcomeName.text(name);
+
+                    $('.chat-title').text(name);
+                    $('.welcome-name').text(name);
+
+                    const avatarDiv = $('.chat-avatar');
+                    avatarDiv.empty();
+
+                    const welcomeAvatarDiv = $('.welcome-avatar');
+                    welcomeAvatarDiv.empty();
                     
-                    // Update message input for direct message
+                    avatarDiv.append(`<img src="${avatarUrl}" alt="${name}" class="class-avatar-img" style="border-radius: 20%; width: 100%; height: 100%; object-fit: cover;"> `);
+                    welcomeAvatarDiv.append(`<img src="${avatarUrl}" alt="${name}" class="class-avatar-img" style="border-radius: 10%; width: 100%; height: 100%; object-fit: cover;"> `);
+                    
+
                     updateMessageInput('direct', `Message ${name}`);
                     updateContextIndicator('direct', name);
                     showMessageInput();
-                    
-                    // Update welcome message mention
-                    $('.welcome-message').html(`This conversation is just between <span class="mention">@${name}</span> and you.`);
+
+                    $('.welcome-message').html(
+                        `This conversation is just between <span class="mention">@${name}</span> and you.`
+                    );
                 }
-                
+
                 // Remove notification badge when user is selected
                 const badge = $(this).find('.notification-badge');
                 if (badge.length) {
                     badge.hide();
                 }
+
+                // Scroll chat to bottom
+                setTimeout(scrollToBottom, 300);
             });
             
             // Handle left navigation menu clicks
@@ -851,7 +870,9 @@
                 const section = $(this).data('section');
                 
                 if (section === 'discussions') {
-                    // ... your existing code ...
+                    const classId = localStorage.getItem("classId");
+        
+                    loadClassDetails(classId);
                     
                     // Scroll to bottom after content is shown
                     setTimeout(scrollToBottom, 300);

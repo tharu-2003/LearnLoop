@@ -40,5 +40,7 @@ public interface ClassService {
 
     List<ClassResponseDTO> getClassesNotJoinedByStudent(Long studentId);
 
+    List<UserResponseDTO> getUsersByClassId(Long classId);
+
 
 }

@@ -230,5 +230,15 @@ public class ClassController {
         }
     }
 
+    @GetMapping("/{classId}/users")
+    public ResponseEntity<ApiResponse> getUsersByClass(@PathVariable Long classId) {
+        try {
+            List<UserResponseDTO> users = classService.getUsersByClassId(classId);
+            return ResponseEntity.ok(new ApiResponse(200, "Users retrieved successfully", users));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ApiResponse(400, e.getMessage(), null));
+        }
+    }
+
 
 }

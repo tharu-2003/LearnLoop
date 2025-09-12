@@ -9,7 +9,9 @@ let savedTemplates = [
         type: 'note',
         title: 'Computer Science - Data Structures',
         date: '2025-09-08',
-        lastModified: '2 days ago'
+        lastModified: '2 days ago',
+        path: 'assets/templates/as_1757663052485.html'
+
     }
 ];
 
@@ -85,7 +87,8 @@ function loadSavedTemplatesFromAPI(token) {
             type: doc.documentType.toLowerCase(),
             title: doc.title,
             date: doc.createdAt ? doc.createdAt.split("T")[0] : "Unknown",
-            lastModified: doc.updatedAt ? formatLastModified(doc.updatedAt) : "Unknown"
+            lastModified: doc.updatedAt ? formatLastModified(doc.updatedAt) : "Unknown",
+            path: doc.documentPath
         }));
 
         loadSavedTemplates();
@@ -286,6 +289,12 @@ function createExamTemplate() {
 }
 
 function openTemplate(id) {
+    
+    const url = $('.copy-url-btn').data('url');
+    // const baseUrl = window.location.origin;
+
+    console.log("Url: "+ url);
+
     const template = savedTemplates.find(t => t.id === id);
     if (template) {
         showToast(`Opening: ${template.title}`, 'info');
@@ -293,14 +302,16 @@ function openTemplate(id) {
         // Navigate to the appropriate template editor
         if (template.type === 'note') {
             localStorage.setItem('currentDocumentId', id);
-            const currentDocumentId = localStorage.getItem("currentDocumentId");
 
             window.location.href = `/pages/note_template.html?id=${id}`;
+            // window.location.href = url;
+
         } else {
             localStorage.setItem('currentDocumentId', JSON.stringify(id));
-            const currentDocumentId = localStorage.getItem("currentDocumentId");
 
             window.location.href = `/pages/paper_template.html?id=${id}`;
+            // window.location.href = url;
+
         }
     }
 }
@@ -651,6 +662,49 @@ function deleteTemplate(id) {
     });
 }
 
+// function loadSavedTemplates() {
+//     const container = $('#savedTemplates');
+    
+//     if (savedTemplates.length === 0) {
+//         container.html('<div class="no-saved">No saved templates yet. Create your first template above!</div>');
+//         return;
+//     }
+    
+//     const templatesHtml = savedTemplates.map(template => `
+//         <div class="saved-item">
+//             <h4>
+//                 <i class="fas fa-${template.type === 'note' ? 'sticky-note' : 'file-text'}"></i>
+//                 ${template.title}
+//             </h4>
+//             <p>
+//                 <i class="fas fa-calendar"></i> Created: ${template.date} | 
+//                 <i class="fas fa-clock"></i> Modified: ${template.lastModified}
+//             </p>
+//             <div class="saved-actions">
+//                 <button class="action-btn btn-open" data-id="${template.id}">
+//                     <i class="fas fa-external-link-alt"></i> Open
+//                 </button>
+//                 <button class="action-btn btn-delete" data-id="${template.id}">
+//                     <i class="fas fa-trash"></i> Delete
+//                 </button>
+//             </div>
+//         </div>
+//     `).join('');
+    
+//     container.html(templatesHtml);
+    
+//     // Add event handlers using jQuery
+//     $('.btn-open').on('click', function() {
+//         const id = parseInt($(this).data('id'));
+//         openTemplate(id);
+//     });
+    
+//     $('.btn-delete').on('click', function() {
+//         const id = parseInt($(this).data('id'));
+//         deleteTemplate(id);
+//     });
+// }
+
 function loadSavedTemplates() {
     const container = $('#savedTemplates');
     
@@ -659,26 +713,44 @@ function loadSavedTemplates() {
         return;
     }
     
-    const templatesHtml = savedTemplates.map(template => `
-        <div class="saved-item">
-            <h4>
-                <i class="fas fa-${template.type === 'note' ? 'sticky-note' : 'file-text'}"></i>
-                ${template.title}
-            </h4>
-            <p>
-                <i class="fas fa-calendar"></i> Created: ${template.date} | 
-                <i class="fas fa-clock"></i> Modified: ${template.lastModified}
-            </p>
-            <div class="saved-actions">
-                <button class="action-btn btn-open" data-id="${template.id}">
-                    <i class="fas fa-external-link-alt"></i> Open
-                </button>
-                <button class="action-btn btn-delete" data-id="${template.id}">
-                    <i class="fas fa-trash"></i> Delete
-                </button>
+    const templatesHtml = savedTemplates.map(template => {
+        // Generate document URL based on template type
+        const baseUrl = 'http://localhost:63342/LearnLoop';
+        const path = template.path;
+        const documentUrl = template.type === 'note' 
+            ? `${baseUrl}${path}?id=${template.id}`
+            : `${baseUrl}${path}?id=${template.id}`;
+        
+        return `
+            <div class="saved-item">
+                <h4>
+                    <i class="fas fa-${template.type === 'note' ? 'sticky-note' : 'file-text'}"></i>
+                    ${template.title}
+                </h4>
+                <p>
+                    <i class="fas fa-calendar"></i> Created: ${template.date} | 
+                    <i class="fas fa-clock"></i> Modified: ${template.lastModified}
+                </p>
+                <div class="document-url-section">
+                    <div class="url-display">
+                        <i class="fas fa-link url-icon"></i>
+                        <span class="document-url" data-url="${documentUrl}">${documentUrl}</span>
+                        <button class="copy-url-btn" data-url="${documentUrl}" title="Copy URL">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="saved-actions">
+                    <button class="action-btn btn-open" data-id="${template.id}">
+                        <i class="fas fa-external-link-alt"></i> Open
+                    </button>
+                    <button class="action-btn btn-delete" data-id="${template.id}">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
     
     container.html(templatesHtml);
     
@@ -692,7 +764,73 @@ function loadSavedTemplates() {
         const id = parseInt($(this).data('id'));
         deleteTemplate(id);
     });
+    
+    // Add copy URL functionality
+    $('.copy-url-btn').on('click', function(e) {
+        e.stopPropagation();
+        const url = $(this).data('url');
+        ;
+        copyToClipboard(url);
+        
+        // Visual feedback
+        const icon = $(this).find('i');
+        const originalClass = icon.attr('class');
+        icon.removeClass('fa-copy').addClass('fa-check');
+        $(this).addClass('copied');
+        
+        setTimeout(() => {
+            icon.attr('class', originalClass);
+            $(this).removeClass('copied');
+        }, 2000);
+    });
 }
+
+// Add this new function for copying to clipboard
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        // Modern approach using Clipboard API
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('Document URL copied to clipboard!', 'success');
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            fallbackCopyTextToClipboard(text);
+        });
+    } else {
+        // Fallback for older browsers
+        fallbackCopyTextToClipboard(text);
+    }
+}
+
+// Fallback copy function for older browsers
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    
+    // Avoid scrolling to bottom
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+    textArea.style.opacity = "0";
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showToast('Document URL copied to clipboard!', 'success');
+        } else {
+            showToast('Failed to copy URL', 'error');
+        }
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+        showToast('Failed to copy URL', 'error');
+    }
+    
+    document.body.removeChild(textArea);
+}
+
 
 function updateStats() {
     const notesCount = savedTemplates.filter(t => t.type === 'NOTE').length;

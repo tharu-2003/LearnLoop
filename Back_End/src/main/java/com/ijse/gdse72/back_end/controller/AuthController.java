@@ -63,19 +63,6 @@ public class AuthController {
         ));
     }
 
-//    @PutMapping("/update/{userId}")
-//    public ResponseEntity<ApiResponse> updateUser(
-//            @PathVariable Long userId,
-//            @RequestBody UpdateUserDTO dto) {
-//
-//        User updatedUser = authService.updateUser(userId, dto);
-//        return ResponseEntity.ok(new ApiResponse(
-//                200,
-//                "Profile Updated Successfully",
-//                updatedUser
-//        ));
-//    }
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         User user = authService.getUserById(userId);

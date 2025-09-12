@@ -267,4 +267,21 @@ public class ClassServiceImpl implements ClassService {
         return dto;
     }
 
+    public List<UserResponseDTO> getUsersByClassId(Long classId) {
+        Class classEntity = classRepository.findById(classId)
+                .orElseThrow(() -> new RuntimeException("Class not found"));
+
+        List<User> users = classEntity.getUsers();
+
+        // Map User entities to DTOs to avoid exposing sensitive info
+        return users.stream().map(u -> new UserResponseDTO(
+                u.getUserId(),
+                u.getUsername(),
+                u.getEmail(),
+                u.getPhoneNumber(),
+                u.getRole().name(),
+                u.getAvatarUrl()
+        )).collect(Collectors.toList());
+    }
+
 }

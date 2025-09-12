@@ -14,6 +14,7 @@
             const classId = localStorage.getItem("classId");
         
             loadClassDetails(classId);
+            loadUsers();
 
             // Cache frequently used elements
             const $sidebarItems = $('.section-item');
@@ -125,12 +126,76 @@
 
                             $('.mention').text(classData.createdByName || 'Unnamed Teacher');
 
+                            const avatarDiv = $('.chat-avatar');
+                            avatarDiv.empty();
+
+                            const welcomeAvatarDiv = $('.welcome-avatar');
+                            avatarDiv.empty();
+                            
+                            avatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius: 20%; width: 100%; height: 100%; object-fit: cover;"> `);
+                            welcomeAvatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius: 10%; width: 100%; height: 100%; object-fit: cover;"> `);
+                    
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error('Failed to fetch class details:', error);
                     }
                 });
+            }
+
+            function loadUsers(){
+                const token = sessionStorage.getItem("token");
+                const classId = localStorage.getItem("classId");
+
+                const currentUser = JSON.parse(localStorage.getItem("current User"));
+                const userId = currentUser.userId;
+
+                $.ajax({
+                    url: `http://localhost:8080/api/classes/${classId}/users`,
+                    method: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    success: function(response) {
+                        if (response && response.data) {
+                            const users = response.data;
+                            let html = '';
+
+                            users.forEach(user => {
+                                if (user.userId !== userId){
+                                    // First letter for avatar
+                                    const initial = user.username ? user.username.charAt(0).toUpperCase() : '?';
+                                    // Pick a color based on userId for consistency
+                                    const colors = ['#2eb67d', '#36c5f0', '#e01e5a', '#f2c744', '#b6502e'];
+                                    const color = colors[user.userId % colors.length];
+
+                                    html += `
+                                        <li class="section-item">
+                                            <div class="user-name">
+                                                <div class="user-avatar" style="background: ${color};">${initial}</div>
+                                                ${user.username}
+                                            </div>
+                                            <span class="notification-badge">1</span>
+                                        </li>
+                                    `;
+                                    }
+                                
+                            });
+
+                            // Insert generated HTML into members list
+                            $('#membersList').html(html);
+
+                        } else {
+                            $('#membersList').html('<li class="section-item">No members found</li>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching users:', error);
+                        $('#membersList').html('<li class="section-item">Failed to load members</li>');
+                    }
+                });
+
             }
             
             function closeSubmissionModal() {
@@ -424,18 +489,14 @@
             $searchInput.on('input', function() {
                 const searchTerm = $(this).val().toLowerCase();
                 
-                $sidebarItems.each(function() {
+                // Dynamically get the current list of members
+                $('#membersList .section-item').each(function() {
                     const userName = $(this).find('.user-name');
                     if (userName.length) {
                         const name = userName.text().toLowerCase();
                         $(this).toggle(name.includes(searchTerm));
                     }
                 });
-                
-                // Show all items if search is empty
-                if (searchTerm === '') {
-                    $sidebarItems.show();
-                }
             });
             
             // Handle members section collapse/expand

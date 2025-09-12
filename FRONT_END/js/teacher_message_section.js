@@ -69,6 +69,9 @@
                 $discussionsContent.hide();
                 $assignmentContent.css('display', 'flex');
                 $chatTitle.text('Assignments');
+
+                const classId = localStorage.getItem("classId");
+                loadClassDetails(classId);
                 
                 // Hide message input for assignments view
                 hideMessageInput();
@@ -457,7 +460,7 @@
 
                 const avatarDiv = $('.chat-avatar');
                 const welcomeAvatarDiv = $('.welcome-avatar');
-                
+
                 avatarDiv.empty();
                 welcomeAvatarDiv.empty();
 

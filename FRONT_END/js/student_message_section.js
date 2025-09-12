@@ -74,6 +74,9 @@
                     $discussionsContent.hide();
                     $assignmentContent.css('display', 'flex');
                     $chatTitle.text('Assignments');
+
+                    const classId = localStorage.getItem("classId");
+                    loadClassDetails(classId);
                     
                     // Hide message input for assignments view
                     hideMessageInput();
@@ -871,7 +874,6 @@
                 
                 if (section === 'discussions') {
                     const classId = localStorage.getItem("classId");
-        
                     loadClassDetails(classId);
                     
                     // Scroll to bottom after content is shown

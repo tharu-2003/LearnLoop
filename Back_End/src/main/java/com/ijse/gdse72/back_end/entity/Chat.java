@@ -28,7 +28,7 @@ public class Chat {
 
 //    private String sender;
 
-    private String receiver;
+    private String receiver_id;
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)

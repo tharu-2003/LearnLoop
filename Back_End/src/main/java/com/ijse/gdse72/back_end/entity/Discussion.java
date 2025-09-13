@@ -29,7 +29,7 @@ public class Discussion {
     @Column(columnDefinition = "TEXT")
     private String message;
 
-    private String receiver;
+    private String receiver_id;
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)

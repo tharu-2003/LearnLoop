@@ -298,69 +298,244 @@
         setupFileUpload('submissionFileUpload', 'submissionFiles', 'submission');
         
         // Handle form submissions
-        $createAssignmentForm.on('submit', function(e) {
-            e.preventDefault();
+        // $createAssignmentForm.on('submit', function(e) {
+        //     e.preventDefault();
             
-            const formData = {
-                title: $('#assignmentTitle').val(),
-                description: $('#assignmentDescription').val(),
-                dueDate: $('#assignmentDueDate').val(),
-                points: $('#assignmentPoints').val(),
-                files: selectedAssignmentFiles
-            };
+        //     const formData = {
+        //         title: $('#assignmentTitle').val(),
+        //         description: $('#assignmentDescription').val(),
+        //         dueDate: $('#assignmentDueDate').val(),
+        //         points: $('#assignmentPoints').val(),
+        //         files: selectedAssignmentFiles
+        //     };
             
-            console.log('Creating assignment:', formData);
+        //     console.log('Creating assignment:', formData);
             
-            // Here you would typically send the data to your server
-            // For demo purposes, we'll add the assignment to the list
-            addAssignmentToList(formData);
+        //     // Here you would typically send the data to your server
+        //     // For demo purposes, we'll add the assignment to the list
+        //     addAssignmentToList(formData);
             
-            closeCreateAssignmentModal();
+        //     closeCreateAssignmentModal();
             
-            // Show success message
-            Swal.fire({
-                title: 'Success!',
-                text: 'Assignment created successfully!',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-        });
+        //     // Show success message
+        //     Swal.fire({
+        //         title: 'Success!',
+        //         text: 'Assignment created successfully!',
+        //         icon: 'success',
+        //         confirmButtonText: 'OK'
+        //     });
+        // });
         
-        function addAssignmentToList(assignmentData) {
-            const $assignmentsList = $('#assignmentsList');
-            const dueDate = new Date(assignmentData.dueDate);
-            const formattedDate = dueDate.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
-            });
+        // function addAssignmentToList(assignmentData) {
+        //     const $assignmentsList = $('#assignmentsList');
+        //     const dueDate = new Date(assignmentData.dueDate);
+        //     const formattedDate = dueDate.toLocaleDateString('en-US', { 
+        //         month: 'short', 
+        //         day: 'numeric', 
+        //         year: 'numeric' 
+        //     });
             
-            const assignmentCard = $(`
-                <div class="assignment-card">
-                    <div class="assignment-card-header">
-                        <div>
-                            <div class="assignment-card-title">${assignmentData.title}</div>
-                            <div class="assignment-card-meta">
-                                <span><i class="fas fa-calendar"></i> Due: ${formattedDate}</span>
-                                <span><i class="fas fa-users"></i> 25 students</span>
-                                <span><i class="fas fa-star"></i> ${assignmentData.points} points</span>
-                            </div>
-                        </div>
-                        <div class="assignment-status active">Active</div>
-                    </div>
-                    <div class="assignment-card-description">
-                        ${assignmentData.description}
-                    </div>
-                    <div class="assignment-card-footer">
-                        <div class="assignment-actions">
-                            <button class="assignment-action-btn">View Details</button>
-                        </div>
+        //     const assignmentCard = $(`
+        //         <div class="assignment-card">
+        //             <div class="assignment-card-header">
+        //                 <div>
+        //                     <div class="assignment-card-title">${assignmentData.title}</div>
+        //                     <div class="assignment-card-meta">
+        //                         <span><i class="fas fa-calendar"></i> Due: ${formattedDate}</span>
+        //                         <span><i class="fas fa-users"></i> 25 students</span>
+        //                         <span><i class="fas fa-star"></i> ${assignmentData.points} points</span>
+        //                     </div>
+        //                 </div>
+        //                 <div class="assignment-status active">Active</div>
+        //             </div>
+        //             <div class="assignment-card-description">
+        //                 ${assignmentData.description}
+        //             </div>
+        //             <div class="assignment-card-footer">
+        //                 <div class="assignment-actions">
+        //                     <button class="assignment-action-btn">View Details</button>
+        //                 </div>
+        //             </div>
+        //         </div>
+        //     `);
+            
+        //     $assignmentsList.prepend(assignmentCard);
+        // }
+
+        // ----------------------------------------
+// Create Assignment (AJAX)
+// ----------------------------------------
+function createAssignmentAJAX(assignmentData) {
+    const token = sessionStorage.getItem("token");
+    
+    $.ajax({
+        url: 'http://localhost:8080/auth/assignments/create',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(assignmentData),
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+            if (response && response.code === 200) {
+                console.log('Assignment created:', response.data);
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Assignment created successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+                
+                // Add assignment to UI list
+                addAssignmentToList(response.data);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error creating assignment:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: xhr.responseJSON?.message || 'Failed to create assignment',
+                icon: 'error'
+            });
+        }
+    });
+}
+
+// ----------------------------------------
+// Load Assignments for a Class
+// ----------------------------------------
+function loadAssignmentsForClass(classId) {
+    const token = sessionStorage.getItem("token");
+    
+    $.ajax({
+        url: `http://localhost:8080/auth/assignments/class/${classId}`,
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+            if (response && response.code === 200) {
+                const assignments = response.data;
+                const $assignmentsList = $('#assignmentsList');
+                $assignmentsList.empty();
+                
+                assignments.forEach(a => addAssignmentToList(a));
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading assignments:', error);
+        }
+    });
+}
+
+// ----------------------------------------
+// Add Assignment to UI
+// ----------------------------------------
+function addAssignmentToList(assignment) {
+    const dueDate = new Date(assignment.endDate);
+    const formattedDate = dueDate.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+    });
+
+    const $assignmentsList = $('#assignmentsList');
+    const assignmentCard = $(`
+        <div class="assignment-card">
+            <div class="assignment-card-header">
+                <div>
+                    <div class="assignment-card-title">${assignment.title}</div>
+                    <div class="assignment-card-meta">
+                        <span><i class="fas fa-calendar"></i> Due: ${formattedDate}</span>
+                        <span><i class="fas fa-star"></i> ${assignment.points} points</span>
                     </div>
                 </div>
-            `);
-            
-            $assignmentsList.prepend(assignmentCard);
+                <div class="assignment-status active">Active</div>
+            </div>
+            <div class="assignment-card-description">
+                ${assignment.description}
+            </div>
+            <div class="assignment-card-footer">
+                <div class="assignment-actions">
+                    <button class="assignment-action-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+    `);
+    $assignmentsList.prepend(assignmentCard);
+}
+
+// CLOUDINARY CONFIG
+const CLOUD_NAME = "dodxgayab"; 
+const UPLOAD_PRESET = "learnloop_unsigned"; 
+
+async function uploadFileToCloudinary(file) {
+    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("folder", "learnloop/assignments");
+
+    try {
+        const response = await fetch(url, { method: "POST", body: formData });
+        const data = await response.json();
+        if (data.secure_url) return data.secure_url;
+        throw new Error("Cloudinary upload failed");
+    } catch (error) {
+        console.error("Cloudinary upload failed:", error);
+        Swal.fire("Error", "File upload failed!", "error");
+        return null;
+    }
+}
+
+$('#createAssignmentForm').on('submit', async function(e) {
+    e.preventDefault();
+
+    const file = $('#assignmentFileInput')[0].files[0];
+    if (!file) {
+        Swal.fire("Error", "Please select a file", "error");
+        return;
+    }
+
+    // Upload file to Cloudinary
+    const fileUrl = await uploadFileToCloudinary(file);
+    if (!fileUrl) return;
+
+    // Prepare assignment data
+    const assignmentData = {
+        title: $('#assignmentTitle').val(),
+        description: $('#assignmentDescription').val(),
+        endDate: $('#assignmentDueDate').val(),
+        points: $('#assignmentPoints').val(),
+        documentUrl: fileUrl,  // single file URL
+        classId: parseInt(localStorage.getItem('classId')) // example: current class
+    };
+
+    // Send to backend
+    const token = sessionStorage.getItem("token");
+    $.ajax({
+        url: 'http://localhost:8080/auth/assignments/create',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(assignmentData),
+        headers: { 'Authorization': 'Bearer ' + token },
+        success: function(response) {
+            Swal.fire('Success', 'Assignment created successfully!', 'success');
+            $('#createAssignmentForm')[0].reset();
+        },
+        error: function(xhr) {
+            Swal.fire('Error', xhr.responseJSON?.message || 'Failed to create assignment', 'error');
         }
+    });
+});
+
+
+
+
+
+
+
         
         // Handle toolbar formatting buttons
         $toolbarBtns.on('click', function(e) {
@@ -555,29 +730,66 @@
         });
         
         // Handle message input and send
+        // function sendMessage() {
+        //     const message = $messageInput.html().trim();
+        //     const textContent = $messageInput.text().trim();
+            
+        //     if (textContent) {
+        //         console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
+        //         console.log(`Plain text: "${textContent}"`);
+                
+        //         // Here you would typically send the message to a server
+        //         // For now, we'll just clear the input and show a console message
+        //         $messageInput.html('');
+                
+        //         // Clear active formats
+        //         activeFormats.clear();
+        //         $toolbarBtns.removeClass('active');
+                
+        //         // Update send button state
+        //         $sendBtn.prop('disabled', true).css('opacity', '0.5');
+                
+        //         // You could add the message to the chat area here
+        //         // addMessageToChat(message, 'You');
+        //     }
+        // }
+
         function sendMessage() {
             const message = $messageInput.html().trim();
             const textContent = $messageInput.text().trim();
-            
-            if (textContent) {
-                console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
-                console.log(`Plain text: "${textContent}"`);
-                
-                // Here you would typically send the message to a server
-                // For now, we'll just clear the input and show a console message
-                $messageInput.html('');
-                
-                // Clear active formats
-                activeFormats.clear();
-                $toolbarBtns.removeClass('active');
-                
-                // Update send button state
-                $sendBtn.prop('disabled', true).css('opacity', '0.5');
-                
-                // You could add the message to the chat area here
-                // addMessageToChat(message, 'You');
-            }
+
+            if (!textContent) return; // Do nothing if input is empty
+
+            console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
+            console.log(`Plain text: "${textContent}"`);
+
+            // Add the message to chat as a sent message
+            addWhatsAppMessage(textContent, true);
+
+            // Clear the input
+            $messageInput.html('');
+
+            // Clear active formats
+            activeFormats.clear();
+            $toolbarBtns.removeClass('active');
+
+            // Update send button state
+            $sendBtn.prop('disabled', true).css('opacity', '0.5');
+
+            // Optional: simulate a response after 2 seconds
+            setTimeout(() => {
+                const responses = [
+                    "Thanks for sharing!",
+                    "Got it!",
+                    "That's helpful!",
+                    "Understood!",
+                    "Great question!"
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addWhatsAppMessage(randomResponse, false, "Teacher John", "#e01e5a", "T");
+            }, 2000);
         }
+
         
         // Send message on button click
         $sendBtn.on('click', sendMessage);
@@ -660,6 +872,20 @@
         
         // Handle navigation items clicks
         $('.nav-item').on('click', function() {
+
+            const section = $(this).data('section');
+            
+            if (section === 'discussions') {
+                const classId = localStorage.getItem("classId");
+        
+                loadClassDetails(classId);
+
+                //get discution details.........
+                
+                // Scroll to bottom after content is shown
+                setTimeout(scrollToBottom, 300);
+            }
+
             // Add visual feedback
             $(this).css({
                 'background': 'rgba(255, 255, 255, 0.1)',
@@ -869,63 +1095,63 @@
         }
 
         // Update the sendMessage function to add messages to chat
-        function sendMessage() {
-            const message = $messageInput.html().trim();
-            const textContent = $messageInput.text().trim();
+        // function sendMessage() {
+        //     const message = $messageInput.html().trim();
+        //     const textContent = $messageInput.text().trim();
             
-            if (textContent) {
-                console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
-                console.log(`Plain text: "${textContent}"`);
+        //     if (textContent) {
+        //         console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
+        //         console.log(`Plain text: "${textContent}"`);
                 
-                // Add the message to chat as a sent message
-                addWhatsAppMessage(textContent, true);
+        //         // Add the message to chat as a sent message
+        //         addWhatsAppMessage(textContent, true);
                 
-                // Clear the input
-                $messageInput.html('');
+        //         // Clear the input
+        //         $messageInput.html('');
                 
-                // Clear active formats
-                activeFormats.clear();
-                $toolbarBtns.removeClass('active');
+        //         // Clear active formats
+        //         activeFormats.clear();
+        //         $toolbarBtns.removeClass('active');
                 
-                // Update send button state
-                $sendBtn.prop('disabled', true).css('opacity', '0.5');
+        //         // Update send button state
+        //         $sendBtn.prop('disabled', true).css('opacity', '0.5');
                 
-                // Simulate a response after 2 seconds (optional)
-                setTimeout(() => {
-                    const responses = [
-                        "Thanks for sharing!",
-                        "Got it!",
-                        "That's helpful!",
-                        "Understood!",
-                        "Great question!"
-                    ];
-                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                    addWhatsAppMessage(randomResponse, false, "Teacher John", "#e01e5a", "T");
-                }, 2000);
-            }
-        }
+        //         // Simulate a response after 2 seconds (optional)
+        //         setTimeout(() => {
+        //             const responses = [
+        //                 "Thanks for sharing!",
+        //                 "Got it!",
+        //                 "That's helpful!",
+        //                 "Understood!",
+        //                 "Great question!"
+        //             ];
+        //             const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        //             addWhatsAppMessage(randomResponse, false, "Teacher John", "#e01e5a", "T");
+        //         }, 2000);
+        //     }
+        // }
 
         // Auto-scroll to bottom when switching to discussions
-        $('.nav-item').on('click', function() {
-            const section = $(this).data('section');
+        // $('.nav-item').on('click', function() {
+        //     const section = $(this).data('section');
             
-            if (section === 'discussions') {
-                const classId = localStorage.getItem("classId");
+        //     if (section === 'discussions') {
+        //         const classId = localStorage.getItem("classId");
         
-                loadClassDetails(classId);
+        //         loadClassDetails(classId);
 
-                //get discution details.........
+        //         //get discution details.........
                 
-                // Scroll to bottom after content is shown
-                setTimeout(scrollToBottom, 300);
-            }
-        });
+        //         // Scroll to bottom after content is shown
+        //         setTimeout(scrollToBottom, 300);
+        //     }
+        // });
 
         // Also scroll to bottom when selecting a member
-        $('.section-item').on('click', function() {
-            // ... your existing code ...
+        // $('.section-item').on('click', function() {
+        //     // ... your existing code ...
             
-            // Scroll to bottom after content is shown
-            setTimeout(scrollToBottom, 300);
-        });
+        //     // Scroll to bottom after content is shown
+        //     setTimeout(scrollToBottom, 300);
+        // });
     });

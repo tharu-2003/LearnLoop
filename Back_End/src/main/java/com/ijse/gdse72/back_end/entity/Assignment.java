@@ -21,6 +21,8 @@ public class Assignment {
     @Column(name = "assignment_id")
     private Long assignmentId;
 
+    private String title; //add now
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

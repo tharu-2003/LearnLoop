@@ -24,16 +24,19 @@ public class Assignment {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @Column(columnDefinition = "TEXT")
-    private String message;
+    private String description;
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @Column(columnDefinition = "TEXT")
-    private String paper;
+    @Column(name = "document_url")
+    private String documentUrl;
 
-    private int mark;
+    private int points;
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,5 +51,10 @@ public class Assignment {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

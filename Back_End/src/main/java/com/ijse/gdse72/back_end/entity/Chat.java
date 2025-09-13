@@ -26,9 +26,11 @@ public class Chat {
     @Column(columnDefinition = "TEXT")
     private String message;
 
-//    private String sender;
+    @Column(name = "receiver_id")
+    private String receiverId;
 
-    private String receiver_id;
+    @Column(name = "read_status", nullable = false)
+    private boolean readStatus = false;
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)

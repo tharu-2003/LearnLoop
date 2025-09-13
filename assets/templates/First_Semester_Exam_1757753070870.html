@@ -2,10 +2,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editable Exam Paper Template</title>
+    <link rel="icon" type="image/x-icon" href="/assets/images/AppIcon.png" style="border-radius: 100px;">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <!-- jQuery -->
-    <script type="text/javascript" src="http://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=JjfPRWIOb78DfMqKVoph8i50_kYcss0RJ9ca8RbL1rv__rTgipmyb-0dwJQ1E_2M3-alJvMfYe6sCp5v9_yuPN7ny2GBMhEANk6Iwp-h4K4" charset="UTF-8"></script><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="http://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=5dgrYUK--qQjxxeUpscoAx0cB7Mg_9tg-YW5d-RhFNSDxD3y7_GPGWyfqRmI3HqbpXOOl1mGRDXpslLL01KgF_oTjdk4-gZhAIijL37i5QQ" charset="UTF-8"></script><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
         * {
@@ -377,7 +378,7 @@
 
     <div class="container">
         <header>
-            <h1><span class="editable" contenteditable="false" style="background-color: transparent;">Exam</span></h1>
+            <h1><span class="editable" contenteditable="false" style="background-color: transparent;">First Semester Exam</span></h1>
             <p class="subtitle"><span class="editable" contenteditable="false" style="background-color: transparent;">Computer Science - Theory Paper</span></p>
         </header>
         
@@ -460,30 +461,7 @@
                         </div>
                     </div>
                 </div>
-            
-                    <div class="question">
-                        <button class="delete-question" title="Delete Question"><i class="fas fa-times"></i></button>
-                        <p class="question-text"><span class="editable" contenteditable="false" style="background-color: transparent;">03. aaaaaaaaaaa</span></p>
-                        <div class="mcq-options">
-                            <div class="mcq-option">
-                                <input type="radio" name="new_q_1757516755152">
-                                <label><span class="editable" contenteditable="false" style="background-color: transparent;">Option A</span></label>
-                            </div>
-                            <div class="mcq-option">
-                                <input type="radio" name="new_q_1757516755152">
-                                <label><span class="editable" contenteditable="false" style="background-color: transparent;">Option B</span></label>
-                            </div>
-                            <div class="mcq-option">
-                                <input type="radio" name="new_q_1757516755152">
-                                <label><span class="editable" contenteditable="false" style="background-color: transparent;">Option C</span></label>
-                            </div>
-                            <div class="mcq-option">
-                                <input type="radio" name="new_q_1757516755152">
-                                <label><span class="editable" contenteditable="false" style="background-color: transparent;">Option D</span></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>
             
             <div class="section">
                 <h2 class="section-title"><span class="editable" contenteditable="false" style="background-color: transparent;">Section B: Short Answer Questions (30 marks)</span></h2>
@@ -499,13 +477,7 @@
                     <p class="question-text"><span class="editable" contenteditable="false" style="background-color: transparent;">02. Describe the key features of the REST architectural style for web services.</span></p>
                     <div class="answer-space"></div>
                 </div>
-            
-                    <div class="question">
-                        <button class="delete-question" title="Delete Question"><i class="fas fa-times"></i></button>
-                        <p class="question-text"><span class="editable" contenteditable="false" style="background-color: transparent;">03. bbbbbbbbbb</span></p>
-                        <div class="answer-space" style="min-height: 100px;"></div>
-                    </div>
-                </div>
+            </div>
             
             <div class="section">
                 <h2 class="section-title"><span class="editable" contenteditable="false" style="background-color: transparent;">Section C: Long Answer Questions (50 marks)</span></h2>
@@ -545,6 +517,7 @@
             if(currentDocumentId){
                 getTamplateDetails(currentDocumentId);
             }
+            
             // Event handlers using jQuery
             $('#toggleEditBtn').click(toggleEditMode);
             // $('#downloadHTML').click(downloadHTML);

@@ -17,10 +17,20 @@ public class Submission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "submission_id")
+    private Long submissionId;
+
+    @Column(columnDefinition = "TEXT")
+    private String comment;
+
+    @Column(name = "document_url")
+    private String documentUrl;
 
     @Column(name = "submitted_at")
     private LocalDateTime submittedAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
@@ -36,5 +46,10 @@ public class Submission {
     @PrePersist
     protected void onCreate() {
         submittedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

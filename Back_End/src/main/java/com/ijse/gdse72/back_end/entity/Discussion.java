@@ -17,8 +17,8 @@ public class Discussion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "disc_id")
-    private Long discId;
+    @Column(name = "discussion_id")
+    private Long discussionId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -27,22 +27,29 @@ public class Discussion {
     private String document;
 
     @Column(columnDefinition = "TEXT")
-    private String description;
+    private String message;
+
+    private String receiver;
 
     // Relationships
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id", nullable = false)
+    @JsonIgnore
+    private User user;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id", nullable = false)
     @JsonIgnore
     private Class classEntity;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_discussion",
-            joinColumns = @JoinColumn(name = "discussion_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    @JsonIgnore
-    private List<User> users;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_discussion",
+//            joinColumns = @JoinColumn(name = "discussion_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id")
+//    )
+//    @JsonIgnore
+//    private List<User> users;
 
     @PrePersist
     protected void onCreate() {

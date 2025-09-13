@@ -26,9 +26,13 @@ public class Chat {
     @Column(columnDefinition = "TEXT")
     private String message;
 
+//    private String sender;
+
+    private String receiver;
+
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "sender_id", nullable = false)
     @JsonIgnore
     private User user;
 

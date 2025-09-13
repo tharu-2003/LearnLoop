@@ -58,13 +58,17 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
+    private List<Discussion> discussions;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Submission> submissions;
 
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
     private List<Class> classes;
 
-    @ManyToMany(mappedBy = "users")
-    @JsonIgnore
-    private List<Discussion> discussions;
+//    @ManyToMany(mappedBy = "users")
+//    @JsonIgnore
+//    private List<Discussion> discussions;
 }

@@ -414,16 +414,22 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Attach Files (Optional)</label>
-                        <div class="form-file" id="assignmentFileUpload">
+                        <label class="form-label" for="assignmentFiles">Attach Files (Optional)</label>
+                        
+                        <!-- File input moved OUTSIDE the clickable area with proper label association -->
+                        <input type="file" multiple accept=".pdf,.doc,.docx,.txt" style="display: none;" id="assignmentFiles" aria-describedby="fileUploadHelp">
+                        
+                        <!-- Clickable upload area -->
+                        <div class="form-file" id="assignmentFileUpload" role="button" tabindex="0" aria-label="Click to select files for upload">
                             <div class="file-upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
+                                <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
                             </div>
                             <div class="file-upload-text">Click to upload files or drag and drop</div>
-                            <div class="file-upload-hint">PDF, DOC, DOCX, TXT (Max 10MB each)</div>
-                            <input type="file" multiple accept=".pdf,.doc,.docx,.txt" style="display: none;" id="assignmentFiles">
+                            <div class="file-upload-hint" id="fileUploadHelp">PDF, DOC, DOCX, TXT (Max 10MB each)</div>
                         </div>
-                        <div id="assignmentSelectedFiles" class="selected-files" style="display: none;"></div>
+                        
+                        <!-- Selected files display -->
+                        <div id="assignmentSelectedFiles" class="selected-files" style="display: none;" aria-live="polite"></div>
                     </div>
                 </form>
             </div>

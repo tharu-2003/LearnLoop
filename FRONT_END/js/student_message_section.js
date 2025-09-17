@@ -1,891 +1,956 @@
-        $(document).ready(function() {
+// Global variables to store app state
+let token = null;
+let currentUser = null;
+let stompClient = null;
+let currentChatUserId = null;
+let activeFormats = new Set();
+let selectedFiles = [];
+let elements = {};
 
-            const token = sessionStorage.getItem("token")
-            const currentUser = JSON.parse(localStorage.getItem("current User"));
-            
-            // if (!token || !currentUser.userId) {
-            //     console.error("No user found, redirecting to login");
-            //     window.location.href = '../index.html';
-            //     return;
-            // }
+// Initialize the application
+function init() {
+    if (!validateUser()) return;
+    
+    cacheElements();
+    setupEventListeners();
+    loadInitialData();
+    connectWebSocket();
+}
 
-            $('.user-avatar-nav').text(currentUser.username[0]);
+// Validate user authentication
+function validateUser() {
+    token = sessionStorage.getItem("token");
+    currentUser = JSON.parse(localStorage.getItem("current User"));
+    
+    if (!token || !currentUser?.userId) {
+        console.error("No user found, redirecting to login");
+        window.location.href = '../index.html';
+        return false;
+    }
+    return true;
+}
 
-            const classId = localStorage.getItem("classId");
+// Cache frequently used DOM elements
+function cacheElements() {
+    elements = {
+        // Navigation elements
+        navMenuItems: $('.nav-menu-item'),
+        navItems: $('.nav-item'),
+        sidebarItems: $('.section-item'),
         
-            loadClassDetails(classId);
-            loadUsers();
-
-            // Cache frequently used elements
-            const $sidebarItems = $('.section-item');
-            const $navMenuItems = $('.nav-menu-item');
-            const $navItems = $('.nav-item');
-            const $messageInput = $('#messageInput');
-            const $sendBtn = $('#sendBtn');
-            const $searchInput = $('#searchInput');
-            const $membersHeader = $('#membersHeader');
-            const $membersList = $('#membersList');
-            const $chatTitle = $('.chat-title');
-            const $welcomeName = $('.welcome-name');
-            const $toolbarBtns = $('.toolbar-btn');
-            const $toolBtns = $('.tool-btn');
-            const $discussionsContent = $('#discussionsContent');
-            const $assignmentContent = $('#assignmentContent');
-            
-            // Assignment modal elements (only submit modal now)
-            const $submitAssignmentModal = $('#submitAssignmentModal');
-            const $closeSubmitModal = $('#closeSubmitModal');
-            const $submitAssignmentForm = $('#submitAssignmentForm');
-            
-            // Track active formatting states
-            let activeFormats = new Set();
-            let selectedSubmissionFiles = [];
-            
-            // Handle nav item clicks (Discussions vs Assignment)
-            $navItems.on('click', function() {
-                // Remove active class from all nav items
-                $navItems.removeClass('active');
-                // Remove active class from all member items
-                $sidebarItems.removeClass('active');
-                // Add active class to clicked item
-                $(this).addClass('active');
-                
-                const section = $(this).data('section');
-                
-                if (section === 'discussions') {
-                    // Show discussions content, hide assignment content
-                    $discussionsContent.css('display', 'flex');
-                    $assignmentContent.hide();
-                    $chatTitle.text('IJSE Group');
-                    
-                    // Update message input for group discussion
-                    updateMessageInput('group', 'Message #general');
-                    updateContextIndicator('group');
-                    showMessageInput();
-                    
-                    // Update welcome message for discussions
-                    $welcomeName.text('IJSE Group');
-                    $('.welcome-message').html(`
-                        This is the beginning of the <span class="mention">#general</span> channel for IJSE Internet Technologies B72.
-                    `);
-                    
-                } else if (section === 'assignment') {
-                    // Show assignment content, hide discussions content
-                    $discussionsContent.hide();
-                    $assignmentContent.css('display', 'flex');
-                    $chatTitle.text('Assignments');
-
-                    const classId = localStorage.getItem("classId");
-                    loadClassDetails(classId);
-                    
-                    // Hide message input for assignments view
-                    hideMessageInput();
-                }
-            });
-            
-            // Submit Assignment Modal Functions
-            window.openSubmissionModal = function(assignmentTitle) {
-                $('#submitModalTitle').text(`Submit: ${assignmentTitle}`);
-                $submitAssignmentModal.show();
-                $('body').css('overflow', 'hidden');
-            }
-            
-            window.logout = function(){
-                Swal.fire({
-                    title: "Confirm Logout",
-                    showCancelButton: true,
-                    confirmButtonText: 'Logout',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if(result.isConfirmed){
-                        localStorage.removeItem("user");
-                        sessionStorage.removeItem("token");
-                        window.location.href = "../index.html";
-                    }
-                });
-            }
-
-            function loadClassDetails(classId) {
-                const token = sessionStorage.getItem("token");
-
-                $.ajax({
-                    url: `http://localhost:8080/api/classes/${classId}`, 
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    success: function(response) {
-                        if (response && response.data) {
-                            const classData = response.data;
-
-                            console.log( classData);
-
-                            // Example: set class name
-                            $('.workspace-title').text(classData.name || 'Unnamed Class');
-                            $('.chat-title').text(classData.name || 'Unnamed Class');
-                            $('.welcome-name').text(classData.name || 'Unnamed Class');
-                            $('.for-class-name').text(classData.name || 'Unnamed Class');
-
-
-                            $('.mention').text(classData.createdByName || 'Unnamed Teacher');
-
-                            
-                            const avatarDiv = $('.chat-avatar');
-                            const welcomeAvatarDiv = $('.welcome-avatar');
-
-                            avatarDiv.empty();
-                            welcomeAvatarDiv.empty();
-                            
-                            avatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius: 20%; width: 100%; height: 100%; object-fit: cover;"> `);
-                            welcomeAvatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius: 10%; width: 100%; height: 100%; object-fit: cover;"> `);
-                    
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Failed to fetch class details:', error);
-                    }
-                });
-            }
-
-            function loadUsers(){
-                const token = sessionStorage.getItem("token");
-                const classId = localStorage.getItem("classId");
-
-                const currentUser = JSON.parse(localStorage.getItem("current User"));
-                const userId = currentUser.userId;
-
-                $.ajax({
-                    url: `http://localhost:8080/api/classes/${classId}/users`,
-                    method: 'GET',
-                    dataType: 'json',
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    },
-                    success: function(response) {
-                        if (response && response.data) {
-                            const users = response.data;
-                            let html = '';
-
-                            users.forEach(user => {
-                                if (user.userId !== userId){
-                                    // First letter for avatar
-                                    const initial = user.username ? user.username.charAt(0).toUpperCase() : '?';
-                                    // Pick a color based on userId for consistency
-                                    const colors = ['#2eb67d', '#36c5f0', '#e01e5a', '#f2c744', '#b6502e'];
-                                    const color = colors[user.userId % colors.length];
-
-                                    html += `
-                                        <li class="section-item">
-                                            <div class="user-name">
-                                                <div class="user-avatar" style="background: ${color};">${initial}</div>
-                                                ${user.username}
-                                            </div>
-                                            <span class="user-id" style="display: none;">${user.userId}</span>
-                                            <span class="user-avatarUrl" style="display: none;">${user.avatarUrl}</span>
-                                            <span class="notification-badge">1</span>
-                                        </li>
-                                    `;
-                                    }
-                                
-                            });
-
-                            // Insert generated HTML into members list
-                            $('#membersList').html(html);
-
-                        } else {
-                            $('#membersList').html('<li class="section-item">No members found</li>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching users:', error);
-                        $('#membersList').html('<li class="section-item">Failed to load members</li>');
-                    }
-                });
-
-            }
-            
-            function closeSubmissionModal() {
-                $submitAssignmentModal.hide();
-                $('body').css('overflow', 'auto');
-                $submitAssignmentForm[0].reset();
-                selectedSubmissionFiles = [];
-                updateSelectedFiles('submission');
-            }
-            
-            // Event listeners for submission modal
-            $closeSubmitModal.on('click', closeSubmissionModal);
-            $('#cancelSubmitAssignment').on('click', closeSubmissionModal);
-            
-            // Close modals when clicking outside
-            $(window).on('click', function(event) {
-                if (event.target === $submitAssignmentModal[0]) {
-                    closeSubmissionModal();
-                }
-                // if (event.target === $viewAssignmentModal[0]) {
-                //     closeViewAssignmentModal();
-                // }
-                // if (event.target === $viewSubmissionModal[0]) {
-                //     closeViewSubmissionModal();
-                // }
-            });
-            
-            // File upload handling for submission only
-            function setupFileUpload(uploadAreaId, inputId, type) {
-                const $uploadArea = $(`#${uploadAreaId}`);
-                const $fileInput = $(`#${inputId}`);
-                
-                $uploadArea.on('click', () => $fileInput.click());
-                
-                $uploadArea.on('dragover', function(e) {
-                    e.preventDefault();
-                    $(this).css({
-                        'background': '#222529',
-                        'border-color': '#1164a3'
-                    });
-                });
-                
-                $uploadArea.on('dragleave', function() {
-                    $(this).css({
-                        'background': '#1a1d29',
-                        'border-color': '#404449'
-                    });
-                });
-                
-                $uploadArea.on('drop', function(e) {
-                    e.preventDefault();
-                    $(this).css({
-                        'background': '#1a1d29',
-                        'border-color': '#404449'
-                    });
-                    
-                    const files = Array.from(e.originalEvent.dataTransfer.files);
-                    handleFileSelection(files, type);
-                });
-                
-                $fileInput.on('change', function(e) {
-                    const files = Array.from(this.files);
-                    handleFileSelection(files, type);
-                });
-            }
-            
-            function handleFileSelection(files, type) {
-                selectedSubmissionFiles = [...selectedSubmissionFiles, ...files];
-                updateSelectedFiles(type);
-            }
-            
-            function updateSelectedFiles(type) {
-                const files = selectedSubmissionFiles;
-                const $container = $(`#${type}SelectedFiles`);
-                
-                if (files.length === 0) {
-                    $container.hide();
-                    return;
-                }
-                
-                $container.show();
-                $container.html(files.map((file, index) => `
-                    <div class="file-item">
-                        <div class="file-info">
-                            <i class="fas fa-file file-icon"></i>
-                            <span>${file.name}</span>
-                            <span style="color: #8d8d8d; font-size: 12px;">(${formatFileSize(file.size)})</span>
-                        </div>
-                        <button type="button" class="remove-file" data-index="${index}" data-type="${type}">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `).join(''));
-                
-                // Add event listeners to remove buttons
-                $container.find('.remove-file').on('click', function() {
-                    const index = $(this).data('index');
-                    selectedSubmissionFiles.splice(index, 1);
-                    updateSelectedFiles(type);
-                });
-            }
-            
-            function formatFileSize(bytes) {
-                if (bytes === 0) return '0 Bytes';
-                const k = 1024;
-                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-            }
-            
-            // Setup file uploads for submission only
-            setupFileUpload('submissionFileUpload', 'submissionFiles', 'submission');
-            
-            // Handle submission form
-            $submitAssignmentForm.on('submit', function(e) {
-                e.preventDefault();
-                
-                const formData = {
-                    comments: $('#submissionText').val(),
-                    files: selectedSubmissionFiles,
-                    assignmentTitle: $('#submitModalTitle').text().replace('Submit: ', '')
-                };
-                
-                console.log('Submitting assignment:', formData);
-                
-                // Here you would typically send the data to your server
-                closeSubmissionModal();
-                
-                // Show success message
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Assignment submitted successfully!',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-            });
-            
-            // Handle toolbar formatting buttons
-            $toolbarBtns.on('click', function(e) {
-                e.preventDefault();
-                const format = $(this).data('format');
-                
-                // Toggle active state
-                $(this).toggleClass('active');
-                
-                if ($(this).hasClass('active')) {
-                    activeFormats.add(format);
-                    // Apply formatting
-                    document.execCommand(format, false, null);
-                } else {
-                    activeFormats.delete(format);
-                    // Remove formatting
-                    document.execCommand(format, false, null);
-                }
-                
-                // Focus back to input
-                $messageInput.focus();
-            });
-            
-            // Apply active formatting to newly typed text
-            function applyActiveFormatting() {
-                // Check current formatting state and sync with active buttons
-                setTimeout(updateFormattingButtons, 10);
-            }
-            
-            // Handle key events for formatting shortcuts
-            $messageInput.on('keydown', function(e) {
-                // Ctrl+B for bold
-                if (e.ctrlKey && e.key === 'b') {
-                    e.preventDefault();
-                    $('[data-format="bold"]').click();
-                }
-                
-                // Ctrl+I for italic
-                if (e.ctrlKey && e.key === 'i') {
-                    e.preventDefault();
-                    $('[data-format="italic"]').click();
-                }
-                
-                // Ctrl+U for underline
-                if (e.ctrlKey && e.key === 'u') {
-                    e.preventDefault();
-                    $('[data-format="underline"]').click();
-                }
-                
-                // Enter key to send message
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            
-            // Update formatting buttons based on cursor position
-            $messageInput.on('selectionchange keyup mouseup', updateFormattingButtons);
-            
-            function updateFormattingButtons() {
-                $toolbarBtns.each(function() {
-                    const format = $(this).data('format');
-                    const isActive = document.queryCommandState(format);
-                    
-                    if (isActive) {
-                        $(this).addClass('active');
-                        activeFormats.add(format);
-                    } else {
-                        $(this).removeClass('active');
-                        activeFormats.delete(format);
-                    }
-                });
-            }
-            
-            // Event delegation for dynamically added members
-            $('#membersList').on('click', '.section-item', function () {
-                // Remove active class from all items
-                $('.section-item').removeClass('active');
-                $('.nav-item').removeClass('active');
-                $(this).addClass('active');
-
-                // Show discussions content for direct messages
-                $('#discussionsContent').css('display', 'flex');
-                $('#assignmentContent').hide();
-
-                // Update chat header and welcome message
-                const userName = $(this).find('.user-name');
-                const url = $(this).find('.user-avatarUrl');
-
-                if (userName.length) {
-
-                    const avatarUrl = url.text().trim();
-                    const name = userName.text().trim();
-
-                    $('.chat-title').text(name);
-                    $('.welcome-name').text(name);
-
-                    const avatarDiv = $('.chat-avatar');
-                    avatarDiv.empty();
-
-                    const welcomeAvatarDiv = $('.welcome-avatar');
-                    welcomeAvatarDiv.empty();
-                    
-                    avatarDiv.append(`<img src="${avatarUrl}" alt="${name}" class="class-avatar-img" style="border-radius: 20%; width: 100%; height: 100%; object-fit: cover;"> `);
-                    welcomeAvatarDiv.append(`<img src="${avatarUrl}" alt="${name}" class="class-avatar-img" style="border-radius: 10%; width: 100%; height: 100%; object-fit: cover;"> `);
-                    
-
-                    updateMessageInput('direct', `Message ${name}`);
-                    updateContextIndicator('direct', name);
-                    showMessageInput();
-
-                    $('.welcome-message').html(
-                        `This conversation is just between <span class="mention">@${name}</span> and you.`
-                    );
-                }
-
-                // Remove notification badge when user is selected
-                const badge = $(this).find('.notification-badge');
-                if (badge.length) {
-                    badge.hide();
-                }
-
-                // Scroll chat to bottom
-                setTimeout(scrollToBottom, 300);
-            });
-            
-            // Handle left navigation menu clicks
-            $navMenuItems.on('click', function() {
-                $navMenuItems.removeClass('active');
-                $(this).addClass('active');
-                
-                // Get the menu text to show different content
-                const menuText = $(this).find('.nav-menu-text').text();
-                    if (menuText === 'Classes') {
-                        localStorage.removeItem("classId");
-                        navigateToClasses();
-                    }else if(menuText === 'Document'){
-                        localStorage.removeItem("classId");
-                        navigateToDocument();
-                    }else if(menuText === 'Dashboard'){
-                        localStorage.removeItem("classId");
-                        navigateToDashboard();
-                    }else if(menuText === 'LogOut'){
-                        sessionStorage.clear();
-                        localStorage.clear();
-
-                        Swal.fire({
-                        title:"logout",
-                        text:"successfully logout",
-                        timer:1500
-                        }).then(() => {
-                            console.log("logout successful");
-                            window.location.href = '../index.html'
-                        })
-                    }
-            });
-
-            function navigateToClasses() {
-                window.location.href = '/pages/student_classess.html';
-            }
-
-            function navigateToDashboard() {
-                window.location.href = '/pages/student_dashboard.html';
-            }
-
-            function navigateToDocument() {
-                window.location.href = '/pages/document_templates.html';
-            }
-
-            // Handle search functionality
-            $searchInput.on('input', function() {
-                const searchTerm = $(this).val().toLowerCase();
-                
-                // Dynamically get the current list of members
-                $('#membersList .section-item').each(function() {
-                    const userName = $(this).find('.user-name');
-                    if (userName.length) {
-                        const name = userName.text().toLowerCase();
-                        $(this).toggle(name.includes(searchTerm));
-                    }
-                });
-            });
-            
-            // Handle members section collapse/expand
-            $membersHeader.on('click', function() {
-                $(this).toggleClass('collapsed');
-                $membersList.slideToggle();
-            });
-            
-            // Handle message input and send
-            function sendMessage() {
-                const message = $messageInput.html().trim();
-                const textContent = $messageInput.text().trim();
-                
-                if (textContent) {
-                    console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
-                    console.log(`Plain text: "${textContent}"`);
-                    
-                    // Here you would typically send the message to a server
-                    // For now, we'll just clear the input and show a console message
-                    $messageInput.html('');
-                    
-                    // Clear active formats
-                    activeFormats.clear();
-                    $toolbarBtns.removeClass('active');
-                    
-                    // Update send button state
-                    $sendBtn.prop('disabled', true).css('opacity', '0.5');
-                }
-            }
-            
-            // Send message on button click
-            $sendBtn.on('click', sendMessage);
-            
-            // Handle tool buttons (emoji, mention, file, etc.)
-            $toolBtns.on('click', function() {
-                const tool = $(this).data('tool');
-                console.log(`Tool clicked: ${tool}`);
-                
-                // Add visual feedback with scale animation
-                $(this).css({
-                    'transform': 'scale(0.95)',
-                    'background': '#404449',
-                    'color': '#ffffff'
-                });
-                
-                setTimeout(() => {
-                    $(this).css({
-                        'transform': '',
-                        'background': '',
-                        'color': ''
-                    });
-                }, 150);
-                
-                // Handle different tools
-                switch(tool) {
-                    case 'text':
-                        console.log('Opening text formatting options...');
-                        break;
-                    case 'emoji':
-                        console.log('Opening emoji picker...');
-                        // You could show an emoji popup here
-                        break;
-                    case 'mention':
-                        // Insert @ symbol and focus
-                        const selection = window.getSelection();
-                        const range = document.createRange();
-                        
-                        // Insert @ at cursor position
-                        const atNode = document.createTextNode('@');
-                        if (selection.rangeCount > 0) {
-                            const currentRange = selection.getRangeAt(0);
-                            currentRange.deleteContents();
-                            currentRange.insertNode(atNode);
-                            range.setStartAfter(atNode);
-                            range.collapse(true);
-                            selection.removeAllRanges();
-                            selection.addRange(range);
-                        } else {
-                            $messageInput[0].appendChild(atNode);
-                            range.setStartAfter(atNode);
-                            range.collapse(true);
-                            selection.removeAllRanges();
-                            selection.addRange(range);
-                        }
-                        
-                        $messageInput.focus();
-                        break;
-                    case 'file':
-                        console.log('Opening file picker...');
-                        // Create hidden file input and trigger click
-                        const fileInput = document.createElement('input');
-                        fileInput.type = 'file';
-                        fileInput.multiple = true;
-                        fileInput.style.display = 'none';
-                        fileInput.addEventListener('change', function() {
-                            console.log('Files selected:', this.files);
-                        });
-                        document.body.appendChild(fileInput);
-                        fileInput.click();
-                        document.body.removeChild(fileInput);
-                        break;
-                    default:
-                        console.log(`${tool} tool functionality not implemented yet`);
-                }
-            });
-            
-            // Initialize send button state
-            $sendBtn.prop('disabled', true).css('opacity', '0.5');
-            
-            // Handle navigation items clicks
-            $('.nav-item').on('click', function() {
-                // Add visual feedback
-                $(this).css({
-                    'background': 'rgba(255, 255, 255, 0.1)',
-                    'color': '#ffffff'
-                });
-                
-                setTimeout(() => {
-                    $(this).css({
-                        'background': '',
-                        'color': ''
-                    });
-                }, 200);
-                
-                const itemText = $(this).text().trim();
-                console.log(`Navigation item clicked: ${itemText}`);
-            });
-            
-            // Add click feedback to user avatar
-            $('.user-avatar-nav').on('click', function() {
-                console.log('User profile clicked');
-                $(this).css('transform', 'scale(0.95)');
-                setTimeout(() => {
-                    $(this).css('transform', 'scale(1)');
-                }, 100);
-            });
-            
-            // Simulate real-time notifications (for demo purposes)
-            function simulateNotification() {
-                const items = $('.section-item:not(.active)');
-                if (items.length > 0) {
-                    const randomItem = items.eq(Math.floor(Math.random() * items.length));
-                    const badge = randomItem.find('.notification-badge');
-                    
-                    if (badge.length && badge.css('display') !== 'none') {
-                        const currentCount = parseInt(badge.text()) || 1;
-                        badge.text(currentCount + 1);
-                    }
-                }
-            }
-            
-            // Simulate notifications every 30 seconds (for demo)
-            setInterval(simulateNotification, 30000);
-            
-            // Message input management functions
-            function updateMessageInput(type, placeholder) {
-                const $messageInputContainer = $('.message-input-container');
-                const $messageToolbar = $('.message-toolbar');
-                const $messageControls = $('.message-controls');
-                
-                if (type === 'direct') {
-                    // Direct message style - more personal
-                    $messageInput.attr('data-placeholder', placeholder);
-                    $messageInput.css('min-height', '20px');
-                    
-                    // Update placeholder dynamically
-                    updatePlaceholderText(placeholder);
-                    
-                    // Show all formatting tools for direct messages
-                    $messageToolbar.show();
-                    $messageControls.show();
-                    
-                } else if (type === 'group') {
-                    // Group discussion style
-                    $messageInput.attr('data-placeholder', placeholder);
-                    $messageInput.css('min-height', '20px');
-                    
-                    // Update placeholder dynamically
-                    updatePlaceholderText(placeholder);
-                    
-                    // Show all formatting tools for group discussions
-                    $messageToolbar.show();
-                    $messageControls.show();
-                }
-            }
-            
-            function updatePlaceholderText(text) {
-                // Clear existing content if empty
-                if ($messageInput.text().trim() === '') {
-                    $messageInput.html('');
-                }
-                
-                // Update the placeholder attribute
-                $messageInput.attr('data-placeholder', text);
-                
-                // Add CSS to show placeholder when empty
-                if ($messageInput.text().trim() === '') {
-                    $messageInput.addClass('empty');
-                } else {
-                    $messageInput.removeClass('empty');
-                }
-            }
-            
-            function showMessageInput() {
-                $('.message-input-area').show();
-            }
-            
-            function hideMessageInput() {
-                $('.message-input-area').hide();
-            }
-            
-            // Enhanced message input styling and context management
-            $messageInput.on('focus', function() {
-                $(this).removeClass('empty');
-            });
-            
-            $messageInput.on('blur', function() {
-                if ($(this).text().trim() === '') {
-                    $(this).addClass('empty');
-                }
-            });
-            
-            $messageInput.on('input', function() {
-                if ($(this).text().trim() === '') {
-                    $(this).addClass('empty');
-                } else {
-                    $(this).removeClass('empty');
-                }
-                
-                // Update send button state
-                const hasContent = $(this).text().trim().length > 0;
-                $sendBtn.prop('disabled', !hasContent).css('opacity', hasContent ? '1' : '0.5');
-                
-                // Apply active formatting to new text
-                applyActiveFormatting();
-            });
-            
-            // Update context indicators when switching between sections
-            function updateContextIndicator(type, name = '') {
-                const $welcomeMessage = $('.welcome-message');
-                let contextHtml = '';
-                
-                if (type === 'direct') {
-                    contextHtml = `<div class="context-indicator direct">Direct Message</div>`;
-                    $welcomeMessage.html(`This conversation is just between <span class="mention">@${name}</span> and you.`);
-                } else if (type === 'group') {
-                    contextHtml = `<div class="context-indicator group">Group Discussion</div>`;
-                    $welcomeMessage.html(`This is the beginning of the <span class="mention">#general</span> channel for <span class="for-class-name">IJSE</span>.`);
-                }
-                
-                // Update context indicator
-                const $existingIndicator = $('.context-indicator');
-                if ($existingIndicator.length) {
-                    $existingIndicator.replaceWith(contextHtml);
-                } else {
-                    $welcomeMessage.before(contextHtml);
-                }
-            }
-            
-            // Initial setup - start with discussions active
-            updateMessageInput('group', 'Message #general');
-            updateContextIndicator('group');
-            showMessageInput();
-            
-            console.log('IJSE Interface with jQuery and Assignment System initialized successfully (Create Assignment functionality removed)!');
+        // Chat elements
+        messageInput: $('#messageInput'),
+        sendBtn: $('#sendBtn'),
+        chatMessages: $('#chatMessages'),
+        chatTitle: $('.chat-title'),
         
-            // Enhanced scroll function for chat content
-            function scrollToBottom() {
-                const chatContent = document.getElementById('discussionsContent');
-                if (chatContent) {
-                    chatContent.scrollTop = chatContent.scrollHeight;
-                }
+        // Content areas
+        discussionsContent: $('#discussionsContent'),
+        assignmentContent: $('#assignmentContent'),
+        
+        // Search and members
+        searchInput: $('#searchInput'),
+        membersList: $('#membersList'),
+        membersHeader: $('#membersHeader'),
+        
+        // UI elements
+        welcomeName: $('.welcome-name'),
+        chatAvatar: $('.chat-avatar'),
+        welcomeAvatar: $('.welcome-avatar'),
+        workspaceTitle: $('.workspace-title'),
+        
+        // Toolbar and formatting
+        toolbarBtns: $('.toolbar-btn'),
+        toolBtns: $('.tool-btn'),
+        
+        // Modal elements
+        submitModal: $('#submitAssignmentModal'),
+        closeSubmitModal: $('#closeSubmitModal'),
+        submitForm: $('#submitAssignmentForm')
+    };
+}
+
+// Setup all event listeners
+function setupEventListeners() {
+    setupNavigationEvents();
+    setupChatEvents();
+    setupMemberEvents();
+    setupModalEvents();
+    setupFormattingEvents();
+    setupFileEvents();
+    setupSearchEvents();
+}
+
+// Navigation event handlers
+function setupNavigationEvents() {
+    // Left navigation menu
+    elements.navMenuItems.on('click', (e) => {
+        const menuText = $(e.currentTarget).find('.nav-menu-text').text();
+        handleNavigation(menuText);
+    });
+
+    // Main navigation items (Discussions/Assignment)
+    elements.navItems.on('click', (e) => {
+        handleSectionSwitch($(e.currentTarget));
+    });
+}
+
+// Chat-related event handlers
+function setupChatEvents() {
+    // Send message button
+    elements.sendBtn.on('click', () => sendMessage());
+    
+    // Message input events
+    elements.messageInput
+        .on('keydown', (e) => handleInputKeydown(e))
+        .on('input', () => handleInputChange())
+        .on('focus', () => handleInputFocus())
+        .on('blur', () => handleInputBlur());
+}
+
+// Member selection events
+function setupMemberEvents() {
+    elements.membersList.on('click', '.section-item', (e) => {
+        handleMemberSelection($(e.currentTarget));
+    });
+    
+    elements.membersHeader.on('click', () => {
+        elements.membersHeader.toggleClass('collapsed');
+        elements.membersList.slideToggle();
+    });
+}
+
+// Modal event handlers
+function setupModalEvents() {
+    elements.closeSubmitModal.on('click', () => closeModal());
+    $('#cancelSubmitAssignment').on('click', () => closeModal());
+    
+    $(window).on('click', (e) => {
+        if (e.target === elements.submitModal[0]) {
+            closeModal();
+        }
+    });
+    
+    elements.submitForm.on('submit', (e) => handleAssignmentSubmit(e));
+}
+
+// Text formatting events
+function setupFormattingEvents() {
+    elements.toolbarBtns.on('click', (e) => handleFormatting(e));
+    elements.toolBtns.on('click', (e) => handleToolAction(e));
+}
+
+// File upload events
+function setupFileEvents() {
+    setupFileUpload('submissionFileUpload', 'submissionFiles');
+}
+
+// Search functionality
+function setupSearchEvents() {
+    elements.searchInput.on('input', (e) => {
+        const searchTerm = $(e.target).val().toLowerCase();
+        filterMembers(searchTerm);
+    });
+}
+
+// WebSocket Connection Management
+function connectWebSocket(callback) {
+    if (stompClient?.connected) {
+        callback?.();
+        return;
+    }
+
+    const socket = new SockJS("http://localhost:8080/ws-chat");
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, (frame) => {
+        console.log("WebSocket Connected:", frame);
+        
+        // Subscribe to personal messages
+        stompClient.subscribe(
+            "/user/topic/messages",
+            (message) => {
+                const msg = JSON.parse(message.body);
+                displayMessage(msg, "received");
+                scrollToBottom();
             }
+        );
 
-            // Auto-scroll when new messages are added
-            function addWhatsAppMessage(text, isSent = true, sender = '', avatarColor = '', avatarInitial = '') {
-                const chatMessages = document.getElementById('chatMessages');
-                const time = new Date().toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit',
-                    hour12: true 
-                });
-                
-                const messageClass = isSent ? 'sent' : 'received';
-                const avatarHtml = !isSent ? `<div class="message-avatar" style="background: ${avatarColor};">${avatarInitial}</div>` : '';
-                const senderHtml = !isSent ? `
-                    <div class="message-header">
-                        <span class="message-sender">${sender}</span>
-                    </div>
-                ` : '';
-                const checkMark = isSent ? '<span class="message-check">✓</span>' : '';
-                
-                const messageHtml = `
-                    <div class="message-item ${messageClass}">
-                        ${avatarHtml}
-                        <div class="message-bubble">
-                            ${senderHtml}
-                            <div class="message-text">${text}</div>
-                            <div class="message-time">
-                                ${time}
-                                ${checkMark}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-                
-                // Smooth scroll to bottom
-                setTimeout(scrollToBottom, 100);
-            }
+        callback?.();
+    }, (error) => {
+        console.error("WebSocket error:", error);
+        showError("Connection failed. Please refresh the page.");
+    });
+}
 
-            // Update the sendMessage function to add messages to chat
-            function sendMessage() {
-                const message = $messageInput.html().trim();
-                const textContent = $messageInput.text().trim();
-                
-                if (textContent) {
-                    console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
-                    console.log(`Plain text: "${textContent}"`);
-                    
-                    // Add the message to chat as a sent message
-                    addWhatsAppMessage(textContent, true);
-                    
-                    // Clear the input
-                    $messageInput.html('');
-                    
-                    // Clear active formats
-                    activeFormats.clear();
-                    $toolbarBtns.removeClass('active');
-                    
-                    // Update send button state
-                    $sendBtn.prop('disabled', true).css('opacity', '0.5');
-                    
-                    // Simulate a response after 2 seconds (optional)
-                    setTimeout(() => {
-                        const responses = [
-                            "Thanks for sharing!",
-                            "Got it!",
-                            "That's helpful!",
-                            "Understood!",
-                            "Great question!"
-                        ];
-                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                        addWhatsAppMessage(randomResponse, false, "Teacher John", "#e01e5a", "T");
-                    }, 2000);
-                }
-            }
+// Load initial data
+function loadInitialData() {
+    const classId = localStorage.getItem("classId");
+    if (classId) {
+        loadClassDetails(classId);
+        loadUsers();
+    }
+    
+    // Set user avatar
+    $('.user-avatar-nav').text(currentUser.username[0]);
+}
 
-            // Auto-scroll to bottom when switching to discussions
-            $navItems.on('click', function() {
-                const section = $(this).data('section');
-                
-                if (section === 'discussions') {
-                    const classId = localStorage.getItem("classId");
-                    loadClassDetails(classId);
-                    
-                    // Scroll to bottom after content is shown
-                    setTimeout(scrollToBottom, 300);
-                }
-            });
-
-            // Also scroll to bottom when selecting a member
-            $sidebarItems.on('click', function() {
-                // ... your existing code ...
-                
-                // Scroll to bottom after content is shown
-                setTimeout(scrollToBottom, 300);
-            });
+// API Calls
+async function loadClassDetails(classId) {
+    try {
+        const response = await $.ajax({
+            url: `http://localhost:8080/api/classes/${classId}`,
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
         });
+
+        if (response?.data) {
+            updateClassUI(response.data);
+        }
+    } catch (error) {
+        console.error('Failed to fetch class details:', error);
+        showError('Failed to load class information');
+    }
+}
+
+async function loadUsers() {
+    const classId = localStorage.getItem("classId");
+    if (!classId) return;
+
+    try {
+        // Load class details for teacher info
+        const classResponse = await $.ajax({
+            url: `http://localhost:8080/api/classes/${classId}`,
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        // Load students
+        const usersResponse = await $.ajax({
+            url: `http://localhost:8080/api/classes/${classId}/users`,
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        renderUsersList(classResponse.data, usersResponse.data);
+    } catch (error) {
+        console.error('Error loading users:', error);
+        showError('Failed to load class members');
+    }
+}
+
+async function loadChatMessages(receiverId) {
+    try {
+        const messages = await $.ajax({
+            url: `http://localhost:8080/api/chats/${currentUser.userId}/${receiverId}`,
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        elements.chatMessages.empty();
+        messages.forEach(msg => {
+            console.log("SENDER", msg.senderId);
+            console.log("Current", currentUser.userId);
+            const type = msg.senderId == currentUser.userId ? "sent" : "received";
+            console.log(type);
+            displayMessage(msg, type);
+        });
+        
+        scrollToBottom();
+    } catch (error) {
+        console.error("Failed to load chat messages:", error);
+        showError("Failed to load chat history");
+    }
+}
+
+// UI Update Methods
+function updateClassUI(classData) {
+    const selectors = [
+        '.workspace-title',
+        '.chat-title', 
+        '.welcome-name',
+        '.for-class-name'
+    ];
+    
+    selectors.forEach(selector => {
+        $(selector).text(classData.name || 'Unnamed Class');
+    });
+
+    $('.mention').text(classData.createdByName || 'Teacher');
+
+    // Update avatars
+    const avatarImg = `<img src="${classData.imageUrl}" alt="${classData.name}" 
+                      style="border-radius: 8px; width: 100%; height: 100%; object-fit: cover;">`;
+    
+    elements.chatAvatar.html(avatarImg);
+    elements.welcomeAvatar.html(avatarImg);
+}
+
+function renderUsersList(classData, users) {
+    const colors = ['#2eb67d', '#36c5f0', '#e01e5a', '#f2c744', '#b6502e'];
+    let html = '';
+
+    // Add teacher first
+    const teacherColor = colors[classData.createdById % colors.length];
+    html += createUserListItem({
+        userId: classData.createdById,
+        username: `${classData.createdByName} (Teacher)`,
+        avatarUrl: classData.createdByAvatarUrl,
+        color: teacherColor,
+        isTeacher: true
+    });
+
+    // Add students
+    users.forEach(user => {
+        if (user.userId !== currentUser.userId && user.userId !== classData.createdById) {
+            const color = colors[user.userId % colors.length];
+            html += createUserListItem({
+                userId: user.userId,
+                username: user.username,
+                avatarUrl: user.avatarUrl,
+                color: color,
+                showBadge: true
+            });
+        }
+    });
+
+    elements.membersList.html(html);
+}
+
+function createUserListItem({ userId, username, avatarUrl, color, isTeacher = false, showBadge = false }) {
+    const badge = showBadge ? '<span class="notification-badge">1</span>' : '';
+    const strongTag = isTeacher ? '<strong>' : '';
+    const strongEndTag = isTeacher ? '</strong>' : '';
+    
+    return `
+        <li class="section-item ${isTeacher ? 'teacher-item' : ''}">
+            <div class="user-name">
+                <div class="user-avatar" style="background: ${color};">
+                    <img src="${avatarUrl}" alt="${username}" 
+                         style="border-radius:20%;width:100%;height:100%;object-fit:cover;">
+                </div>
+                ${strongTag}${username}${strongEndTag}
+            </div>
+            <span class="user-id" style="display:none;">${userId}</span>
+            <span class="user-avatarUrl" style="display:none;">${avatarUrl}</span>
+            ${badge}
+        </li>
+    `;
+}
+
+// Event Handlers
+function handleNavigation(menuText) {
+    const navigationMap = {
+        'Classes': () => navigateTo('/pages/student_classess.html'),
+        'Document': () => navigateTo('/pages/document_templates.html'),
+        'Dashboard': () => navigateTo('/pages/student_dashboard.html'),
+        'LogOut': () => handleLogout()
+    };
+
+    const action = navigationMap[menuText];
+    if (action) {
+        action();
+    }
+}
+
+function handleSectionSwitch($element) {
+    elements.navItems.removeClass('active');
+    elements.sidebarItems.removeClass('active');
+    $element.addClass('active');
+
+    const section = $element.data('section');
+    
+    if (section === 'discussions') {
+        showDiscussions();
+    } else if (section === 'assignment') {
+        showAssignments();
+    }
+}
+
+function handleMemberSelection($element) {
+    // Update UI
+    $('.section-item').removeClass('active');
+    $('.nav-item').removeClass('active');
+    $element.addClass('active');
+
+    // Show discussions content
+    elements.discussionsContent.css('display', 'flex');
+    elements.assignmentContent.hide();
+
+    // Get member info
+    const userName = $element.find('.user-name').text().trim();
+    const avatarUrl = $element.find('.user-avatarUrl').text().trim();
+    const receiverId = $element.find('.user-id').text().trim();
+
+    // Update chat UI
+    updateChatHeader(userName, avatarUrl);
+    updateMessageInput('direct', `Message ${userName}`);
+    updateContextIndicator('direct', userName);
+    showMessageInput();
+
+    // Store receiver ID and load messages
+    localStorage.setItem("reciverId", receiverId);
+    currentChatUserId = receiverId;
+
+    // Hide notification badge
+    $element.find('.notification-badge').hide();
+
+    // Connect and load messages
+    connectWebSocket(() => {
+        loadChatMessages(receiverId);
+    });
+}
+
+function handleInputKeydown(e) {
+    // Formatting shortcuts
+    if (e.ctrlKey) {
+        const shortcuts = {
+            'b': 'bold',
+            'i': 'italic',
+            'u': 'underline'
+        };
+        
+        const format = shortcuts[e.key];
+        if (format) {
+            e.preventDefault();
+            $(`[data-format="${format}"]`).click();
+        }
+    }
+
+    // Send on Enter (without Shift)
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+}
+
+function handleInputChange() {
+    const hasContent = elements.messageInput.text().trim().length > 0;
+    
+    // Update send button state
+    elements.sendBtn.prop('disabled', !hasContent)
+                   .css('opacity', hasContent ? '1' : '0.5');
+    
+    // Update empty state
+    elements.messageInput.toggleClass('empty', !hasContent);
+}
+
+function handleInputFocus() {
+    elements.messageInput.removeClass('empty');
+}
+
+function handleInputBlur() {
+    if (elements.messageInput.text().trim() === '') {
+        elements.messageInput.addClass('empty');
+    }
+}
+
+function handleFormatting(e) {
+    e.preventDefault();
+    const format = $(e.currentTarget).data('format');
+    
+    $(e.currentTarget).toggleClass('active');
+    
+    if ($(e.currentTarget).hasClass('active')) {
+        activeFormats.add(format);
+    } else {
+        activeFormats.delete(format);
+    }
+    
+    document.execCommand(format, false, null);
+    elements.messageInput.focus();
+}
+
+function handleToolAction(e) {
+    const tool = $(e.currentTarget).data('tool');
+    
+    // Visual feedback
+    animateButton($(e.currentTarget));
+    
+    const toolActions = {
+        'text': () => console.log('Text formatting options...'),
+        'emoji': () => console.log('Emoji picker...'),
+        'mention': () => insertMention(),
+        'file': () => openFilePicker()
+    };
+    
+    const action = toolActions[tool];
+    if (action) action();
+}
+
+function handleAssignmentSubmit(e) {
+    e.preventDefault();
+    
+    const formData = {
+        comments: $('#submissionText').val(),
+        files: selectedFiles,
+        assignmentTitle: $('#submitModalTitle').text().replace('Submit: ', '')
+    };
+    
+    console.log('Submitting assignment:', formData);
+    
+    closeModal();
+    showSuccess('Assignment submitted successfully!');
+}
+
+function handleLogout() {
+
+    sessionStorage.clear();
+    localStorage.clear();
+
+    Swal.fire({
+        title: 'Logging Out...',
+        html: `
+            <div style="text-align: center; padding: 20px;">
+                <div style="
+                    width: 80px; 
+                    height: 80px; 
+                    margin: 0 auto 20px; 
+                    border-radius: 50%; 
+                    background: linear-gradient(45deg, #667eea, #764ba2); 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center;
+                    animation: rotateGlow 2s ease-in-out infinite;
+                ">
+                    <i class="fas fa-sign-out-alt" style="font-size: 32px; color: white;"></i>
+                </div>
+                <p style="font-size: 18px; color: #6b7280; margin: 0; font-weight: 300;">
+                    Thank you for using our service!
+                </p>
+                <p style="font-size: 14px; color: #9ca3af; margin: 10px 0 0; font-style: italic;">
+                    Redirecting you safely...
+                </p>
+            </div>
+        `,
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        backdrop: `rgba(0,0,123,0.4)`,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        customClass: {
+            popup: 'beautiful-logout',
+            timerProgressBar: 'custom-progress-bar'
+        },
+        didOpen: () => {
+            const popup = Swal.getPopup();
+            popup.style.borderRadius = '25px';
+            popup.style.border = 'none';
+            popup.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+            popup.style.background = 'white';
+            popup.style.overflow = 'hidden';
+            popup.style.position = 'relative';
+            
+            // Add a subtle background pattern
+            popup.style.backgroundImage = `
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.05) 0%, transparent 50%)
+            `;
+            
+            // Add CSS animations if not already added
+            if (!document.getElementById('logout-animations')) {
+                const style = document.createElement('style');
+                style.id = 'logout-animations';
+                style.textContent = `
+                    @keyframes rotateGlow {
+                        0% { 
+                            transform: rotate(0deg) scale(1);
+                            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                        }
+                        50% { 
+                            transform: rotate(180deg) scale(1.05);
+                            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+                        }
+                        100% { 
+                            transform: rotate(360deg) scale(1);
+                            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                        }
+                    }
+                    
+                    .beautiful-logout {
+                        animation: slideInFromTop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+                    }
+                    
+                    .custom-progress-bar {
+                        background: linear-gradient(90deg, #667eea, #764ba2) !important;
+                        height: 6px !important;
+                        border-radius: 3px !important;
+                    }
+                    
+                    @keyframes slideInFromTop {
+                        from {
+                            opacity: 0;
+                            transform: translate3d(0, -60px, 0) scale(0.9);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translate3d(0, 0, 0) scale(1);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+    }).then(() => {
+        console.log("logout successful");
+        window.location.href = '../index.html';
+    });
+}
+
+// Message Management
+function sendMessage() {
+    const msgContent = elements.messageInput.text().trim();
+    const receiverId = localStorage.getItem("reciverId");
+    const classId = localStorage.getItem("classId");
+
+    if (!msgContent || !receiverId) return;
+
+    const chatMessage = {
+        senderId: currentUser.userId,
+        receiverId: receiverId,
+        classId: classId,
+        message: msgContent,
+        createdAt: new Date()
+    };
+
+    // Send via WebSocket
+    if (stompClient?.connected) {
+        stompClient.send("/app/sendMessage", {}, JSON.stringify(chatMessage));
+    }
+
+    // Display message immediately
+    displayMessage(chatMessage, "sent");
+    
+    // Clear input
+    clearMessageInput();
+    scrollToBottom();
+}
+
+function displayMessage(msg, type) {
+    console.log(type);
+    const time = new Date(msg.createdAt).toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+    });
+
+    const messageHtml = createMessageHTML(msg, type, time);
+    elements.chatMessages.append(messageHtml);
+}
+
+function createMessageHTML(msg, type, time) {
+    console.log(type);
+    const isReceived = type === "received";
+    const avatarHtml = isReceived ? createAvatarHTML() : '';
+    const senderHtml = isReceived ? `
+        <div class="message-header">
+            <span class="message-sender"></span>
+        </div>
+    ` : '';
+    const checkMark = !isReceived ? '<span class="message-check">✓</span>' : '';
+
+    return `
+        <div class="message-item ${type}">
+            ${avatarHtml}
+            <div class="message-bubble">
+                ${senderHtml}
+                <div class="message-text">${msg.message}</div>
+                <div class="message-time">
+                    ${time}
+                    ${checkMark}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function createAvatarHTML() {
+    return ``;
+}
+
+function clearMessageInput() {
+    elements.messageInput.html('');
+    activeFormats.clear();
+    elements.toolbarBtns.removeClass('active');
+    elements.sendBtn.prop('disabled', true).css('opacity', '0.5');
+}
+
+// UI State Management
+function showDiscussions() {
+    elements.discussionsContent.css('display', 'flex');
+    elements.assignmentContent.hide();
+    elements.chatTitle.text('IJSE Group');
+    
+    updateMessageInput('group', 'Message #general');
+    updateContextIndicator('group');
+    showMessageInput();
+    
+    // Load class details
+    const classId = localStorage.getItem("classId");
+    if (classId) loadClassDetails(classId);
+    
+    setTimeout(() => scrollToBottom(), 300);
+}
+
+function showAssignments() {
+    elements.discussionsContent.hide();
+    elements.assignmentContent.css('display', 'flex');
+    elements.chatTitle.text('Assignments');
+    hideMessageInput();
+    
+    // Load class details
+    const classId = localStorage.getItem("classId");
+    if (classId) loadClassDetails(classId);
+}
+
+function updateChatHeader(userName, avatarUrl) {
+    elements.chatTitle.text(userName);
+    elements.welcomeName.text(userName);
+
+    const avatarImg = `<img src="${avatarUrl}" alt="${userName}" 
+                      style="border-radius: 20%; width: 100%; height: 100%; object-fit: cover;">`;
+    
+    elements.chatAvatar.html(avatarImg);
+    elements.welcomeAvatar.html(avatarImg);
+}
+
+function updateMessageInput(type, placeholder) {
+    elements.messageInput.attr('data-placeholder', placeholder);
+    updatePlaceholderText(placeholder);
+    
+    $('.message-toolbar, .message-controls').show();
+}
+
+function updatePlaceholderText(text) {
+    elements.messageInput.attr('data-placeholder', text);
+    
+    if (elements.messageInput.text().trim() === '') {
+        elements.messageInput.addClass('empty');
+    } else {
+        elements.messageInput.removeClass('empty');
+    }
+}
+
+function updateContextIndicator(type, name = '') {
+    const contextMap = {
+        'direct': {
+            class: 'direct',
+            text: 'Direct Message',
+            message: `This conversation is just between <span class="mention">@${name}</span> and you.`
+        },
+        'group': {
+            class: 'group', 
+            text: 'Group Discussion',
+            message: `This is the beginning of the <span class="mention">#general</span> channel for <span class="for-class-name">IJSE</span>.`
+        }
+    };
+
+    const config = contextMap[type];
+    if (!config) return;
+
+    const contextHtml = `<div class="context-indicator ${config.class}">${config.text}</div>`;
+    const $existingIndicator = $('.context-indicator');
+    
+    if ($existingIndicator.length) {
+        $existingIndicator.replaceWith(contextHtml);
+    } else {
+        $('.welcome-message').before(contextHtml);
+    }
+    
+    $('.welcome-message').html(config.message);
+}
+
+function showMessageInput() {
+    $('.message-input-area').show();
+}
+
+function hideMessageInput() {
+    $('.message-input-area').hide();
+}
+
+// Utility Methods
+function scrollToBottom() {
+    const chatContent = elements.discussionsContent[0];
+    if (chatContent) {
+        chatContent.scrollTop = chatContent.scrollHeight;
+    }
+}
+
+function filterMembers(searchTerm) {
+    elements.membersList.find('.section-item').each(function() {
+        const name = $(this).find('.user-name').text().toLowerCase();
+        $(this).toggle(name.includes(searchTerm));
+    });
+}
+
+function animateButton($button) {
+    $button.css({
+        'transform': 'scale(0.95)',
+        'background': '#404449',
+        'color': '#ffffff'
+    });
+    
+    setTimeout(() => {
+        $button.css({
+            'transform': '',
+            'background': '',
+            'color': ''
+        });
+    }, 150);
+}
+
+function insertMention() {
+    const selection = window.getSelection();
+    const atNode = document.createTextNode('@');
+    
+    if (selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(atNode);
+        range.setStartAfter(atNode);
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+    
+    elements.messageInput.focus();
+}
+
+function openFilePicker() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    input.style.display = 'none';
+    
+    input.addEventListener('change', (e) => {
+        console.log('Files selected:', e.target.files);
+    });
+    
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
+}
+
+function setupFileUpload(uploadAreaId, inputId) {
+    const $uploadArea = $(`#${uploadAreaId}`);
+    const $fileInput = $(`#${inputId}`);
+    
+    $uploadArea.on('click', () => $fileInput.click());
+    
+    $uploadArea.on('dragover', (e) => {
+        e.preventDefault();
+        $uploadArea.css({
+            'background': '#222529',
+            'border-color': '#1164a3'
+        });
+    });
+    
+    $uploadArea.on('dragleave', () => {
+        $uploadArea.css({
+            'background': '#1a1d29',
+            'border-color': '#404449'
+        });
+    });
+    
+    $uploadArea.on('drop', (e) => {
+        e.preventDefault();
+        $uploadArea.css({
+            'background': '#1a1d29',
+            'border-color': '#404449'
+        });
+        
+        const files = Array.from(e.originalEvent.dataTransfer.files);
+        handleFileSelection(files);
+    });
+    
+    $fileInput.on('change', (e) => {
+        const files = Array.from(e.target.files);
+        handleFileSelection(files);
+    });
+}
+
+function handleFileSelection(files) {
+    selectedFiles = [...selectedFiles, ...files];
+    updateSelectedFiles();
+}
+
+function updateSelectedFiles() {
+    // Implementation for updating file display
+    console.log('Selected files:', selectedFiles);
+}
+
+// Modal Management
+function openSubmissionModal(assignmentTitle) {
+    $('#submitModalTitle').text(`Submit: ${assignmentTitle}`);
+    elements.submitModal.show();
+    $('body').css('overflow', 'hidden');
+}
+
+function closeModal() {
+    elements.submitModal.hide();
+    $('body').css('overflow', 'auto');
+    elements.submitForm[0].reset();
+    selectedFiles = [];
+}
+
+// Navigation
+function navigateTo(url) {
+    localStorage.removeItem("classId");
+    window.location.href = url;
+}
+
+function performLogout() {
+    sessionStorage.clear();
+    localStorage.clear();
+    
+    Swal.fire({
+        title: "Logout",
+        text: "Successfully logged out",
+        timer: 1500
+    }).then(() => {
+        window.location.href = '../index.html';
+    });
+}
+
+// Notifications
+function showError(message) {
+    Swal.fire({
+        title: 'Error',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showSuccess(message) {
+    Swal.fire({
+        title: 'Success!',
+        text: message,
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
+// Global functions for modal (called from HTML)
+window.openSubmissionModal = function(assignmentTitle) {
+    openSubmissionModal(assignmentTitle);
+};
+
+window.logout = function() {
+    handleLogout();
+};
+
+// Initialize the app when DOM is ready
+$(document).ready(function() {
+    // External script dependencies check
+    if (typeof SockJS === 'undefined' || typeof Stomp === 'undefined') {
+        console.error('Required libraries (SockJS, StompJS) not loaded');
+        return;
+    }
+    
+    // Initialize the chat application
+    init();
+    
+    console.log('Chat application initialized successfully');
+});

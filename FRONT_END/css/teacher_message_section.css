@@ -557,7 +557,7 @@ body {
 .welcome-avatar {
     width: 128px;
     height: 128px;
-    border-radius: 12px;
+    border-radius: 27px;
     background: #1a2771;
     margin: 0 auto 24px auto;
     display: flex;

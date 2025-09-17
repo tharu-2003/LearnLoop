@@ -4,6 +4,10 @@ $(document).ready(function() {
     const currentUser = JSON.parse(localStorage.getItem("current User"));
     const classId = localStorage.getItem("classId");
     
+    // Chat variables (following first file pattern)
+    let stompClient = null;
+    let currentChatUserId = null;
+    
     loadClassDetails(classId);
     loadUsers();
 
@@ -22,6 +26,7 @@ $(document).ready(function() {
     const $toolBtns = $('.tool-btn');
     const $discussionsContent = $('#discussionsContent');
     const $assignmentContent = $('#assignmentContent');
+    const $chatMessages = $('#chatMessages');
     
     // Assignment modal elements
     const $createAssignmentModal = $('#createAssignmentModal');
@@ -108,8 +113,8 @@ $(document).ready(function() {
                     avatarDiv.empty();
                     welcomeAvatarDiv.empty();
 
-                    avatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius:20%;width:100%;height:100%;object-fit:cover;">`);
-                    welcomeAvatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius:10%;width:100%;height:100%;object-fit:cover;">`);
+                    avatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius:8px;width:100%;height:100%;object-fit:cover;">`);
+                    welcomeAvatarDiv.append(`<img src="${classData.imageUrl}" alt="${classData.name}" class="class-avatar-img" style="border-radius:12px;width:100%;height:100%;object-fit:cover;">`);
                 
                 }
             },
@@ -168,6 +173,231 @@ $(document).ready(function() {
         });
     }
 
+    // =============== CHAT FUNCTIONALITY (Fixed following first file pattern) ===============
+    
+    // WebSocket Connection Management (from first file)
+    function connectWebSocket(callback) {
+        if (stompClient?.connected) {
+            callback?.();
+            return;
+        }
+
+        const socket = new SockJS("http://localhost:8080/ws-chat");
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, (frame) => {
+            console.log("WebSocket Connected:", frame);
+            
+            // Subscribe to personal messages
+            stompClient.subscribe(
+                "/user/topic/messages",
+                (message) => {
+                    const msg = JSON.parse(message.body);
+                    displayMessage(msg, "received");
+                    scrollToBottom();
+                }
+            );
+
+            callback?.();
+        }, (error) => {
+            console.error("WebSocket error:", error);
+            showError("Connection failed. Please refresh the page.");
+        });
+    }
+
+    // Load chat messages (from first file pattern)
+    async function loadChatMessages(receiverId) {
+        try {
+            const messages = await $.ajax({
+                url: `http://localhost:8080/api/chats/${currentUser.userId}/${receiverId}`,
+                method: "GET",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            $chatMessages.empty();
+            messages.forEach(msg => {
+                const type = msg.senderId == currentUser.userId ? "sent" : "received";
+                displayMessage(msg, type);
+            });
+            
+            scrollToBottom();
+        } catch (error) {
+            console.error("Failed to load chat messages:", error);
+            showError("Failed to load chat history");
+        }
+    }
+
+    // Send message function (from first file pattern)
+    function sendMessage() {
+        const msgContent = $messageInput.text().trim();
+        const receiverId = localStorage.getItem("reciverId");
+        const classId = localStorage.getItem("classId");
+
+        if (!msgContent || !receiverId) return;
+
+        const chatMessage = {
+            senderId: currentUser.userId,
+            receiverId: receiverId,
+            classId: classId,
+            message: msgContent,
+            createdAt: new Date()
+        };
+
+        // Send via WebSocket
+        if (stompClient?.connected) {
+            stompClient.send("/app/sendMessage", {}, JSON.stringify(chatMessage));
+        }
+
+        // Display message immediately
+        displayMessage(chatMessage, "sent");
+        
+        // Clear input
+        clearMessageInput();
+        scrollToBottom();
+    }
+
+    // Display message function (from first file pattern)
+    function displayMessage(msg, type) {
+        const time = new Date(msg.createdAt).toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        });
+
+        const messageHtml = createMessageHTML(msg, type, time);
+        $chatMessages.append(messageHtml);
+    }
+
+    // Create message HTML (from first file pattern)
+    function createMessageHTML(msg, type, time) {
+        const isReceived = type === "received";
+        const avatarHtml = isReceived ? createAvatarHTML() : '';
+        const senderHtml = isReceived ? `
+            <div class="message-header">
+                <span class="message-sender"></span>
+            </div>
+        ` : '';
+        const checkMark = !isReceived ? '<span class="message-check">✓</span>' : '';
+
+        return `
+            <div class="message-item ${type}">
+                ${avatarHtml}
+                <div class="message-bubble">
+                    ${senderHtml}
+                    <div class="message-text">${msg.message}</div>
+                    <div class="message-time">
+                        ${time}
+                        ${checkMark}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function createAvatarHTML() {
+        return ``;
+    }
+
+    // Clear message input (from first file pattern)
+    function clearMessageInput() {
+        $messageInput.html('');
+        activeFormats.clear();
+        $toolbarBtns.removeClass('active');
+        $sendBtn.prop('disabled', true).css('opacity', '0.5');
+    }
+
+    // Member selection handler (Fixed to follow first file pattern)
+    $('#membersList').on('click', '.section-item', function () {
+        // Update UI
+        $('.section-item').removeClass('active');
+        $('.nav-item').removeClass('active');
+        $(this).addClass('active');
+
+        // Show discussions content
+        $discussionsContent.css('display', 'flex');
+        $assignmentContent.hide();
+
+        // Get member info
+        const userName = $(this).find('.user-name').text().trim();
+        const avatarUrl = $(this).find('.user-avatarUrl').text().trim();
+        const receiverId = $(this).find('.user-id').text().trim();
+
+        // Update chat UI
+        updateChatHeader(userName, avatarUrl);
+        updateMessageInput('direct', `Message ${userName}`);
+        updateContextIndicator('direct', userName);
+        showMessageInput();
+
+        // Store receiver ID and load messages
+        localStorage.setItem("reciverId", receiverId);
+        currentChatUserId = receiverId;
+
+        // Hide notification badge
+        $(this).find('.notification-badge').hide();
+
+        // Connect and load messages
+        connectWebSocket(() => {
+            loadChatMessages(receiverId);
+        });
+    });
+
+    // Update chat header (from first file pattern)
+    function updateChatHeader(userName, avatarUrl) {
+        $chatTitle.text(userName);
+        $welcomeName.text(userName);
+
+        const avatarImg = `<img src="${avatarUrl}" alt="${userName}" 
+                          style="border-radius: 20%; width: 100%; height: 100%; object-fit: cover;">`;
+        
+        $('.chat-avatar').html(avatarImg);
+        $('.welcome-avatar').html(avatarImg);
+    }
+
+    // Send message event handlers (Fixed)
+    $sendBtn.on('click', () => sendMessage());
+    
+    $messageInput.on('keydown', (e) => {
+        // Send on Enter (without Shift)
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Message input change handler (from first file pattern)
+    $messageInput.on('input', function() {
+        const hasContent = $(this).text().trim().length > 0;
+        
+        // Update send button state
+        $sendBtn.prop('disabled', !hasContent)
+                .css('opacity', hasContent ? '1' : '0.5');
+        
+        // Update empty state
+        $(this).toggleClass('empty', !hasContent);
+    });
+
+    // Scroll to bottom function (from first file pattern)
+    function scrollToBottom() {
+        const chatContent = $discussionsContent[0];
+        if (chatContent) {
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+    }
+
+    // Error notification function
+    function showError(message) {
+        Swal.fire({
+            title: 'Error',
+            text: message,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    }
+
+    // Initialize send button state
+    $sendBtn.prop('disabled', true).css('opacity', '0.5');
+
+    // =============== END CHAT FUNCTIONALITY ===============
     
     // Assignment Modal Functions
     function openCreateAssignmentModal() {
@@ -183,20 +413,20 @@ $(document).ready(function() {
         updateSelectedFiles('assignment');
     }
     
-    window.logout = function(){
-        Swal.fire({
-            title: "Confirm Logout",
-            showCancelButton: true,
-            confirmButtonText: 'Logout',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if(result.isConfirmed){
-                localStorage.removeItem("user");
-                sessionStorage.removeItem("token");
-                window.location.href = "../index.html";
-            }
-        });
-    }
+    // window.logout = function(){
+    //     Swal.fire({
+    //         title: "Confirm Logout",
+    //         showCancelButton: true,
+    //         confirmButtonText: 'Logout',
+    //         cancelButtonText: 'Cancel'
+    //     }).then((result) => {
+    //         if(result.isConfirmed){
+    //             localStorage.removeItem("user");
+    //             sessionStorage.removeItem("token");
+    //             window.location.href = "../index.html";
+    //         }
+    //     });
+    // }
     
     // Event listeners for modals
     $addAssignmentBtn.off('click').on('click', openCreateAssignmentModal);
@@ -327,18 +557,47 @@ $(document).ready(function() {
     const UPLOAD_PRESET = "learnloop_unsigned"; 
 
     async function uploadFileToCloudinary(file) {
-        const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+        // Detect the resource type
+        let resourceType = "auto";
+        if (file.type === "application/pdf" || 
+            file.type === "application/msword" || 
+            file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+            file.type === "text/plain") {
+            resourceType = "raw";   // 👈 use raw for documents
+        }
+
+        const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`;
+
+        // Decide folder by type
+        let folderPath = "learnloop/classes/others";
+        if (file.type === "application/pdf") {
+            folderPath = "learnloop/classes/pdfs";
+        } else if (file.type.startsWith("image/")) {
+            folderPath = "learnloop/classes/images";
+        } else if (file.type.startsWith("video/")) {
+            folderPath = "learnloop/classes/videos";
+        } else if (file.type.includes("word")) {
+            folderPath = "learnloop/classes/docs";
+        }
 
         const formData = new FormData();
         formData.append("file", file);
         formData.append("upload_preset", UPLOAD_PRESET);
-        formData.append("folder", "learnloop/classes");
+        formData.append("folder", folderPath);
 
         try {
-            const response = await fetch(url, { method: "POST", body: formData });
+            const response = await fetch(url, {
+                method: "POST",
+                body: formData
+            });
+
             const data = await response.json();
-            if (data.secure_url) return data.secure_url;
-            throw new Error("Cloudinary upload failed");
+            console.log("Cloudinary response:", data);
+
+            if (data.secure_url) {
+                return data.secure_url;  // ✅ this URL will now open PDFs correctly
+            }
+            throw new Error("Upload failed: " + JSON.stringify(data));
         } catch (error) {
             console.error("Cloudinary upload failed:", error);
             Swal.fire("Error", "File upload failed!", "error");
@@ -395,6 +654,7 @@ $(document).ready(function() {
                     Swal.fire('Success', 'Assignment created successfully!', 'success');
                     closeCreateAssignmentModal();
                     addAssignmentToList(response.data || assignmentData);
+                    
                 },
                 error: function(xhr) {
                     Swal.fire('Error', xhr.responseJSON?.message || 'Failed to create assignment', 'error');
@@ -441,9 +701,6 @@ $(document).ready(function() {
         $assignmentsList.prepend(assignmentCard);
     }
 
-    // Rest of your code remains the same...
-    // (I'm keeping the rest unchanged to avoid making the artifact too long)
-    
     // Handle toolbar formatting buttons
     $toolbarBtns.on('click', function(e) {
         e.preventDefault();
@@ -491,12 +748,6 @@ $(document).ready(function() {
             e.preventDefault();
             $('[data-format="underline"]').click();
         }
-        
-        // Enter key to send message
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
     });
     
     // Update formatting buttons based on cursor position
@@ -516,59 +767,6 @@ $(document).ready(function() {
             }
         });
     }
-
-    // Event delegation for dynamically added members
-    $('#membersList').on('click', '.section-item', function () {
-        // Remove active class from all items
-        $('.section-item').removeClass('active');
-        $('.nav-item').removeClass('active');
-        $(this).addClass('active');
-
-        // Show discussions content for direct messages
-        $('#discussionsContent').css('display', 'flex');
-        $('#assignmentContent').hide();
-
-        // Update chat header and welcome message
-        const userName = $(this).find('.user-name');
-        const url = $(this).find('.user-avatarUrl');
-
-        if (userName.length) {
-
-            const avatarUrl = url.text().trim();
-            const name = userName.text().trim();
-
-            $('.chat-title').text(name);
-            $('.welcome-name').text(name);
-
-            const avatarDiv = $('.chat-avatar');
-            const welcomeAvatarDiv = $('.welcome-avatar');
-
-            avatarDiv.empty();
-            welcomeAvatarDiv.empty();
-
-            avatarDiv.append(`<img src="${avatarUrl}" alt="${name}" class="class-avatar-img" style="border-radius:20%;width:100%;height:100%;object-fit:cover;">`);
-            welcomeAvatarDiv.append(`<img src="${avatarUrl}" alt="${name}" class="class-avatar-img" style="border-radius:10%;width:100%;height:100%;object-fit:cover;">`);
-                
-
-            updateMessageInput('direct', `Message ${name}`);
-            updateContextIndicator('direct', name);
-            showMessageInput();
-
-            $('.welcome-message').html(
-                `This conversation is just between <span class="mention">@${name}</span> and you.`
-            );
-        }
-
-        // Remove notification badge when user is selected
-        const badge = $(this).find('.notification-badge');
-        if (badge.length) {
-            badge.hide();
-        }
-
-        // Scroll chat to bottom
-        setTimeout(scrollToBottom, 300);
-    });
-
     
     // Handle left navigation menu clicks
     $navMenuItems.on('click', function() {
@@ -591,13 +789,103 @@ $(document).ready(function() {
                 localStorage.clear();
 
                 Swal.fire({
-                title:"logout",
-                text:"successfully logout",
-                timer:1500
+                    title: 'Logging Out...',
+                    html: `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="
+                                width: 80px; 
+                                height: 80px; 
+                                margin: 0 auto 20px; 
+                                border-radius: 50%; 
+                                background: linear-gradient(45deg, #667eea, #764ba2); 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center;
+                                animation: rotateGlow 2s ease-in-out infinite;
+                            ">
+                                <i class="fas fa-sign-out-alt" style="font-size: 32px; color: white;"></i>
+                            </div>
+                            <p style="font-size: 18px; color: #6b7280; margin: 0; font-weight: 300;">
+                                Thank you for using our service!
+                            </p>
+                            <p style="font-size: 14px; color: #9ca3af; margin: 10px 0 0; font-style: italic;">
+                                Redirecting you safely...
+                            </p>
+                        </div>
+                    `,
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true,
+                    backdrop: `rgba(0,0,123,0.4)`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    customClass: {
+                        popup: 'beautiful-logout',
+                        timerProgressBar: 'custom-progress-bar'
+                    },
+                    didOpen: () => {
+                        const popup = Swal.getPopup();
+                        popup.style.borderRadius = '25px';
+                        popup.style.border = 'none';
+                        popup.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+                        popup.style.background = 'white';
+                        popup.style.overflow = 'hidden';
+                        popup.style.position = 'relative';
+                        
+                        // Add a subtle background pattern
+                        popup.style.backgroundImage = `
+                            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.05) 0%, transparent 50%),
+                            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.05) 0%, transparent 50%)
+                        `;
+                        
+                        // Add CSS animations if not already added
+                        if (!document.getElementById('logout-animations')) {
+                            const style = document.createElement('style');
+                            style.id = 'logout-animations';
+                            style.textContent = `
+                                @keyframes rotateGlow {
+                                    0% { 
+                                        transform: rotate(0deg) scale(1);
+                                        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                                    }
+                                    50% { 
+                                        transform: rotate(180deg) scale(1.05);
+                                        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+                                    }
+                                    100% { 
+                                        transform: rotate(360deg) scale(1);
+                                        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+                                    }
+                                }
+                                
+                                .beautiful-logout {
+                                    animation: slideInFromTop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+                                }
+                                
+                                .custom-progress-bar {
+                                    background: linear-gradient(90deg, #667eea, #764ba2) !important;
+                                    height: 6px !important;
+                                    border-radius: 3px !important;
+                                }
+                                
+                                @keyframes slideInFromTop {
+                                    from {
+                                        opacity: 0;
+                                        transform: translate3d(0, -60px, 0) scale(0.9);
+                                    }
+                                    to {
+                                        opacity: 1;
+                                        transform: translate3d(0, 0, 0) scale(1);
+                                    }
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+                    }
                 }).then(() => {
                     console.log("logout successful");
-                    window.location.href = '../index.html'
-                })
+                    window.location.href = '../index.html';
+                });
             }
     });
 
@@ -635,46 +923,6 @@ $(document).ready(function() {
         $(this).toggleClass('collapsed');
         $membersList.slideToggle();
     });
-    
-    function sendMessage() {
-        const message = $messageInput.html().trim();
-        const textContent = $messageInput.text().trim();
-
-        if (!textContent) return; // Do nothing if input is empty
-
-        console.log(`Sending formatted message: "${message}" to ${$chatTitle.text()}`);
-        console.log(`Plain text: "${textContent}"`);
-
-        // Add the message to chat as a sent message
-        addWhatsAppMessage(textContent, true);
-
-        // Clear the input
-        $messageInput.html('');
-
-        // Clear active formats
-        activeFormats.clear();
-        $toolbarBtns.removeClass('active');
-
-        // Update send button state
-        $sendBtn.prop('disabled', true).css('opacity', '0.5');
-
-        // Optional: simulate a response after 2 seconds
-        setTimeout(() => {
-            const responses = [
-                "Thanks for sharing!",
-                "Got it!",
-                "That's helpful!",
-                "Understood!",
-                "Great question!"
-            ];
-            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-            addWhatsAppMessage(randomResponse, false, "Teacher John", "#e01e5a", "T");
-        }, 2000);
-    }
-
-    
-    // Send message on button click
-    $sendBtn.on('click', sendMessage);
     
     // Handle tool buttons (emoji, mention, file, etc.)
     $toolBtns.on('click', function() {
@@ -749,26 +997,6 @@ $(document).ready(function() {
         }
     });
     
-    // Initialize send button state
-    $sendBtn.prop('disabled', true).css('opacity', '0.5');
-    
-    // Simulate real-time notifications (for demo purposes)
-    function simulateNotification() {
-        const items = $('.section-item:not(.active)');
-        if (items.length > 0) {
-            const randomItem = items.eq(Math.floor(Math.random() * items.length));
-            const badge = randomItem.find('.notification-badge');
-            
-            if (badge.length && badge.css('display') !== 'none') {
-                const currentCount = parseInt(badge.text()) || 1;
-                badge.text(currentCount + 1);
-            }
-        }
-    }
-    
-    // Simulate notifications every 30 seconds (for demo)
-    setInterval(simulateNotification, 30000);
-    
     // Message input management functions
     function updateMessageInput(type, placeholder) {
         const $messageInputContainer = $('.message-input-container');
@@ -837,21 +1065,6 @@ $(document).ready(function() {
         }
     });
     
-    $messageInput.on('input', function() {
-        if ($(this).text().trim() === '') {
-            $(this).addClass('empty');
-        } else {
-            $(this).removeClass('empty');
-        }
-        
-        // Update send button state
-        const hasContent = $(this).text().trim().length > 0;
-        $sendBtn.prop('disabled', !hasContent).css('opacity', hasContent ? '1' : '0.5');
-        
-        // Apply active formatting to new text
-        applyActiveFormatting();
-    });
-    
     // Update context indicators when switching between sections
     function updateContextIndicator(type, name = '') {
         const $welcomeMessage = $('.welcome-message');
@@ -886,51 +1099,5 @@ $(document).ready(function() {
     $('#assignmentDueDate').val(nextWeek.toISOString().slice(0, 16));
     
     console.log('IJSE Interface with jQuery and Assignment System initialized successfully!');
-
-    // Enhanced scroll function for chat content
-    function scrollToBottom() {
-        const chatContent = document.getElementById('discussionsContent');
-        if (chatContent) {
-            chatContent.scrollTop = chatContent.scrollHeight;
-        }
-    }
-
-    // Auto-scroll when new messages are added
-    function addWhatsAppMessage(text, isSent = true, sender = '', avatarColor = '', avatarInitial = '') {
-        const chatMessages = document.getElementById('chatMessages');
-        const time = new Date().toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit',
-            hour12: true 
-        });
-        
-        const messageClass = isSent ? 'sent' : 'received';
-        const avatarHtml = !isSent ? `<div class="message-avatar" style="background: ${avatarColor};">${avatarInitial}</div>` : '';
-        const senderHtml = !isSent ? `
-            <div class="message-header">
-                <span class="message-sender">${sender}</span>
-            </div>
-        ` : '';
-        const checkMark = isSent ? '<span class="message-check">✓</span>' : '';
-        
-        const messageHtml = `
-            <div class="message-item ${messageClass}">
-                ${avatarHtml}
-                <div class="message-bubble">
-                    ${senderHtml}
-                    <div class="message-text">${text}</div>
-                    <div class="message-time">
-                        ${time}
-                        ${checkMark}
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        chatMessages.insertAdjacentHTML('beforeend', messageHtml);
-        
-        // Smooth scroll to bottom
-        setTimeout(scrollToBottom, 100);
-    }
 
 });

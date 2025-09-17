@@ -27,7 +27,7 @@ public class Chat {
     private String message;
 
     @Column(name = "receiver_id")
-    private String receiverId;
+    private Long receiverId;
 
     @Column(name = "read_status", nullable = false)
     private boolean readStatus = false;

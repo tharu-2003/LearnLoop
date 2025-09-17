@@ -38,7 +38,7 @@ public class SecurityConfig {
 //                .authorizeHttpRequests(auth ->
 //                        auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**", "/api/classes/join").permitAll().anyRequest().authenticated())
+                        auth.requestMatchers("/auth/**", "/api/classes/join", "/ws-chat/**").permitAll().anyRequest().authenticated())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //awasthawa save karaganne
                 .authenticationProvider(authenticationProvider())

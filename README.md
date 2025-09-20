@@ -269,7 +269,7 @@ Key features include secure user authentication, password reset functionality vi
 
 🎥 **Watch the complete project demonstration:**
 
-[**LearnLoop Student Management System - GDSE 72 - Tharusha Sandaruwan Dahanayaka**](https://youtube.com/your-video-link)
+[**LearnLoop Student Management System - GDSE 72 - Tharusha Sandaruwan Dahanayaka**](https://youtube.com/your-video-link](https://youtu.be/-dFuGJIvC0s))
 
 The demo video showcases:
 - Complete authentication flow with role-based access

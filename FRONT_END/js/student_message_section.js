@@ -880,13 +880,6 @@ function updateSelectedFiles() {
     console.log('Selected files:', selectedFiles);
 }
 
-// Modal Management
-function openSubmissionModal(assignmentTitle) {
-    $('#submitModalTitle').text(`Submit: ${assignmentTitle}`);
-    elements.submitModal.show();
-    $('body').css('overflow', 'hidden');
-}
-
 function closeModal() {
     elements.submitModal.hide();
     $('body').css('overflow', 'auto');
@@ -932,9 +925,11 @@ function showSuccess(message) {
     });
 }
 
-// Global functions for modal (called from HTML)
 window.openSubmissionModal = function(assignmentTitle) {
-    openSubmissionModal(assignmentTitle);
+    const submitAssignmentModal = document.getElementById('submitAssignmentModal');
+    document.getElementById('submitModalTitle').textContent = `Submit: ${assignmentTitle}`;
+    submitAssignmentModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
 };
 
 window.logout = function() {
